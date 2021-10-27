@@ -1,5 +1,5 @@
-script/experiment_data/position_data
+script/experiment_data/SI
 script/w2v_model/*.bin
 script/w2v_model/*.gz
 script/*.pyc
-script/graph_converter.py
+# script/graph_converter.py
