@@ -1,4 +1,4 @@
-script/experiment_data/SI
+script/experiment_data/*
 script/w2v_model/*.bin
 script/w2v_model/*.gz
 script/*.pyc

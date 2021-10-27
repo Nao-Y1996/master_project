@@ -130,8 +130,11 @@ if __name__ == '__main__':
     new_dir_path = str(datetime.now())[0:16].replace(' ', '-').replace(':', '-')
     save_dir = base_dir + new_dir_path
     # 各フレームにおけるobject positionとimageの保存用先
-    os.makedirs(save_dir+'/images/')
-    os.makedirs(save_dir+'/position_data/')
+    try:
+        os.makedirs(save_dir+'/images/')
+        os.makedirs(save_dir+'/position_data/')
+    except OSError:
+        print('file exist')
     image_dir = save_dir+'/images/'
     position_dir = save_dir+'/position_data/'
     # データを保存するファイル名の設定
