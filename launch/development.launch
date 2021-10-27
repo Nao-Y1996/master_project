@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<launch>        
+    <!-- ====== Intel Realsense Camera ===== -->
+    <!-- <include file="$(find realsense2_camera)/launch/rs_d435_camera_with_model.launch"></include>
+    <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/xtion.rviz"/>
+    <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+      <arg name="image" value="/camera/color/image_raw"/>
+    </include> -->
+
+    <!-- ====== Xtion Camera ===== -->
+    <include file="$(find openni2_launch)/launch/openni2.launch"></include>
+    <!-- <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/xtion.rviz"/> -->
+    <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+      <arg name="image" value="/camera/rgb/image_raw"/>
+    </include>
+
+    <!-- ====== HSR simulator ===== -->
+    <!-- <include file="$(find hsrb_gazebo_launch)/launch/hsrb_megaweb2015_world.launch"></include>
+    <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/hsr_development.rviz"/>
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/> 
+    <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+       <arg name="image" value="/hsrb/head_rgbd_sensor/rgb/image_raw"/>
+    </include> -->
+
+
+
+    
+
+    <!-- create object TF -->
+    <!-- <node pkg="master_project" name="objectPosition" type="objectPosition.py"/> -->
+    
+    <!-- <node pkg="tf" type="static_transform_publisher" name="robot_to_sensor" args="0.2 0 0.1 0 0 0 robot sensor 10" /> -->
+    
+    <!-- <arg name="x" default="-2.37" />
+    <arg name="y" default="-6.14" />
+    <arg name="z" default="1.12" />
+    <node name="spawn_bottle" pkg="gazebo_ros" type="spawn_model"
+            args="-sdf -database bottle_with_marker -x $(arg x) -y $(arg y) -z $(arg z) -model bottle" /> -->
+
+  <!-- <include file="$(find hsrb_gazebo_launch)/launch/include/hsrb_gazebo_common.xml" pass_all_args="true" >
+    <arg name="map" value="$(find tmc_potential_maps)/maps/white_space/map.yaml" />
+    <arg name="world_name" value="$(find tmc_gazebo_worlds)/worlds/empty$(arg world_suffix).world"/>
+    <arg name="robot_pos" value="-x 0 -y 0 -z 0 -Y 0" />
+    <arg name="ground_truth_xyz_offset" value="0.0\ 0.0\ 0.0" />
+    <arg name="ground_truth_rpy_offset" value="0.0\ 0.0\ 0.0" />
+  </include> -->
+
+
+
+</launch>
+<!-- roslaunch hsrb_gazebo_launch hsrb_empty_world.launch rviz:=false -->

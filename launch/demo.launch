@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>        
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find wrs2020)/rviz_conf/demo.rviz"/>
+    <node pkg="wrs2020" name="tf_memorizing" type="tf_memorizing.py"/>
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" />
+</launch>

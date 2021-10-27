@@ -1,0 +1,981 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /RobotModel1
+        - /TF1
+        - /TF1/Frames1
+        - /PointCloud21
+        - /MarkerArray1
+      Splitter Ratio: 0.4317719042301178
+    Tree Height: 191
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: PointCloud2
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        arm_flex_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_lift_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        arm_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_b_bumper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_f_bumper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_imu_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_l_drive_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_l_passive_wheel_x_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_l_passive_wheel_y_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_l_passive_wheel_z_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_r_drive_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_r_passive_wheel_x_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_r_passive_wheel_y_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_r_passive_wheel_z_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_range_sensor_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_camera_gazebo_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_l_distal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hand_l_finger_tip_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_l_finger_vacuum_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hand_l_mimic_distal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_l_proximal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_l_spring_proximal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hand_motor_dummy_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_palm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hand_r_distal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        hand_r_finger_tip_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_r_mimic_distal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_r_proximal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        hand_r_spring_proximal_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_center_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_center_camera_gazebo_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_l_stereo_camera_gazebo_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_l_stereo_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_pan_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_r_stereo_camera_gazebo_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_r_stereo_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_rgbd_sensor_gazebo_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_rgbd_sensor_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_tilt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        torso_lift_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_flex_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_ft_sensor_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wrist_ft_sensor_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wrist_roll_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Name: RobotModel
+      Robot Description: robot_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        ar_marker/14:
+          Value: true
+        ar_marker/710:
+          Value: true
+        ar_marker/711:
+          Value: true
+        ar_marker/712:
+          Value: true
+        ar_marker/720:
+          Value: true
+        arm_flex_link:
+          Value: false
+        arm_lift_link:
+          Value: false
+        arm_roll_link:
+          Value: false
+        base_b_bumper_link:
+          Value: false
+        base_f_bumper_link:
+          Value: false
+        base_footprint:
+          Value: false
+        base_footprint_wheel:
+          Value: false
+        base_imu_frame:
+          Value: false
+        base_l_drive_wheel_link:
+          Value: false
+        base_l_passive_wheel_x_frame:
+          Value: false
+        base_l_passive_wheel_y_frame:
+          Value: false
+        base_l_passive_wheel_z_link:
+          Value: false
+        base_link:
+          Value: false
+        base_r_drive_wheel_link:
+          Value: false
+        base_r_passive_wheel_x_frame:
+          Value: false
+        base_r_passive_wheel_y_frame:
+          Value: false
+        base_r_passive_wheel_z_link:
+          Value: false
+        base_range_sensor_link:
+          Value: false
+        base_roll_link:
+          Value: false
+        dodo_detector_ros/apple_0:
+          Value: true
+        dodo_detector_ros/apple_1:
+          Value: true
+        dodo_detector_ros/backpack_0:
+          Value: true
+        dodo_detector_ros/bed_0:
+          Value: true
+        dodo_detector_ros/bench_0:
+          Value: true
+        dodo_detector_ros/bench_1:
+          Value: true
+        dodo_detector_ros/bicycle_0:
+          Value: true
+        dodo_detector_ros/book_0:
+          Value: false
+        dodo_detector_ros/book_1:
+          Value: true
+        dodo_detector_ros/book_2:
+          Value: true
+        dodo_detector_ros/bottle_0:
+          Value: true
+        dodo_detector_ros/bottle_1:
+          Value: true
+        dodo_detector_ros/bottle_2:
+          Value: true
+        dodo_detector_ros/bottle_3:
+          Value: true
+        dodo_detector_ros/bottle_4:
+          Value: true
+        dodo_detector_ros/bowl_0:
+          Value: true
+        dodo_detector_ros/bowl_1:
+          Value: true
+        dodo_detector_ros/bowl_2:
+          Value: true
+        dodo_detector_ros/car_0:
+          Value: true
+        dodo_detector_ros/car_1:
+          Value: true
+        dodo_detector_ros/cell phone_0:
+          Value: false
+        dodo_detector_ros/cell phone_1:
+          Value: false
+        dodo_detector_ros/chair_0:
+          Value: false
+        dodo_detector_ros/chair_1:
+          Value: false
+        dodo_detector_ros/chair_2:
+          Value: false
+        dodo_detector_ros/chair_3:
+          Value: true
+        dodo_detector_ros/chair_4:
+          Value: true
+        dodo_detector_ros/chair_5:
+          Value: true
+        dodo_detector_ros/chair_6:
+          Value: true
+        dodo_detector_ros/clock_0:
+          Value: true
+        dodo_detector_ros/couch_0:
+          Value: false
+        dodo_detector_ros/couch_1:
+          Value: true
+        dodo_detector_ros/couch_2:
+          Value: true
+        dodo_detector_ros/cup_0:
+          Value: true
+        dodo_detector_ros/cup_1:
+          Value: true
+        dodo_detector_ros/cup_2:
+          Value: true
+        dodo_detector_ros/cup_3:
+          Value: true
+        dodo_detector_ros/dining table_0:
+          Value: false
+        dodo_detector_ros/dining table_1:
+          Value: false
+        dodo_detector_ros/dining table_2:
+          Value: true
+        dodo_detector_ros/dining table_3:
+          Value: true
+        dodo_detector_ros/dining table_4:
+          Value: true
+        dodo_detector_ros/dog_0:
+          Value: true
+        dodo_detector_ros/keyboard_0:
+          Value: true
+        dodo_detector_ros/laptop_0:
+          Value: false
+        dodo_detector_ros/laptop_1:
+          Value: true
+        dodo_detector_ros/laptop_2:
+          Value: true
+        dodo_detector_ros/microwave_0:
+          Value: true
+        dodo_detector_ros/motorcycle_0:
+          Value: true
+        dodo_detector_ros/mouse_0:
+          Value: false
+        dodo_detector_ros/orange_0:
+          Value: true
+        dodo_detector_ros/oven_0:
+          Value: true
+        dodo_detector_ros/person_0:
+          Value: false
+        dodo_detector_ros/person_1:
+          Value: false
+        dodo_detector_ros/person_2:
+          Value: false
+        dodo_detector_ros/person_3:
+          Value: true
+        dodo_detector_ros/person_4:
+          Value: true
+        dodo_detector_ros/person_5:
+          Value: true
+        dodo_detector_ros/potted plant_0:
+          Value: true
+        dodo_detector_ros/potted plant_1:
+          Value: true
+        dodo_detector_ros/potted plant_2:
+          Value: true
+        dodo_detector_ros/potted plant_3:
+          Value: true
+        dodo_detector_ros/refrigerator_0:
+          Value: false
+        dodo_detector_ros/refrigerator_1:
+          Value: true
+        dodo_detector_ros/refrigerator_2:
+          Value: true
+        dodo_detector_ros/remote_0:
+          Value: false
+        dodo_detector_ros/remote_1:
+          Value: true
+        dodo_detector_ros/scissors_0:
+          Value: true
+        dodo_detector_ros/sink_0:
+          Value: true
+        dodo_detector_ros/skateboard_0:
+          Value: true
+        dodo_detector_ros/sports ball_0:
+          Value: false
+        dodo_detector_ros/suitcase_0:
+          Value: false
+        dodo_detector_ros/suitcase_1:
+          Value: true
+        dodo_detector_ros/suitcase_2:
+          Value: true
+        dodo_detector_ros/surfboard_0:
+          Value: true
+        dodo_detector_ros/tennis racket_0:
+          Value: true
+        dodo_detector_ros/tie_0:
+          Value: true
+        dodo_detector_ros/toilet_0:
+          Value: true
+        dodo_detector_ros/toilet_1:
+          Value: true
+        dodo_detector_ros/traffic light_0:
+          Value: true
+        dodo_detector_ros/train_0:
+          Value: true
+        dodo_detector_ros/truck_0:
+          Value: true
+        dodo_detector_ros/tv_0:
+          Value: false
+        dodo_detector_ros/tv_1:
+          Value: true
+        dodo_detector_ros/tv_2:
+          Value: true
+        dodo_detector_ros/tv_3:
+          Value: true
+        dodo_detector_ros/umbrella_0:
+          Value: true
+        dodo_detector_ros/vase_0:
+          Value: true
+        dodo_detector_ros/vase_1:
+          Value: true
+        dodo_detector_ros/wine glass_0:
+          Value: true
+        hand_camera_frame:
+          Value: false
+        hand_camera_gazebo_frame:
+          Value: false
+        hand_l_distal_link:
+          Value: false
+        hand_l_finger_tip_frame:
+          Value: false
+        hand_l_finger_vacuum_frame:
+          Value: false
+        hand_l_mimic_distal_link:
+          Value: false
+        hand_l_proximal_link:
+          Value: false
+        hand_l_spring_proximal_link:
+          Value: false
+        hand_motor_dummy_link:
+          Value: false
+        hand_palm_link:
+          Value: true
+        hand_r_distal_link:
+          Value: false
+        hand_r_finger_tip_frame:
+          Value: false
+        hand_r_mimic_distal_link:
+          Value: false
+        hand_r_proximal_link:
+          Value: false
+        hand_r_spring_proximal_link:
+          Value: false
+        head_center_camera_frame:
+          Value: false
+        head_center_camera_gazebo_frame:
+          Value: false
+        head_l_stereo_camera_frame:
+          Value: false
+        head_l_stereo_camera_gazebo_frame:
+          Value: false
+        head_l_stereo_camera_link:
+          Value: false
+        head_pan_link:
+          Value: false
+        head_r_stereo_camera_gazebo_frame:
+          Value: false
+        head_r_stereo_camera_link:
+          Value: false
+        head_rgbd_sensor_gazebo_frame:
+          Value: false
+        head_rgbd_sensor_link:
+          Value: false
+        head_rgbd_sensor_rgb_frame:
+          Value: false
+        head_tilt_link:
+          Value: false
+        map:
+          Value: true
+        odom:
+          Value: false
+        torso_lift_link:
+          Value: false
+        wrist_flex_link:
+          Value: false
+        wrist_ft_sensor_frame:
+          Value: false
+        wrist_ft_sensor_mount_link:
+          Value: false
+        wrist_roll_link:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          odom:
+            base_footprint:
+              base_link:
+                arm_lift_link:
+                  arm_flex_link:
+                    arm_roll_link:
+                      wrist_flex_link:
+                        wrist_ft_sensor_mount_link:
+                          wrist_ft_sensor_frame:
+                            wrist_roll_link:
+                              hand_palm_link:
+                                hand_camera_frame:
+                                  hand_camera_gazebo_frame:
+                                    {}
+                                hand_l_proximal_link:
+                                  hand_l_spring_proximal_link:
+                                    hand_l_mimic_distal_link:
+                                      hand_l_distal_link:
+                                        hand_l_finger_tip_frame:
+                                          {}
+                                        hand_l_finger_vacuum_frame:
+                                          {}
+                                hand_motor_dummy_link:
+                                  {}
+                                hand_r_proximal_link:
+                                  hand_r_spring_proximal_link:
+                                    hand_r_mimic_distal_link:
+                                      hand_r_distal_link:
+                                        hand_r_finger_tip_frame:
+                                          {}
+                base_b_bumper_link:
+                  {}
+                base_f_bumper_link:
+                  {}
+                base_imu_frame:
+                  {}
+                base_range_sensor_link:
+                  {}
+                base_roll_link:
+                  base_l_drive_wheel_link:
+                    {}
+                  base_l_passive_wheel_x_frame:
+                    base_l_passive_wheel_y_frame:
+                      base_l_passive_wheel_z_link:
+                        {}
+                  base_r_drive_wheel_link:
+                    {}
+                  base_r_passive_wheel_x_frame:
+                    base_r_passive_wheel_y_frame:
+                      base_r_passive_wheel_z_link:
+                        {}
+                torso_lift_link:
+                  head_pan_link:
+                    head_tilt_link:
+                      head_center_camera_frame:
+                        head_center_camera_gazebo_frame:
+                          {}
+                      head_l_stereo_camera_link:
+                        head_l_stereo_camera_frame:
+                          ar_marker/14:
+                            {}
+                          ar_marker/710:
+                            {}
+                          ar_marker/711:
+                            {}
+                          ar_marker/712:
+                            {}
+                          ar_marker/720:
+                            {}
+                          head_rgbd_sensor_rgb_frame:
+                            {}
+                        head_l_stereo_camera_gazebo_frame:
+                          {}
+                      head_r_stereo_camera_link:
+                        head_r_stereo_camera_gazebo_frame:
+                          {}
+                      head_rgbd_sensor_link:
+                        dodo_detector_ros/apple_0:
+                          {}
+                        dodo_detector_ros/apple_1:
+                          {}
+                        dodo_detector_ros/backpack_0:
+                          {}
+                        dodo_detector_ros/bed_0:
+                          {}
+                        dodo_detector_ros/bench_0:
+                          {}
+                        dodo_detector_ros/bench_1:
+                          {}
+                        dodo_detector_ros/bicycle_0:
+                          {}
+                        dodo_detector_ros/book_0:
+                          {}
+                        dodo_detector_ros/book_1:
+                          {}
+                        dodo_detector_ros/book_2:
+                          {}
+                        dodo_detector_ros/bottle_0:
+                          {}
+                        dodo_detector_ros/bottle_1:
+                          {}
+                        dodo_detector_ros/bottle_2:
+                          {}
+                        dodo_detector_ros/bottle_3:
+                          {}
+                        dodo_detector_ros/bottle_4:
+                          {}
+                        dodo_detector_ros/bowl_0:
+                          {}
+                        dodo_detector_ros/bowl_1:
+                          {}
+                        dodo_detector_ros/bowl_2:
+                          {}
+                        dodo_detector_ros/car_0:
+                          {}
+                        dodo_detector_ros/car_1:
+                          {}
+                        dodo_detector_ros/cell phone_0:
+                          {}
+                        dodo_detector_ros/cell phone_1:
+                          {}
+                        dodo_detector_ros/chair_0:
+                          {}
+                        dodo_detector_ros/chair_1:
+                          {}
+                        dodo_detector_ros/chair_2:
+                          {}
+                        dodo_detector_ros/chair_3:
+                          {}
+                        dodo_detector_ros/chair_4:
+                          {}
+                        dodo_detector_ros/chair_5:
+                          {}
+                        dodo_detector_ros/chair_6:
+                          {}
+                        dodo_detector_ros/clock_0:
+                          {}
+                        dodo_detector_ros/couch_0:
+                          {}
+                        dodo_detector_ros/couch_1:
+                          {}
+                        dodo_detector_ros/couch_2:
+                          {}
+                        dodo_detector_ros/cup_0:
+                          {}
+                        dodo_detector_ros/cup_1:
+                          {}
+                        dodo_detector_ros/cup_2:
+                          {}
+                        dodo_detector_ros/cup_3:
+                          {}
+                        dodo_detector_ros/dining table_0:
+                          {}
+                        dodo_detector_ros/dining table_1:
+                          {}
+                        dodo_detector_ros/dining table_2:
+                          {}
+                        dodo_detector_ros/dining table_3:
+                          {}
+                        dodo_detector_ros/dining table_4:
+                          {}
+                        dodo_detector_ros/dog_0:
+                          {}
+                        dodo_detector_ros/keyboard_0:
+                          {}
+                        dodo_detector_ros/laptop_0:
+                          {}
+                        dodo_detector_ros/laptop_1:
+                          {}
+                        dodo_detector_ros/laptop_2:
+                          {}
+                        dodo_detector_ros/microwave_0:
+                          {}
+                        dodo_detector_ros/motorcycle_0:
+                          {}
+                        dodo_detector_ros/mouse_0:
+                          {}
+                        dodo_detector_ros/orange_0:
+                          {}
+                        dodo_detector_ros/oven_0:
+                          {}
+                        dodo_detector_ros/person_0:
+                          {}
+                        dodo_detector_ros/person_1:
+                          {}
+                        dodo_detector_ros/person_2:
+                          {}
+                        dodo_detector_ros/person_3:
+                          {}
+                        dodo_detector_ros/person_4:
+                          {}
+                        dodo_detector_ros/person_5:
+                          {}
+                        dodo_detector_ros/potted plant_0:
+                          {}
+                        dodo_detector_ros/potted plant_1:
+                          {}
+                        dodo_detector_ros/potted plant_2:
+                          {}
+                        dodo_detector_ros/potted plant_3:
+                          {}
+                        dodo_detector_ros/refrigerator_0:
+                          {}
+                        dodo_detector_ros/refrigerator_1:
+                          {}
+                        dodo_detector_ros/refrigerator_2:
+                          {}
+                        dodo_detector_ros/remote_0:
+                          {}
+                        dodo_detector_ros/remote_1:
+                          {}
+                        dodo_detector_ros/scissors_0:
+                          {}
+                        dodo_detector_ros/sink_0:
+                          {}
+                        dodo_detector_ros/skateboard_0:
+                          {}
+                        dodo_detector_ros/sports ball_0:
+                          {}
+                        dodo_detector_ros/suitcase_0:
+                          {}
+                        dodo_detector_ros/suitcase_1:
+                          {}
+                        dodo_detector_ros/suitcase_2:
+                          {}
+                        dodo_detector_ros/surfboard_0:
+                          {}
+                        dodo_detector_ros/tennis racket_0:
+                          {}
+                        dodo_detector_ros/tie_0:
+                          {}
+                        dodo_detector_ros/toilet_0:
+                          {}
+                        dodo_detector_ros/toilet_1:
+                          {}
+                        dodo_detector_ros/traffic light_0:
+                          {}
+                        dodo_detector_ros/train_0:
+                          {}
+                        dodo_detector_ros/truck_0:
+                          {}
+                        dodo_detector_ros/tv_0:
+                          {}
+                        dodo_detector_ros/tv_1:
+                          {}
+                        dodo_detector_ros/tv_2:
+                          {}
+                        dodo_detector_ros/tv_3:
+                          {}
+                        dodo_detector_ros/umbrella_0:
+                          {}
+                        dodo_detector_ros/vase_0:
+                          {}
+                        dodo_detector_ros/vase_1:
+                          {}
+                        dodo_detector_ros/wine glass_0:
+                          {}
+                        head_rgbd_sensor_gazebo_frame:
+                          {}
+            base_footprint_wheel:
+              {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic: /hsrb/head_rgbd_sensor/depth_registered/rectified_points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /dodo_detector_ros/labeled_image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /collision_environment_marker_array
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 5.62759256362915
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 1.337768793106079
+        Y: 0.8121463656425476
+        Z: 0.7410570383071899
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.7897965312004089
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 4.435408115386963
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 970
+  Hide Left Dock: false
+  Hide Right Dock: true
+  Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000400000000000002890000032cfc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000000fc000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d006500720061010000026e0000007f0000000000000000fb0000000a0049006d006100670065010000013f0000022a0000001600ffffff000000010000010f0000031ffc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d0000031f000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004220000003efc0100000002fb0000000800540069006d0065010000000000000422000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000001930000032c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: true
+  Width: 1058
+  X: 93
+  Y: 53
