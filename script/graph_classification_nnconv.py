@@ -9,7 +9,7 @@ from torch_geometric.nn import NNConv
 from torch_geometric.loader import DataLoader
 from torch_geometric.utils import to_networkx
 
-from graphDatasetCreater import csv2graphDataset
+from graph_converter import graph_utilitys
 
 from matplotlib import pyplot as plt
 import networkx as nx
@@ -99,10 +99,10 @@ def test(model, iterator):
     accuracy = float(correct_num)/total_data_len
     return accuracy
 
-
+graph_utils = graph_utilitys()
 base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
 csv_path_list = {0:base_dir+'/SI/work.csv',1:base_dir+'/SI/meal_and_working_tools.csv',2:base_dir+'/SI/meal_while_working.csv',3:base_dir+'/SI/meal.csv'}
-datasets,_ = csv2graphDataset(csv_path_list)
+datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
 # data = datasets[0]

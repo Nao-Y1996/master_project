@@ -3,4 +3,5 @@ script/w2v_model/*.bin
 script/w2v_model/*.gz
 script/*.pyc
 script/__pycache__/*.pyc
-# script/graph_converter.py
+script/.DS_store
+.DS_store

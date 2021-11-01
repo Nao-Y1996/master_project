@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 import torch
 import torch.nn.functional as F
-from torch_geometric.nn import GraphConv
+from torch_geometric.nn import GCNConv
 from torch_geometric.loader import DataLoader
 
-from graphDatasetCreater import csv2graphDataset
+from graph_converter import graph_utilitys
 import random
 from torch.nn import Linear
 import torch.nn.functional as F
@@ -13,15 +13,15 @@ from torch_geometric.nn import global_mean_pool
 
 import os
 
-# GraphConv
+# GCNConv
 class GCN(torch.nn.Module):
-    def __init__(self, hidden_channels):
+    def __init__(self):
         super(GCN, self).__init__()
         torch.manual_seed(12345)
-        self.conv1 = GraphConv(50, hidden_channels)
-        self.conv2 = GraphConv(hidden_channels, hidden_channels)
-        self.conv3 = GraphConv(hidden_channels, hidden_channels)
-        self.lin = Linear(hidden_channels, 4)
+        self.conv1 = GCNConv(300, 200)
+        self.conv2 = GCNConv(200, 100)
+        self.conv3 = GCNConv(100, 30)
+        self.lin = Linear(30, 4)
 
     def forward(self, x, edge_index, batch):
         # 1. Obtain node embeddings
@@ -37,17 +37,21 @@ class GCN(torch.nn.Module):
         # 3. Apply a final classifier
         x = F.dropout(x, p=0.5, training=self.training)
         x = self.lin(x)
-        
+
         return x
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = GCN(hidden_channels=64)#.to(device)
+model = GCN()#.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 criterion = torch.nn.CrossEntropyLoss()
 
+graph_utils = graph_utilitys()
 base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
-csv_path_list = {0:base_dir+'/SI/work.csv',1:base_dir+'/SI/meal_and_working_tools.csv',2:base_dir+'/SI/meal_while_working.csv',3:base_dir+'/SI/meal.csv'}
-datasets,_ = csv2graphDataset(csv_path_list)
+csv_path_list = {0:base_dir+'/SI/position_data/work.csv',
+                 1:base_dir+'/SI/position_data/meal_and_working_tools.csv',
+                 2:base_dir+'/SI/position_data/meal_while_working.csv',
+                 3:base_dir+'/SI/position_data/meal.csv'}
+datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
 # data = datasets[0]
@@ -93,7 +97,7 @@ for epoch in range(1, 10):
     print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
 
 
-# model_path = os.path.dirname(__file__) + '/model/SI_gcn-test.pt'
+# model_path = os.path.abspath('') + '/model/SI_gcn-w300-30cm.pt'
 # torch.save(model.state_dict(),model_path)
 
 
