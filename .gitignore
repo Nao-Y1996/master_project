@@ -5,3 +5,4 @@ script/*.pyc
 script/__pycache__/*.pyc
 script/.DS_store
 .DS_store
+.python-version

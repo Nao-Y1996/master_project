@@ -11,7 +11,11 @@ from torch.nn import Linear
 import torch.nn.functional as F
 from torch_geometric.nn import global_mean_pool
 
+import fasttext
+import fasttext.util
 import os
+import numpy as np
+ft = fasttext.load_model(os.path.dirname(__file__) +'w2v_model/cc.en.300.bin')
 
 # GCNConv
 class GCN(torch.nn.Module):
@@ -45,7 +49,8 @@ model = GCN()#.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 criterion = torch.nn.CrossEntropyLoss()
 
-graph_utils = graph_utilitys()
+
+graph_utils = graph_utilitys(fasttext_model=ft)
 base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
 csv_path_list = {0:base_dir+'/SI/position_data/work.csv',
                  1:base_dir+'/SI/position_data/meal_and_working_tools.csv',
