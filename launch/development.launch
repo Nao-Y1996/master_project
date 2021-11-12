@@ -8,11 +8,11 @@
     </include> -->
 
     <!-- ====== Xtion Camera ===== -->
-    <include file="$(find openni2_launch)/launch/openni2.launch"></include>
-    <!-- <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/xtion.rviz"/> -->
+    <!-- <include file="$(find openni2_launch)/launch/openni2.launch"></include>
+    <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/xtion.rviz"/>
     <include file="$(find darknet_ros)/launch/darknet_ros.launch">
       <arg name="image" value="/camera/rgb/image_raw"/>
-    </include>
+    </include> -->
 
     <!-- ====== HSR simulator ===== -->
     <!-- <include file="$(find hsrb_gazebo_launch)/launch/hsrb_megaweb2015_world.launch"></include>
@@ -23,6 +23,12 @@
     </include> -->
 
 
+    <!-- ====== HSR ===== -->
+    <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/hsr_development.rviz"/>
+    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/> 
+    <include file="$(find darknet_ros)/launch/darknet_ros.launch">
+       <arg name="image" value="/hsrb/head_rgbd_sensor/rgb/image_raw"/>
+    </include> 
 
     
 

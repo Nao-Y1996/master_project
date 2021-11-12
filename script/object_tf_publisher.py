@@ -35,15 +35,19 @@ class TF_Publisher():
             topic_name = "/camera/depth/color/points"
             self.reference_tf = 'head_rgbd_sensor_link'
 
-        elif exe_type == 'hsr': # for HSR
+        elif exe_type == 'hsr_sim': # for HSR simulator
             topic_name = "/hsrb/head_rgbd_sensor/depth_registered/points"
+            self.reference_tf = 'head_rgbd_sensor_link'
+            
+        elif exe_type == 'hsr': # for HSR
+            topic_name = '/hsrb/head_rgbd_sensor/depth_registered/rectified_points'
             self.reference_tf = 'head_rgbd_sensor_link'
         else:
             print('TF_Publisherクラスの初期化に失敗しました')
             sys.exit()
         self.exe_type = exe_type
         self.pc_sub = rospy.Subscriber(topic_name, PointCloud2, self.get_pc)
-        rospy.wait_for_message(topic_name, PointCloud2, timeout=5.0)
+        rospy.wait_for_message(topic_name, PointCloud2, timeout=10.0)
         self.pc_data = None
 
     def get_pc(self, data):
@@ -156,7 +160,7 @@ if __name__ == '__main__':
     # detectionimage = ImageSbscriber(topic_name="/darknet_ros/detection_image")
     # face_sub = FaceSubscriber()
     yolo_info = GetYoloObjectInfo()
-    tf_pub = TF_Publisher(exe_type='xtion')
+    tf_pub = TF_Publisher(exe_type='hsr')
 
     spin_rate=rospy.Rate(100)
     count = 0
