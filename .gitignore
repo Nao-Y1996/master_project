@@ -2,4 +2,6 @@ script/experiment_data/*
 script/w2v_model/*.bin
 script/w2v_model/*.gz
 script/*.pyc
-# script/graph_converter.py
+script/__pycache__/*.pyc
+script/.DS_store
+.DS_store

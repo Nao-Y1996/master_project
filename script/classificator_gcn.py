@@ -13,15 +13,15 @@ from torch.nn import Linear
 import os
 
 
-# GraphConv
+# GCNConv
 class GCN(torch.nn.Module):
-    def __init__(self, hidden_channels):
+    def __init__(self):
         super(GCN, self).__init__()
         torch.manual_seed(12345)
-        self.conv1 = GraphConv(50, hidden_channels)
-        self.conv2 = GraphConv(hidden_channels, hidden_channels)
-        self.conv3 = GraphConv(hidden_channels, hidden_channels)
-        self.lin = Linear(hidden_channels, 4)
+        self.conv1 = GCNConv(300, 200)
+        self.conv2 = GCNConv(200, 100)
+        self.conv3 = GCNConv(100, 30)
+        self.lin = Linear(30, 4)
 
     def forward(self, x, edge_index, batch):
         # 1. Obtain node embeddings
@@ -37,14 +37,14 @@ class GCN(torch.nn.Module):
         # 3. Apply a final classifier
         x = F.dropout(x, p=0.5, training=self.training)
         x = self.lin(x)
-        
+
         return x
 
 class classificator():
-    def __init__(self):
+    def __init__(self, model):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        model_path = os.path.dirname(__file__) + '/model/SI_gcn.pt'
-        self.loading_model =  GCN(hidden_channels=64).to(self.device)
+        model_path = os.path.dirname(__file__) + '/model/'+ model # 'SI_gcn.pt'
+        self.loading_model =  GCN().to(self.device)
         self.loading_model.load_state_dict(torch.load(model_path))
 
     def classificate(self, graph):
@@ -57,5 +57,5 @@ class classificator():
             data = data.to(self.device)
             pred = self.loading_model(data.x, data.edge_index, data.batch)
             probability = sm(pred).tolist()[0]
-            print(probability) 
+            # print(probability)
             return probability
