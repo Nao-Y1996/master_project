@@ -15,18 +15,30 @@ csv_path_list = {0:base_dir+'/position_data/work.csv',
                  }
 
 obj_name_change_patterns = [
-                            {'sandwich':'toast'},
-                            {'orange':'grape'},
-                            {'banana':'apple'},
-                            {'donut':'cookie'},
-                            {'sandwich':'toast','orange':'grape'},
-                            {'sandwich':'toast','orange':'grape','banana':'apple'},
-                            {'sandwich':'toast','orange':'grape','banana':'apple','donut':'cookie'},
-                            {'laptop':'tvmonitor'},
-                            {'mouse':'cell phone'},
-                            {'keyboard':'iPad'},
-                            {'laptop':'tvmonitor','mouse':'cell phone'},
-                            {'laptop':'tvmonitor','mouse':'cell phone','keyboard':'iPad'}
+                            {'sandwich':'toast'},#1
+                            {'sandwich':'book'},#2
+                            {'orange':'grape'},#3
+                            {'orange':'book'},#4
+                            {'banana':'apple'},#5
+                            {'banana':'book'},#6
+                            {'donut':'cookie'},#7
+                            {'donut':'book'},#8
+                            {'sandwich':'toast','orange':'grape'},#9
+                            {'sandwich':'book','orange':'chair'},#10
+                            {'sandwich':'toast','orange':'grape','banana':'apple'},#11
+                            {'sandwich':'book','orange':'chair','banana':'t-shirt'},#12
+                            {'sandwich':'toast','orange':'grape','banana':'apple','donut':'cookie'},#13
+                            {'sandwich':'book','orange':'chair','banana':'t-shirt','donut':'clock'},#14
+                            {'laptop':'tvmonitor'},#15
+                            {'laptop':'book'},#16
+                            {'mouse':'cell phone'},#17
+                            {'mouse':'book'},#18
+                            {'keyboard':'iPad'},#19
+                            {'keyboard':'book'},#20
+                            {'laptop':'tvmonitor','mouse':'cell phone'},#21
+                            {'laptop':'book','mouse':'chair'},#22
+                            {'laptop':'tvmonitor','mouse':'cell phone','keyboard':'iPad'},#23
+                            {'laptop':'book','mouse':'chair','keyboard':'t-shirt'}#24
                             ]
 
 cf = classificator(model='SI_gcn-w300-30cm.pt')
@@ -66,7 +78,7 @@ for i, pattern in enumerate(obj_name_change_patterns):
             file_name = str(count)+'_'+str(result)+'->'+str(int(graph.y))+'.png'
             graph_util.visualize_graph(graph, node_labels=obj_names, save_graph_name=save_dir+'/'+file_name, show_graph=False)
         probabilitys.append(probability)
-    print('パターン'+str(i)+' 正解率：\n' , crrect_num, '/', related_graph_count, ' = ', end='')
+    print('パターン'+str(i+1)+' 正解率：\n' , crrect_num, '/', related_graph_count, ' = ', end='')
     try:
         print(crrect_num/related_graph_count)
     except:
