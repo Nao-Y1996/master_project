@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 import pyaudio
@@ -8,7 +11,7 @@ from google.api_core import exceptions
 from google.cloud import speech_v1p1beta1 as speech
 
 # 環境変数の設定（プログラムの中でのみ有効）
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/Users/NaoYamada/serene-star-322806-748861ca74d7.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+"/serene-star-322806-748861ca74d7.json"
 #!/usr/bin/env python
 
 # Copyright 2019 Google LLC
