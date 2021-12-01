@@ -12,12 +12,13 @@ import matplotlib.pyplot as plt
 from classificator_gcn import classificator
 print("start-----------------------------------")
 cf = classificator(model='SI_gcn-w300-30cm.pt')
-graph_utils = graph_utilitys()
+graph_utils = graph_utilitys(fasttext_model='w2v_model/cc.en.300.bin')
 # AF = IPv4 という意味
 # TCP/IP の場合は、SOCK_STREAM を使う
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # IPアドレスとポートを指定
-    s.bind(('192.168.2.102', 50010))
+    # s.bind(('192.168.2.102', 50010))
+    s.bind(('127.0.0.1', 50010))
     # 1 接続
     s.listen(1)
     # connection するまで待つ
