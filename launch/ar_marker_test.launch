@@ -10,7 +10,7 @@
 
   <include file="$(find openni2_launch)/launch/openni2.launch"></include>
  
-  <arg name="marker_size" default="7.0" />
+  <arg name="marker_size" default="3.5" />
   <arg name="max_new_marker_error" default="0.08" />
   <arg name="max_track_error" default="0.2" />
   <arg name="cam_image_topic" default="/camera/rgb/image_raw" />
@@ -22,5 +22,7 @@
           $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
  
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find master_project)/rviz_conf/ar_marker_test.rviz"/>
+  <!-- <node pkg="master_project" name="ar_tf_publisher" type="ar_tf_publisher.py"/> -->
+
  
 </launch>
