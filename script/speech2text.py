@@ -7,12 +7,15 @@ import pyaudio
 from six.moves import queue
 
 from google.api_core import exceptions
-
 from google.cloud import speech_v1p1beta1 as speech
-
 # 環境変数の設定（プログラムの中でのみ有効）
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+"/serene-star-322806-748861ca74d7.json"
-#!/usr/bin/env python
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+"serene-star-322806-748861ca74d7.json"
+
+import socket
+M_SIZE = 1024
+# Serverのアドレスを用意。Serverのアドレスは確認しておく必要がある。
+serv_address = ('127.0.0.1', 8890)
+
 
 # Copyright 2019 Google LLC
 #
@@ -176,7 +179,7 @@ class ResumableMicrophoneStream:
             yield b"".join(data)
 
 
-def listen_print_loop(responses, stream):
+def listen_print_loop(responses, stream, sock):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -232,6 +235,10 @@ def listen_print_loop(responses, stream):
             sys.stdout.write(GREEN)
             sys.stdout.write("\033[K")
             sys.stdout.write(str(corrected_time) + ": " + transcript + "\n")
+            
+            #-----------ここにsocket通信を入れる------------#
+            send_len = sock.sendto(transcript.encode('utf-8'), serv_address) # UDPで送る
+            #--------------------------------------------#
 
             stream.is_final_end_time = stream.result_end_time
             stream.last_transcript_was_final = True
@@ -253,6 +260,9 @@ def listen_print_loop(responses, stream):
 
 
 def main():
+    # UDPのためのソケットを作成する
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
     """start bidirectional streaming from microphone input to speech API"""
 
     client = speech.SpeechClient()
@@ -260,6 +270,7 @@ def main():
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=SAMPLE_RATE,
         language_code="ja-JP",
+        # language_code="en-US",
         max_alternatives=1,
     )
 
@@ -293,7 +304,7 @@ def main():
             responses = client.streaming_recognize(streaming_config, requests)
 
             # Now, put the transcription responses to use.
-            listen_print_loop(responses, stream)
+            listen_print_loop(responses, stream, sock)
 
             if stream.result_end_time > 0:
                 stream.final_request_end_time = stream.is_final_end_time
@@ -303,6 +314,7 @@ def main():
             stream.audio_input = []
             stream.restart_counter = stream.restart_counter + 1
 
+            # STREAMING_LIMITで定義した時間が経過するとここが実行される。
             if not stream.last_transcript_was_final:
                 sys.stdout.write("\n")
             stream.new_stream = True
