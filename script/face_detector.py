@@ -21,7 +21,7 @@ class FaceDetection():
         rospy.wait_for_message(topic_name, Image, timeout=5.0)
         self.faces = None
         self.rgb_image = None
-        self.cascade_path = os.path.dirname(rectified_pointsrectified_points
+        self.cascade_path = os.path.dirname(
             __file__) + '/haarcascades/haarcascade_frontalface_alt2.xml'
 
     def callback_image(self, data):
