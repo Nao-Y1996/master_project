@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import rospy
+import rosparam
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField,Image
 import cv2
@@ -72,30 +73,29 @@ if __name__ == '__main__':
         pass
 
     # 保存用ディレクトリの設定
-    base_dir = os.path.dirname(__file__)+'/experiment_data/'
-    new_dir_path = str(datetime.now())[0:16].replace(' ', '-').replace(':', '-')
-    save_dir = base_dir + new_dir_path
+    ex_dir = os.path.dirname(__file__)+'/experiment_data/' + str(datetime.now())[0:10]
     # 各フレームにおけるobject positionとimageの保存用先
     try:
-        os.makedirs(save_dir+'/images/')
-        os.makedirs(save_dir+'/position_data/')
+        os.makedirs(ex_dir+'/images/')
+        os.makedirs(ex_dir+'/position_dataset/')
+        os.makedirs(ex_dir+'/estimation_output/')
     except OSError:
-        print('file exist')
-    image_dir = save_dir+'/images/'
-    position_dir = save_dir+'/position_data/'
+        print('experiment dirs exist')
+    dataset_dir = ex_dir+'/position_dataset/'
     # データを保存するファイル名の設定
-    if file_name is None:
-        file_name = 'test'
-    position_file_path = position_dir + file_name + '.csv'
+    state_pattern_count = rosparam.get_param("/state_pattern_count")
+    position_file_path = dataset_dir + str(state_pattern_count) + '.csv'
     with open(position_file_path, 'w') as f:
         print('created csv file for position')
-    # 実行モードが１のときサーバーに接続(分類結果を受け取る)
-    if exe_mode == 1:
+
+    robot_mode = rosparam.get_param("/robot_mode")
+    if robot_mode == 'state_recognition':
+    # if exe_mode == 1: # 実行モードが１のときサーバーに接続(分類結果を受け取る)
         print('connecting to server ...')
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #オブジェクトの作成をします
         client.connect(('192.168.2.105', 50010)) #これでサーバーに接続します
         print('Successfuly connected to server')
-        probability_file_path = position_dir + file_name + '_porobability.csv'
+        probability_file_path = dataset_dir + file_name + '_porobability.csv'
         with open(probability_file_path, 'w') as f:
             print('created csv file for porobability')
 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
 
-        # pag.screenshot(image_dir+str(count)+'.jpg')
+        # pag.screenshot(ex_dir+'/images/'+str(count)+'.jpg')
 
         # --------face detection by mediapipe pose---------
         # print("face ---- ",face_sub.face_x, face_sub.face_y)
@@ -147,13 +147,19 @@ if __name__ == '__main__':
                 print(obj_name)
 
 
-            
-        graph_info = np.array(obj_positions).reshape(1,-1)[0].tolist()
-        with open(position_file_path, 'a') as f:
-            writer = csv.writer(f)
-            writer.writerow(graph_info)
 
-        if exe_mode == 1:
+        graph_info = np.array(obj_positions).reshape(1,-1)[0].tolist()
+
+        robot_mode = rosparam.get_param("/robot_mode")
+
+        if robot_mode == "graph_collecting":
+            # グラフデータ収集
+            with open(position_file_path, 'a') as f:
+                writer = csv.writer(f)
+                writer.writerow(graph_info)
+
+        if robot_mode == 'state_recognition':
+        # if exe_mode == 1:
             data = pickle.dumps(graph_info)
             client.send(data) #データを送信
             received_data = client.recv(1024) # データを受信
