@@ -10,7 +10,7 @@
 
   <include file="$(find openni2_launch)/launch/openni2.launch"></include>
  
-  <arg name="marker_size" default="3.5" />
+  <arg name="marker_size" default="3.2" />
   <arg name="max_new_marker_error" default="0.08" />
   <arg name="max_track_error" default="0.2" />
   <arg name="cam_image_topic" default="/camera/rgb/image_raw" />
