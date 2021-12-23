@@ -4,11 +4,13 @@ import socket
 import sys
 
 import rospy
-import rosparam
+# import rosparam
 
 # 通信の設定
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+IP_ADDRESS = s.getsockname()[0]
 M_SIZE = 1024
-host = '192.168.0.109'
+host = IP_ADDRESS
 port = 8890
 locaddr = (host, port)
 
@@ -22,8 +24,8 @@ sock.bind(locaddr)
 if __name__ == "__main__":
     rospy.init_node('main_controller', anonymous=True)
     
-    rosparam.set_param("/robot_mode", "nomal")
-    rosparam.set_param("/state_pattern_count", 1)
+    rospy.set_param("/robot_mode", "nomal")
+    rospy.set_param("/state_pattern_count", 1)
 
     while not rospy.is_shutdown():
         try :
@@ -38,20 +40,20 @@ if __name__ == "__main__":
                 print(message, type(message))
             if '覚えて' in message:
                 print('GNN学習データの収集を開始します')
-                pattern_count = rosparam.get_param("/state_pattern_count")
-                rosparam.set_param("/state_pattern_count", pattern_count+1)
+                pattern_count = rospy.get_param("/state_pattern_count")
+                rospy.set_param("/state_pattern_count", pattern_count+1)
                 # データ収集モードに切り替え
-                rosparam.set_param("/robot_mode", "graph_collecting")
+                rospy.set_param("/robot_mode", "graph_collecting")
 
             if '終了' in message:
                 print('GNN学習データの収集を開始します')
                 # データ収集モードをしゅうりょうする
-                rosparam.set_param("/robot_mode", "finish_graph_collecting")
+                rospy.set_param("/robot_mode", "finish_graph_collecting")
             
             if '認識モード' in message:
                 print('状態認識を開始します')
                 # データ収集モードをしゅうりょうする
-                rosparam.set_param("/robot_mode", "state_recognition")
+                rospy.set_param("/robot_mode", "state_recognition")
 
         except KeyboardInterrupt:
             print ('\n . . .\n')

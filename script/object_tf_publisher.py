@@ -162,7 +162,7 @@ if __name__ == '__main__':
     # detectionimage = ImageSbscriber(topic_name="/darknet_ros/detection_image")
     # face_sub = FaceSubscriber()
     yolo_info = GetYoloObjectInfo()
-    tf_pub = TF_Publisher(exe_type='hsr')
+    tf_pub = TF_Publisher(exe_type='xtion')
 
     spin_rate=rospy.Rate(100)
     count = 0
