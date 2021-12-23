@@ -128,6 +128,8 @@ if __name__ == '__main__':
         file_name = args[2]
     except:
         pass
+    
+    server_ip = rospy.get_param('server_IP')
 
     # 保存用ディレクトリの設定
     base_dir = os.path.dirname(__file__)+'/experiment_data/'
@@ -151,7 +153,7 @@ if __name__ == '__main__':
     if exe_mode == 1:
         print('connecting to server ...')
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #オブジェクトの作成をします
-        client.connect(('192.168.2.105', 50010)) #これでサーバーに接続します
+        client.connect((server_ip, 12345)) #これでサーバーに接続します
         print('Successfuly connected to server')
         probability_file_path = position_dir + file_name + '_porobability.csv'
         with open(probability_file_path, 'w') as f:

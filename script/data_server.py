@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+import rospy
 import socket
 import datetime
 import pickle
@@ -17,6 +17,8 @@ graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 IP_ADDRESS = s.getsockname()[0]
+print(f'IP address = {IP_ADDRESS}')
+rospy.set_param('server_IP', IP_ADDRESS)
 
 # AF = IPv4 という意味
 # TCP/IP の場合は、SOCK_STREAM を使う

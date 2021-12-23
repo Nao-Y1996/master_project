@@ -26,7 +26,7 @@ class graph_utilitys():
                     26:"mouse", 27:"remote", 28:"keyboard", 29:"cell phone", 30:"microwave", 31:"oven", 32:"toaster", 33:"sink", 34:"refrigerator",
                     35:"book", 36:"clock", 37:"vase", 38:"scissors", 39:"teddy bear", 40:"hair drier", 41:"toothbrush"
                     }
-        self.ft = fasttext_model
+        self.ft = fasttext.load_model(fasttext_model)
 
     def changeID_2_OBJECT_NAME(self, obj_name_changer_dict):
         """
