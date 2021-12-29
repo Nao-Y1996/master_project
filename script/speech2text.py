@@ -14,7 +14,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+"serene
 import socket
 M_SIZE = 1024
 # Serverのアドレスを用意。Serverのアドレスは確認しておく必要がある。
-serv_address = ('127.0.0.1', 8890)
+serv_address = ('192.168.2.109', 8890)
 
 
 # Copyright 2019 Google LLC

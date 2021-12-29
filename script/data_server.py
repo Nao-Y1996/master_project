@@ -22,6 +22,7 @@ rospy.set_param('server_IP', IP_ADDRESS)
 
 # AF = IPv4 という意味
 # TCP/IP の場合は、SOCK_STREAM を使う
+# UDPの場合は、SOCK_DGRAM
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # IPアドレスとポートを指定
     s.bind((IP_ADDRESS, 12345))

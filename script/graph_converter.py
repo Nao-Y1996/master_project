@@ -20,7 +20,7 @@ class DictConstrustionError(Exception):
 class graph_utilitys():
     def __init__(self, fasttext_model):
         self.ID_2_OBJECT_NAME = {
-                    0:"robot", 1:"bottle", 2:"wine glass", 3:"cup", 4:"fork", 5:"knife", 6:"spoon", 7:"bowl",
+                    0:"face", 1:"bottle", 2:"wine glass", 3:"cup", 4:"fork", 5:"knife", 6:"spoon", 7:"bowl",
                     8:"banana", 9:"apple", 10:"sandwich", 11:"orange", 12:"broccoli", 13:"carrot", 14:"hot dog", 15:"pizza", 16:"donut",
                     17:"cake", 18:"chair", 19:"sofa", 20:"pottedplant", 21:"bed", 22:"diningtable", 23:"toilet", 24:"tvmonitor", 25:"laptop",
                     26:"mouse", 27:"remote", 28:"keyboard", 29:"cell phone", 30:"microwave", 31:"oven", 32:"toaster", 33:"sink", 34:"refrigerator",
@@ -53,7 +53,7 @@ class graph_utilitys():
         obj_num = int(len(position_data)/4)
         #物体の数が0 or 1の時はグラフ作成できない
         if (obj_num==0) or (obj_num==1):
-            return None
+            return None, None
         names = []
         nodes_features = []
         positions = []
@@ -127,11 +127,11 @@ class graph_utilitys():
         return datasets, obj_names_sets
     
     def visualize_graph(self, graph, node_labels, save_graph_name=None, show_graph=True):
-        plt.close()
+        # plt.close()
         G = to_networkx(graph, node_attrs=['x'], edge_attrs=['edge_attr'])
         mapping = {k: v for k, v in zip(G.nodes, node_labels)}
         G = nx.relabel_nodes(G, mapping)
-        c_list = ['skyblue' if n=='robot' else 'orange' for n in G.nodes()]
+        c_list = ['skyblue' if n=='face' else 'orange' for n in G.nodes()]
         nx.draw_spring(G, with_labels=True, width = 3, edge_color="gray", node_color=c_list, node_size=2000)
         if save_graph_name is not None:
             plt.savefig(save_graph_name)

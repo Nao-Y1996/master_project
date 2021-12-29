@@ -8,7 +8,9 @@ import rospy
 
 # 通信の設定
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
 IP_ADDRESS = s.getsockname()[0]
+print('IP address = ',IP_ADDRESS)
 M_SIZE = 1024
 host = IP_ADDRESS
 port = 8890
@@ -34,24 +36,32 @@ if __name__ == "__main__":
             # python2では（）つけるとコンソールの表示が崩れる
             python_version = sys.version_info[0]
             if python_version == 2:
-                print message, type(message)
+                print (message)
             if python_version == 3:
                 message = message.decode(encoding='utf-8')
-                print(message, type(message))
+                print(message)
+            
+            if 'モードの確認' in message:
+                robot_mode = rospy.get_param("/robot_mode")
+                print(robot_mode)
+
             if '覚えて' in message:
-                print('GNN学習データの収集を開始します')
-                pattern_count = rospy.get_param("/state_pattern_count")
-                rospy.set_param("/state_pattern_count", pattern_count+1)
-                # データ収集モードに切り替え
-                rospy.set_param("/robot_mode", "graph_collecting")
+                robot_mode = rospy.get_param("/robot_mode")
+                if robot_mode != 'graph_collecting':
+                    pattern_count = rospy.get_param("/state_pattern_count")
+                    # データ収集モードに切り替え
+                    rospy.set_param("/robot_mode", "graph_collecting")
+                    print(str(pattern_count)+'パターン目のデータを収集します')
 
             if '終了' in message:
-                print('GNN学習データの収集を開始します')
                 # データ収集モードをしゅうりょうする
                 rospy.set_param("/robot_mode", "finish_graph_collecting")
+
+                pattern_count = rospy.get_param("/state_pattern_count")
+                print(str(pattern_count)+'パターン目のデータ収集を終了')
+                rospy.set_param("/state_pattern_count", pattern_count+1)
             
             if '認識モード' in message:
-                print('状態認識を開始します')
                 # データ収集モードをしゅうりょうする
                 rospy.set_param("/robot_mode", "state_recognition")
 
