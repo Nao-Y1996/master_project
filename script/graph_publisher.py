@@ -303,8 +303,10 @@ if __name__ == '__main__':
                     # trans, rot = listener.lookupTransform(marker, marker, rospy.Time(0))
                     # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  marker)
                     # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
-        
-        print(np.array(obj_positions)[:,0])
+        try:
+            print(np.array(obj_positions)[:,0])
+        except IndexError:
+            print(np.array(obj_positions))
         graph_data = np.array(obj_positions).reshape(1,-1)[0].tolist()
         publish_data = Float32MultiArray(data=graph_data)
         graph_data_pub.publish(publish_data)

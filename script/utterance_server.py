@@ -108,6 +108,9 @@ if __name__ == "__main__":
             
             elif '認識モード' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
+            
+            elif '通常モード' in message:
+                rospy.set_param("/robot_mode", "nomal")
 
             elif '覚えて' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")

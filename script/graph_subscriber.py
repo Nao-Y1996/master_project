@@ -36,7 +36,7 @@ if __name__ == '__main__':
     print("start-----------------------------------")
     cf = classificator(model='SI_gcn-w300-30cm.pt')
 
-    graph_sub = GraphSbscriber()
+    graph_sub = GraphSbscriber(topic_name='graph_data')
 
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
