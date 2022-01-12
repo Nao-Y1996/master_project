@@ -21,7 +21,8 @@ import pyautogui as pag
 # import sqlite3
 import pandas as pd
 import time
-
+import traceback
+import json
 
 # ロボット機能を使うための準備
 from hsrb_interface import Robot
@@ -157,14 +158,11 @@ class MediapipePoseSubscriber():
         self.face_pose_visibility = self.pose[0:11,2]
         return self.face_pose, self.face_pose_visibility
 
-
-# "face","bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", 
-# "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", 
-# "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", 
-# "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
+conf_dir = os.path.dirname(__file__)+'/obj_conf/'
 
 MARKER_2_OBJECT ={}
 OBJECT_NAME_2_ID ={}
+ID_2_OBJECT_NAME = {}
 
 obj_4_real = ["face","bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl",
                "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor",
@@ -181,6 +179,17 @@ for marker, obj_name in zip(marker_list, obj_4_marker):
 objct_list = obj_4_real+obj_4_marker
 for i, name in enumerate(objct_list):
     OBJECT_NAME_2_ID[name]=i
+    ID_2_OBJECT_NAME[i] = name
+
+with open(conf_dir+'ID_2_OBJECT_NAME.json', 'w') as f:
+    json.dump(ID_2_OBJECT_NAME, f)
+
+with open(conf_dir+'OBJECT_NAME_2_ID.json', 'w') as f:
+    json.dump(OBJECT_NAME_2_ID, f)
+
+with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
+    json.dump(MARKER_2_OBJECT, f)
+
 
 
 if __name__ == '__main__':
@@ -246,7 +255,7 @@ if __name__ == '__main__':
     tf_pub = TF_Publisher(exe_type='hsr')
 
     # グラフデータ配信用のパブリッシャー
-    graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=10)
+    graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=1)
 
     spin_rate=rospy.Rate(100)
     count = 1
@@ -277,7 +286,6 @@ if __name__ == '__main__':
                 # print('face')
                 face_exist = True
             except:
-                import traceback
                 traceback.print_exc()
 
         if face_exist:
@@ -305,7 +313,6 @@ if __name__ == '__main__':
                     pass
                 except:
                     exist_marker = False
-                    import traceback
                     traceback.print_exc()
                     pass
                 if exist_marker:
@@ -341,18 +348,25 @@ if __name__ == '__main__':
             obj_moved = True
             pass            
         except:
-            import traceback
             traceback.print_exc()
         
 
 
         # グラフデータを配信
         # print(map(lambda k: type(k), graph_data))
-        publish_data = Float32MultiArray(data=graph_data)
-        graph_data_pub.publish(publish_data)
+        try:
+            publish_data = Float32MultiArray(data=graph_data)
+            graph_data_pub.publish(publish_data)
+        except rospy.exceptions.ROSSerializationException:
+            # 認識モードから通常モードへの切替時に
+            # rospy.exceptions.ROSSerializationException: field data[] must be float type
+            # のエラーが出る　のでそれ用
+            continue
+        except:
+            traceback.print_exc()
 
         obj_num = (len(graph_data)-1)/4
-        # print(obj_num)
+        print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
             
