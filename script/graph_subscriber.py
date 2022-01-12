@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 import rospy
 from std_msgs.msg import Float32MultiArray
+import numpy as np
 
 from graph_converter import graph_utilitys
-from torch_geometric.utils import to_networkx
-import networkx as nx
 import matplotlib.pyplot as plt
 from classificator_gcn import classificator
 
@@ -33,6 +32,7 @@ class GraphSbscriber(object):
 if __name__ == '__main__':
 
     rospy.init_node('graph_subscriber', anonymous=True)
+    spin_rate=rospy.Rate(10)
     print("start-----------------------------------")
     cf = classificator(model='SI_gcn-w300-30cm.pt')
 
@@ -55,3 +55,10 @@ if __name__ == '__main__':
             if robot_mode == 'state_recognition':
                 probability = cf.classificate(graph)
                 print(probability)
+                height = np.round(probability, decimals=5)*100
+                left = [1, 2, 3, 4 ]
+                plt.bar(left, height)
+                plt.ylim(0, 100)
+                plt.pause(0.001)
+                plt.cla()
+        spin_rate.sleep()
