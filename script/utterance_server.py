@@ -13,6 +13,13 @@ import csv
 from hsrb_interface import Robot
 robot = Robot()
 tts = robot.try_get('default_tts')
+whole_body = robot.try_get('whole_body')
+
+# whole_body.move_to_joint_positions({'head_pan_joint': -0.9, 
+#                                     'head_tilt_joint': -0.1,
+#                                     'arm_flex_joint': -0.3,
+#                                     'arm_lift_joint':0.4,
+#                                     'arm_roll_joint':0.0})
 
 python_version = sys.version_info[0]
 
@@ -73,6 +80,7 @@ sock.bind(locaddr)
 if __name__ == "__main__":
     # rospy.init_node('main_controller', anonymous=True)
     
+    # print(-987)
     rospy.set_param("/robot_mode", "nomal")
 
     # 保存用ディレクトリの設定
@@ -82,6 +90,7 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         state_name = None
         state_index = None
+        # rospy.set_param("/image_save_path", image_save_path)
         robot_mode = rospy.get_param("/robot_mode")
         try :
         # ③Clientからのmessageの受付開始
@@ -95,16 +104,33 @@ if __name__ == "__main__":
             
             if 'モードの確認' in message:
                 robot_mode = rospy.get_param("/robot_mode")
-                print(robot_mode)
+                if robot_mode == "state_recognition":
+                    tts.say('現在、認識モードです')
+                elif robot_mode == "nomal":
+                    tts.say('現在、通常モードです')
+                elif robot_mode == "waite_state_name":
+                    tts.say('現在、記録の準備中です。　今、何をしているか教えてもらえたら記録を開始できます。')
+                elif robot_mode == "graph_collecting":
+                    tts.say('現在、記録中です')
+                else:
+                    tts.say('モードが不明です。')
 
             elif '終了' in message:
-                save_dir = rospy.get_param("/save_dir")
-                db_file = save_dir+"/state.csv"
+                if (robot_mode=='graph_collecting'):
+                    save_dir = rospy.get_param("/save_dir")
+                    db_file = save_dir+"/state.csv"
 
-                state_index = rospy.get_param("/state_index")
-                state_name = get_stateName(db_file, state_index)
-                print(state_name + ' のデータ収集を終了します')
-                rospy.set_param("/robot_mode", "finish_graph_collecting")
+                    state_index = rospy.get_param("/state_index")
+                    state_name = get_stateName(db_file, state_index)
+                    
+
+                    image_save_path = save_dir+'/images/'
+                    rospy.set_param("/image_save_path", image_save_path)
+                    rospy.set_param("/robot_mode", "nomal")
+
+                    tts.say(state_name + 'の記録を終了しました。')
+                else:
+                    pass
             
             elif '認識モード' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
@@ -112,7 +138,7 @@ if __name__ == "__main__":
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
 
-            elif '覚えて' in message:
+            elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
                 tts.say('はい、今何をしていますか？')
 
@@ -126,7 +152,7 @@ if __name__ == "__main__":
                 if (robot_mode=='waite_state_name'):
                     # state_name = input('状態名を入力してください')
                     state_name = message
-                    tts.say(state_name + '、を記録します')
+                    tts.say(state_name + '、を記録します。')
                     
                     save_dir = rospy.get_param("/save_dir")
                     db_file = save_dir+"/state.csv"
@@ -137,9 +163,11 @@ if __name__ == "__main__":
                     rospy.set_param("/state_index", state_index)
 
                     # 収集するデータを保存するファイルを指定
+                    image_save_path = save_dir+'/images/pattern_'+str(state_index)+'/'
                     data_save_path = save_dir+'/position_data/pattern_'+str(state_index)+'.csv'
                     print(data_save_path + ' にデータを保存します')
                     rospy.set_param("/data_save_path", data_save_path)
+                    rospy.set_param("/image_save_path", image_save_path)
                     
                     # データ収集モードに切り替え
                     rospy.set_param("/robot_mode", "graph_collecting")
@@ -151,6 +179,8 @@ if __name__ == "__main__":
             print ('\n . . .\n')
             sock.close()
             break
+        except socket.timeout:
+            pass
         except:
             import traceback
             traceback.print_exc()

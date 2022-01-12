@@ -10,7 +10,7 @@ import os
 import csv
 from datetime import datetime
 import numpy as np
-np.set_printoptions(precision=3, suppress=True)
+np.set_printoptions(precision=6, suppress=True)
 import sys
 from yolo_object_detector import GetYoloObjectInfo
 import math
@@ -22,7 +22,14 @@ import pyautogui as pag
 import pandas as pd
 import time
 
-rospy.init_node('listen', anonymous=True)
+
+# ロボット機能を使うための準備
+from hsrb_interface import Robot
+robot = Robot()
+tts = robot.try_get('default_tts')
+whole_body = robot.try_get('whole_body')
+
+# rospy.init_node('listen', anonymous=True)
 br = TF.TransformBroadcaster()
 listener = TF.TransformListener()
 
@@ -186,7 +193,9 @@ if __name__ == '__main__':
     save_dir = rospy.get_param("/base_dir") +"/user_"+str(user_id)
     rospy.set_param("/save_dir", save_dir)
     image_dir = save_dir+'/images/'
+    rospy.set_param("/image_save_path", image_dir)
     position_dir = save_dir+'/position_data/'
+
     try:
         os.makedirs(image_dir)
         os.makedirs(position_dir)
@@ -207,6 +216,12 @@ if __name__ == '__main__':
         probability_file_path = position_dir + '/porobability.csv'
         with open(probability_file_path, 'w') as f:
             print('created csv file for porobability')
+        
+        for i in range(10):
+            try:
+                os.makedirs(image_dir+'pattern_'+str(i))
+            except OSError:
+                print('directory exist')
     else:
         pass
 
@@ -234,13 +249,13 @@ if __name__ == '__main__':
     graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=10)
 
     spin_rate=rospy.Rate(100)
-    count = 0
-    pre_face_x = 0
+    count = 1
+    count_saved = 0
+    pre_graph_data = None
     while not rospy.is_shutdown():
         
         # time.sleep(1)
-
-        # pag.screenshot(image_dir+str(count)+'.jpg')
+        obj_moved = False
         face_exist = False
         obj_positions =[]
 
@@ -302,25 +317,81 @@ if __name__ == '__main__':
                     
                     # trans, rot = listener.lookupTransform(marker, marker, rospy.Time(0))
                     # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  marker)
-                    # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
-        try:
-            print(np.array(obj_positions)[:,0])
-        except IndexError:
-            print(np.array(obj_positions))
+                    br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
+        # try:
+        #     print(np.array(obj_positions)[:,0])
+        # except IndexError:
+        #     print(np.array(obj_positions))
+        
+        
+
         graph_data = np.array(obj_positions).reshape(1,-1)[0].tolist()
+
+        # 先頭にcountを追加
+        graph_data.insert(0, float(count))
+
+        try:
+            graph_diff = np.array(pre_graph_data[1:]) - graph_data[1:]
+            all_obj_moved = map(lambda k: abs(k)>0.01, graph_diff) # 前回保存したデータと比較して各オブジェクトが1cm以上移動しているかどうか
+            if any(all_obj_moved):
+                obj_moved = True
+            else:
+                obj_moved = False
+        except (TypeError, ValueError):
+            obj_moved = True
+            pass            
+        except:
+            import traceback
+            traceback.print_exc()
+        
+
+
+        # グラフデータを配信
+        # print(map(lambda k: type(k), graph_data))
         publish_data = Float32MultiArray(data=graph_data)
         graph_data_pub.publish(publish_data)
 
-        obj_num = len(graph_data)/4
+        obj_num = (len(graph_data)-1)/4
+        # print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
-        if robot_mode == 'graph_collecting' and (obj_num >= 2) and (face_x != pre_face_x):
-            data_save_path = rospy.get_param("/data_save_path")
-            with open(data_save_path, 'a') as f:
-                writer = csv.writer(f)
-                writer.writerow(graph_data)
-                pre_face_x = face_x
+        if robot_mode == 'graph_collecting':
+            
+            if   (obj_num >= 2) and obj_moved:
+                data_save_path = rospy.get_param("/data_save_path")
+                with open(data_save_path, 'a') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(graph_data)
+                print(pre_graph_data)
+                print(graph_data)
 
-        
+                pre_graph_data = graph_data
+
+                count_saved += 1
+            print(count_saved)
+
+            #　スクリーンショット
+            image_save_path = rospy.get_param("/image_save_path")
+            pag.screenshot(image_save_path+str(count)+'.jpg')
+
+            count += 1
+
+            if count_saved >= 300:
+                
+                save_dir = rospy.get_param("/save_dir")
+                image_save_path = save_dir+'/images/'
+                rospy.set_param("/image_save_path", image_save_path)
+                rospy.set_param("/robot_mode", "nomal")
+
+                tts.say('記録を終了しました。')
+
+            
+        else:
+            count_saved = 0
+            pass
+
+        spin_rate.sleep()
+        print('------------------------------------------------>')
+
 
             # if exe_mode == 1:
             # if robot_mode == 'state_recognition':
@@ -341,8 +412,3 @@ if __name__ == '__main__':
                 # plt.ylim(0, 100)
                 # plt.pause(0.001)
                 # plt.cla()
-            count += 1
-        # if count >1000:
-        #     break
-        # spin_rate.sleep()
-        print('------------------------------------------------>')

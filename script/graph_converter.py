@@ -50,6 +50,9 @@ class graph_utilitys():
                 raise DictConstrustionError('変更したい物体名が、ID_2_OBJECT_NAME内に見つかりません。')
 
     def convertData2graph(self, position_data, label, include_names=False):
+        # 先頭の要素（countのデータ）を削除
+        position_data.pop(0)
+
         obj_num = int(len(position_data)/4)
         #物体の数が0 or 1の時はグラフ作成できない
         if (obj_num==0) or (obj_num==1):
