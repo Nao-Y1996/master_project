@@ -15,12 +15,12 @@ robot = Robot()
 tts = robot.try_get('default_tts')
 whole_body = robot.try_get('whole_body')
 
-# whole_body.move_to_joint_positions({'head_pan_joint': -0.9, 
-#                                     'head_tilt_joint': -0.1,
-#                                     'arm_flex_joint': -0.3,
-#                                     'arm_lift_joint':0.4,
-#                                     'arm_roll_joint':0.0})
-
+whole_body.move_to_joint_positions({'head_pan_joint': -0.9, 
+                                     'head_tilt_joint': -0.3,
+                                     'arm_flex_joint': -2.6,
+                                     'wrist_flex_joint':-0.5,
+                                     'arm_lift_joint':0.6,
+                                     'arm_roll_joint':0.0})
 python_version = sys.version_info[0]
 
 def exist_state_check(csv_file, state_name):
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                     rospy.set_param("/image_save_path", image_save_path)
                     rospy.set_param("/robot_mode", "nomal")
 
-                    tts.say(state_name + 'の記録を終了しました。')
+                    tts.say(state_name + 'の記録は完了です。')
                 else:
                     pass
             

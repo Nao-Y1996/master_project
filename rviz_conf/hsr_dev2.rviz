@@ -10,7 +10,7 @@ Panels:
         - /TF1/Frames1
         - /PointCloud21
       Splitter Ratio: 0.5
-    Tree Height: 470
+    Tree Height: 604
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -60,11 +60,21 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        ar_marker/709:
+        apple:
+          Value: true
+        ar_marker/701:
           Value: false
-        ar_marker/711:
+        ar_marker/702:
           Value: false
-        ar_marker/712:
+        ar_marker/703:
+          Value: false
+        ar_marker/704:
+          Value: false
+        ar_marker/705:
+          Value: false
+        ar_marker/706:
+          Value: false
+        ar_marker/707:
           Value: false
         arm_flex_link:
           Value: false
@@ -104,11 +114,9 @@ Visualization Manager:
           Value: false
         base_roll_link:
           Value: false
-        cell phone:
+        book:
           Value: true
-        chair:
-          Value: false
-        cup:
+        cereal:
           Value: true
         donut:
           Value: true
@@ -170,22 +178,30 @@ Visualization Manager:
           Value: false
         keyboard:
           Value: true
-        laptop:
-          Value: true
         map:
           Value: false
         mouse:
           Value: true
         odom:
           Value: false
-        refrigerator:
+        orange:
           Value: true
-        remote:
+        pizza:
           Value: true
-        scissors:
+        salada:
+          Value: true
+        sandwitch:
+          Value: true
+        scrambled egg:
+          Value: true
+        soup:
+          Value: true
+        toast:
           Value: true
         torso_lift_link:
           Value: false
+        tvmonitor:
+          Value: true
         wrist_flex_link:
           Value: false
         wrist_ft_sensor_frame:
@@ -260,11 +276,19 @@ Visualization Manager:
                           {}
                       head_l_stereo_camera_link:
                         head_l_stereo_camera_frame:
-                          ar_marker/709:
+                          ar_marker/701:
                             {}
-                          ar_marker/711:
+                          ar_marker/702:
                             {}
-                          ar_marker/712:
+                          ar_marker/703:
+                            {}
+                          ar_marker/704:
+                            {}
+                          ar_marker/705:
+                            {}
+                          ar_marker/706:
+                            {}
+                          ar_marker/707:
                             {}
                           head_rgbd_sensor_rgb_frame:
                             {}
@@ -274,11 +298,11 @@ Visualization Manager:
                         head_r_stereo_camera_gazebo_frame:
                           {}
                       head_rgbd_sensor_link:
-                        cell phone:
+                        apple:
                           {}
-                        chair:
+                        book:
                           {}
-                        cup:
+                        cereal:
                           {}
                         donut:
                           {}
@@ -288,15 +312,23 @@ Visualization Manager:
                           {}
                         keyboard:
                           {}
-                        laptop:
-                          {}
                         mouse:
                           {}
-                        refrigerator:
+                        orange:
                           {}
-                        remote:
+                        pizza:
                           {}
-                        scissors:
+                        salada:
+                          {}
+                        sandwitch:
+                          {}
+                        scrambled egg:
+                          {}
+                        soup:
+                          {}
+                        toast:
+                          {}
+                        tvmonitor:
                           {}
             base_footprint_wheel:
               {}
@@ -314,7 +346,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -331,7 +363,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -360,33 +392,33 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.669671058654785
+      Distance: 1.2636462450027466
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.7380581498146057
-        Y: 0.007162012159824371
-        Z: 0.585870623588562
+        X: 0.0690232664346695
+        Y: -0.7515853643417358
+        Z: 1.7206114530563354
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6897963881492615
+      Pitch: 1.1547964811325073
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.070375919342041
+      Yaw: 2.545370578765869
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 767
+  Height: 901
   Hide Left Dock: false
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd0000000400000000000001c900000261fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed0000026900000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d00000261000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f00000334fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000334000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004f30000003efc0100000002fb0000000800540069006d00650100000000000004f3000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000003240000026100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000156000002e7fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed0000043800000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000002e7000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f00000334fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000334000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004f30000003efc0100000002fb0000000800540069006d00650100000000000004f3000002eb00fffffffb0000000800540069006d0065010000000000000450000000000000000000000397000002e700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -396,5 +428,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1267
-  X: 474
-  Y: 725
+  X: 1771
+  Y: 61

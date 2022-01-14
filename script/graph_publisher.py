@@ -164,11 +164,8 @@ MARKER_2_OBJECT ={}
 OBJECT_NAME_2_ID ={}
 ID_2_OBJECT_NAME = {}
 
-obj_4_real = ["face","bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl",
-               "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor",
-               "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven",
-               "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
-obj_4_marker = ["banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake" ]
+obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "cell phone", "book", "banana", "apple", "orange", "pizza","cup"]
+obj_4_marker = ['toast', 'sandwitch', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
 marker_list = []
 for i in range(1,len(obj_4_marker)+1):
     marker_list.append('ar_marker/'+str(700+i))
@@ -258,7 +255,6 @@ if __name__ == '__main__':
     graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=1)
 
     spin_rate=rospy.Rate(100)
-    count = 1
     count_saved = 0
     pre_graph_data = None
     while not rospy.is_shutdown():
@@ -287,8 +283,8 @@ if __name__ == '__main__':
                 face_exist = True
             except:
                 traceback.print_exc()
-
-        if face_exist:
+        names = []
+        if True: #face_exist:
             # -------- object detection ---------
             objects_info = yolo_info.get_objects() #"/darknet_ros/detection_image"
             if len(objects_info) > 0:
@@ -301,6 +297,7 @@ if __name__ == '__main__':
                         if obj_x is not None:
                             obj_positions.append( [OBJECT_NAME_2_ID[name] ,obj_x, obj_y, obj_z] )
                             # print(name)
+                            names.append(name)
                             pass
             # -------- marker detection ---------
             for marker in marker_list:
@@ -319,6 +316,7 @@ if __name__ == '__main__':
                     trans, rot = listener.lookupTransform(tf_pub.reference_tf, marker, rospy.Time(0))
                     obj_x, obj_y, obj_z = trans
                     obj_name = MARKER_2_OBJECT[marker]
+                    names.append(obj_name)
                     # print(obj_name)
                     obj_positions.append( [OBJECT_NAME_2_ID[obj_name] ,obj_x, obj_y, obj_z] )
                     
@@ -329,17 +327,19 @@ if __name__ == '__main__':
         #     print(np.array(obj_positions)[:,0])
         # except IndexError:
         #     print(np.array(obj_positions))
+        print(names)
         
         
 
         graph_data = np.array(obj_positions).reshape(1,-1)[0].tolist()
 
-        # 先頭にcountを追加
-        graph_data.insert(0, float(count))
+        # 先頭にdata_idを追加
+        data_id = int(float(time.time())*100)
+        graph_data.insert(0, float(data_id))
 
         try:
             graph_diff = np.array(pre_graph_data[1:]) - graph_data[1:]
-            all_obj_moved = map(lambda k: abs(k)>0.01, graph_diff) # 前回保存したデータと比較して各オブジェクトが1cm以上移動しているかどうか
+            all_obj_moved = map(lambda k: abs(k)>0.02, graph_diff) # 前回保存したデータと比較して各オブジェクトが2cm以上移動しているかどうか
             if any(all_obj_moved):
                 obj_moved = True
             else:
@@ -350,7 +350,6 @@ if __name__ == '__main__':
         except:
             traceback.print_exc()
         
-
 
         # グラフデータを配信
         # print(map(lambda k: type(k), graph_data))
@@ -366,63 +365,48 @@ if __name__ == '__main__':
             traceback.print_exc()
 
         obj_num = (len(graph_data)-1)/4
-        print(obj_num)
+        # print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
-            
-            if   (obj_num >= 2) and obj_moved:
-                data_save_path = rospy.get_param("/data_save_path")
-                with open(data_save_path, 'a') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(graph_data)
-                print(pre_graph_data)
-                print(graph_data)
+            data_save_path = rospy.get_param("/data_save_path")
 
-                pre_graph_data = graph_data
+            if face_exist:
+                if (obj_num >= 2) and obj_moved:
+                    data_save_path = rospy.get_param("/data_save_path")
+                    with open(data_save_path, 'a') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(graph_data)
 
-                count_saved += 1
+                    pre_graph_data = graph_data
+
+                    count_saved += 1
+                else:
+                    pass
+
+                #　スクリーンショット
+                image_save_path = rospy.get_param("/image_save_path")
+                pag.screenshot(image_save_path+str(data_id)+'.jpg')
+
+            else:
+                pass
+
             print(count_saved)
 
-            #　スクリーンショット
-            image_save_path = rospy.get_param("/image_save_path")
-            pag.screenshot(image_save_path+str(count)+'.jpg')
-
-            count += 1
-
-            if count_saved >= 300:
+            if count_saved >= 100:
                 
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'
                 rospy.set_param("/image_save_path", image_save_path)
                 rospy.set_param("/robot_mode", "nomal")
 
-                tts.say('記録を終了しました。')
+                tts.say('終了しました。')
 
-            
         else:
             count_saved = 0
             pass
 
         spin_rate.sleep()
-        print('------------------------------------------------>')
-
-
-            # if exe_mode == 1:
-            # if robot_mode == 'state_recognition':
-            #     print(graph_data)
-            #     data = pickle.dumps(graph_data)
-                # client.send(data) #データを送信
-                # send_len = sock.sendto(data, (data_server_ip,12345)) # UDPで送る
-                # received_data = client.recv(1024) # データを受信
-                # rx_meesage, addr = sock.recvfrom(1024)
-                # print(rx_meesage.decode(encoding='utf-8'))
-                # probability = np.array(pickle.loads(received_data))
-                # with open(probability_file_path, 'a') as f:
-                #     writer = csv.writer(f)
-                #     writer.writerow(probability)
-                # height = np.round(probability, decimals=5)*100
-                # left = [1, 2, 3, 4 ]
-                # plt.bar(left, height)
-                # plt.ylim(0, 100)
-                # plt.pause(0.001)
-                # plt.cla()
+        # import time
+ 
+        
+        # print('------------------------------------------------')

@@ -7,7 +7,7 @@ import numpy as np
 from graph_converter import graph_utilitys
 import matplotlib.pyplot as plt
 from classificator_gcn import classificator
-
+import traceback
 graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
 
 
@@ -41,6 +41,8 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
 
+        probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
+
         # グラフデータを受け取る
         graph = graph_sub.get_grapf()
         node_names = graph_sub.get_node_names()
@@ -48,17 +50,23 @@ if __name__ == '__main__':
 
         # グラフの表示
         if graph is not None:
-            graph_utils.visualize_graph(graph, node_labels=node_names,
-                            save_graph_name=None, show_graph=True)
+            # graph_utils.visualize_graph(graph, node_labels=node_names,
+            #                 save_graph_name=None, show_graph=True)
             
             # 状態認識
             if robot_mode == 'state_recognition':
                 probability = cf.classificate(graph)
                 print(probability)
-                height = np.round(probability, decimals=5)*100
-                left = [1, 2, 3, 4 ]
-                plt.bar(left, height)
-                plt.ylim(0, 100)
-                plt.pause(0.001)
-                plt.cla()
+
+                try:
+                    publish_data = Float32MultiArray(data=probability)
+                    probability_pub.publish(publish_data)
+                except rospy.exceptions.ROSSerializationException:
+                    # 認識モードから通常モードへの切替時に
+                    # rospy.exceptions.ROSSerializationException: field data[] must be float type
+                    # のエラーが出る　のでそれ用
+                    continue
+                except:
+                    traceback.print_exc()
+
         spin_rate.sleep()
