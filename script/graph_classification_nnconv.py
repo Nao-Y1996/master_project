@@ -126,7 +126,7 @@ test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = NNConvNet(node_feature_dim=300, edge_feature_dim=1, output_dim=4
+model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=4
                   ).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
