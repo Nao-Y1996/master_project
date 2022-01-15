@@ -126,9 +126,18 @@ class graph_utilitys():
         datasets = []
         for num in range(len(csv_files)):
             file_path = csv_files[num]
+            positions_data = []
             with open(file_path) as f:
                 csv_file = csv.reader(f)
-                positions_data = [[float(v) for v in row] for row in csv_file]
+                for i, row in enumerate(csv_file):
+                    _row = []
+                    if '' in row:
+                            continue
+                    for j, v in enumerate(row):
+                        _row.append(float(v))
+                    positions_data.append(_row)# 先頭の要素（data_idのデータ）を削除してから追加
+                # positions_data = [[float(v) for v in row] for row in csv_file]
+            print(file_path.split('/')[-1],' number of data ---> ', len(positions_data))
             for row, position_data in enumerate(positions_data):
                 graph, obj_names = self.convertData2graph(position_data, label=num, include_names=include_names)
                 if graph is not None:
@@ -150,3 +159,13 @@ class graph_utilitys():
             # plt.show()
             plt.pause(0.1)
             plt.clf()
+
+if __name__ == '__main__':
+    ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+    graph_utils = graph_utilitys(fasttext_model=ft_path)
+    base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
+
+    csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
+    datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
+    print(datasets)
+    print(len(datasets))

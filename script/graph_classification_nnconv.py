@@ -18,6 +18,8 @@ import random
 import csv
 import os
 
+import fasttext
+
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
         super(NNConvNet, self).__init__()
@@ -34,8 +36,8 @@ class NNConvNet(nn.Module):
     def forward(self, data):
         x, edge_index, edge_attr = data.x, data.edge_index, data.edge_attr
         # print(x, edge_index, edge_attr, sep='\n')
-        x = self.nnconv1(x, edge_index, edge_attr)
         # print(f'1 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        x = self.nnconv1(x, edge_index, edge_attr)
         x = F.relu(x)
         # print(f'2 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = self.nnconv2(x, edge_index, edge_attr)
@@ -99,9 +101,11 @@ def test(model, iterator):
     accuracy = float(correct_num)/total_data_len
     return accuracy
 
-graph_utils = graph_utilitys()
-base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
-csv_path_list = {0:base_dir+'/SI/work.csv',1:base_dir+'/SI/meal_and_working_tools.csv',2:base_dir+'/SI/meal_while_working.csv',3:base_dir+'/SI/meal.csv'}
+ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+graph_utils = graph_utilitys(fasttext_model=ft_path)
+base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
+
+csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
 datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
@@ -122,7 +126,7 @@ test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = NNConvNet(node_feature_dim=50, edge_feature_dim=1, output_dim=4
+model = NNConvNet(node_feature_dim=300, edge_feature_dim=1, output_dim=4
                   ).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())

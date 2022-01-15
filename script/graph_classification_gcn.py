@@ -15,7 +15,7 @@ import fasttext
 import fasttext.util
 import os
 import numpy as np
-ft = fasttext.load_model(os.path.dirname(__file__) +'w2v_model/cc.en.300.bin')
+
 
 # GCNConv
 class GCN(torch.nn.Module):
@@ -49,13 +49,20 @@ model = GCN()#.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 criterion = torch.nn.CrossEntropyLoss()
 
+# ft = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+# graph_utils = graph_utilitys(fasttext_model=ft)
+# base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
+# csv_path_list = {0:base_dir+'/SI/position_data/work.csv',
+#                  1:base_dir+'/SI/position_data/meal_and_working_tools.csv',
+#                  2:base_dir+'/SI/position_data/meal_while_working.csv',
+#                  3:base_dir+'/SI/position_data/meal.csv'}
+# datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 
-graph_utils = graph_utilitys(fasttext_model=ft)
-base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data"
-csv_path_list = {0:base_dir+'/SI/position_data/work.csv',
-                 1:base_dir+'/SI/position_data/meal_and_working_tools.csv',
-                 2:base_dir+'/SI/position_data/meal_while_working.csv',
-                 3:base_dir+'/SI/position_data/meal.csv'}
+ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+graph_utils = graph_utilitys(fasttext_model=ft_path)
+base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
+
+csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
 datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
