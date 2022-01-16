@@ -27,7 +27,7 @@ class DataSbscriber(object):
 
 if __name__ == '__main__':
 
-    rospy.init_node('graph_subscriber', anonymous=True)
+    rospy.init_node('master_model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(10)
     print("start-----------------------------------")
     cf = classificator(model='SI_gcn-w300-30cm.pt')
