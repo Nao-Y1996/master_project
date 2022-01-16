@@ -101,7 +101,7 @@ def test(model, iterator):
     accuracy = float(correct_num)/total_data_len
     return accuracy
 
-ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 graph_utils = graph_utilitys(fasttext_model=ft_path)
 base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
 
@@ -133,7 +133,7 @@ optimizer = torch.optim.Adam(model.parameters())
 
 
 print('-------train---------')
-for epoch in range(10):
+for epoch in range(3):
     train_loss, train_acc = train(model, train_loader , optimizer, criterion)
     print(f'loss : {train_loss}  Accuracy : {train_acc}')
 print('--------test---------')
@@ -141,6 +141,6 @@ acc = test(model, test_loader)
 print(f'Accuracy : {acc}')
 
 
-# model_path = os.path.dirname(__file__) + '/model/model_nnconv.pt'
-# torch.save(model.state_dict(),model_path)
+model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
+torch.save(model.state_dict(),model_path)
 
