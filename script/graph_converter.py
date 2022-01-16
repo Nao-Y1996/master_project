@@ -55,10 +55,14 @@ class graph_utilitys():
                     raise DictConstrustionError('変更したい物体名のidが、ID_2_OBJECT_NAME内に複数見つかりました')
             else:
                 raise DictConstrustionError('変更したい物体名が、ID_2_OBJECT_NAME内に見つかりません。')
+    
+    def removeDataId(self, data):
+        position_data = data[1:]
+        return position_data
 
-    def convertData2graph(self, position_data, label, include_names=False):
+    def positionData2graph(self, position_data, label, include_names=False):
         # 先頭の要素（countのデータ）を削除
-        position_data = position_data[1:]
+        # position_data = position_data[1:]
         # position_data.pop(0)
 
         obj_num = int(len(position_data)/4)
@@ -128,6 +132,18 @@ class graph_utilitys():
         graph = Data(x=x, y=y, edge_index=edge_index,edge_attr=edge_attr)
         return graph, names
     
+    def convertData2dummygraphs(self, data):
+        position_data = self.removeDataId(data)
+        obj_num = len(position_data)/4
+        dummy_graph_lsit = []
+        removed_obj_data_list = []
+        for i in range(obj_num):
+            removed_obj_data_list.append([position_data[i],position_data[i+1],position_data[i+2],position_data[i+3]])
+            dummy_postion_data =  np.reshape(np.delete(np.reshape(position_data,(-1,4)), i, axis=0), (1,-1))[0]
+            dummy_graph, dummy_names = self.positionData2graph(dummy_postion_data, label=12345, include_names=False)
+            dummy_graph_lsit.append([dummy_graph, dummy_names])
+        return dummy_graph_lsit, removed_obj_data_list
+
     def csv2graphDataset(self, csv_files, include_names=False):
         """
         csv_files = {0:'1-1.csv', 1:'3-2.csv',
@@ -150,7 +166,7 @@ class graph_utilitys():
                 # positions_data = [[float(v) for v in row] for row in csv_file]
             print(file_path.split('/')[-1],' number of data ---> ', len(positions_data))
             for row, position_data in enumerate(positions_data):
-                graph, obj_names = self.convertData2graph(position_data, label=num, include_names=include_names)
+                graph, obj_names = self.positionData2graph(position_data, label=num, include_names=include_names)
                 if graph is not None:
                     datasets.append(graph)
                     if len(obj_names)!=0:
