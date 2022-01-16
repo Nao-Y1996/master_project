@@ -164,7 +164,7 @@ MARKER_2_OBJECT ={}
 OBJECT_NAME_2_ID ={}
 ID_2_OBJECT_NAME = {}
 
-obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "cell phone", "book", "banana", "apple", "orange", "pizza","cup"]
+obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]# "cell phone",]
 obj_4_marker = ['toast', 'sandwitch', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
 marker_list = []
 for i in range(1,len(obj_4_marker)+1):
@@ -392,7 +392,7 @@ if __name__ == '__main__':
 
             print(count_saved)
 
-            if count_saved >= 100:
+            if count_saved >= 1000:
                 
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'

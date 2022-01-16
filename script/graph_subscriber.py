@@ -11,23 +11,19 @@ import traceback
 graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
 
 
-class GraphSbscriber(object):
+class DataSbscriber(object):
 
     def __init__(self, topic_name):
-        self.graph_data = None
-        self.graph = None
-        self.names = None
+        self.data = None
         self._image_sub = rospy.Subscriber(topic_name, Float32MultiArray, self.callback)
         rospy.wait_for_message(topic_name, Float32MultiArray, timeout=5.0)
 
     def callback(self, data):
-        self.graph, self.names = graph_utils.convertData2graph(data.data, 10000, include_names=True)
+        self.data = data.data
     
-    def get_grapf(self):
-        return  self.graph
+    def get_data(self):
+        return  self.data
     
-    def get_node_names(self):
-        return  self.names
 
 if __name__ == '__main__':
 
@@ -36,17 +32,23 @@ if __name__ == '__main__':
     print("start-----------------------------------")
     cf = classificator(model='SI_gcn-w300-30cm.pt')
 
-    graph_sub = GraphSbscriber(topic_name='graph_data')
+    data_sub = DataSbscriber(topic_name='graph_data')
 
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
-
+        clean_mode = rospy.get_param("/is_clean_mode")
+        
         probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
 
-        # グラフデータを受け取る
-        graph = graph_sub.get_grapf()
-        node_names = graph_sub.get_node_names()
+        # データを受け取る
+        data = data_sub.get_data()
+        # グラフに変換
+        position_data = graph_utils.removeDataId(data)
+        graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
         print(node_names)
+        
+        # ノードを１つ取り除いたパターンのグラフを取得
+        dummy_graph_lsit, removed_obj_data_list = graph_utils.convertData2dummygraphs(data)
 
         # グラフの表示
         if graph is not None:
@@ -57,6 +59,26 @@ if __name__ == '__main__':
             if robot_mode == 'state_recognition':
                 probability = cf.classificate(graph)
                 print(probability)
+
+                # 不要な物体（ノード）の特定
+                if clean_mode:
+                    for dummy_graph, removed_obj_data in zip(dummy_graph_lsit, removed_obj_data_list):
+                        dummy_probability = cf.classificate(dummy_graph)
+                        # あるノードを取り除いた時の認識結果ともとの認識結果が一致するか
+                        if dummy_probability.index(dummy_probability.max()) == probability.index(probability.max()):
+                            # あるノードを取り除いた時の認識結果の確率が上昇するか
+                            if dummy_probability.max() > probability.max():
+                                removed_obj_id = removed_obj_data[0]
+                                unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
+                                print('=======不要ノード========')
+                                print(unnecessary_obj)
+                                print('=======================')
+                            else:
+                                print('確率は上昇しませんでした')
+                        else:
+                            print('認識結果が一致していません')
+                else:
+                    pass
 
                 try:
                     publish_data = Float32MultiArray(data=probability)

@@ -80,8 +80,8 @@ sock.bind(locaddr)
 if __name__ == "__main__":
     # rospy.init_node('main_controller', anonymous=True)
     
-    # print(-987)
     rospy.set_param("/robot_mode", "nomal")
+    rospy.set_param("/is_clean_mode", 0)
 
     # 保存用ディレクトリの設定
     base_dir = os.path.dirname(__file__)+'/experiment_data/'+str(datetime.now()).split(' ')[0]
@@ -141,6 +141,13 @@ if __name__ == "__main__":
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
                 tts.say('はい、今何をしていますか？')
+
+            elif '片付け':
+                rospy.set_param("/robot_mode", "state_recognition")
+                rospy.set_param("/is_clean_mode", 1)
+
+            elif 'ありがとう':
+                rospy.set_param("/is_clean_mode", 0)
 
             elif 'はい' in message:
                 pass
