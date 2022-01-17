@@ -55,9 +55,9 @@ class NNConvNet(nn.Module):
 
 class classificator():
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
-    def __init__(self):
-        model_path = os.path.dirname(__file__) + '/model/model_nnconv.pt'
-        self.loading_model = NNConvNet(node_feature_dim=50, edge_feature_dim=1, output_dim=4)
+    def __init__(self,model):
+        model_path = model
+        self.loading_model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=4)
         self.loading_model.load_state_dict(torch.load(model_path))
 
     def classificate(self, graph):
@@ -69,5 +69,5 @@ class classificator():
         for batch in input_loader:
             pred = self.loading_model(batch)
             probability = sm(pred).tolist()[0]
-            print(probability) 
+            # print(probability) 
             return probability

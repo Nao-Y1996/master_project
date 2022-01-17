@@ -259,7 +259,6 @@ if __name__ == '__main__':
     pre_graph_data = None
     while not rospy.is_shutdown():
         
-        # time.sleep(1)
         is_clean_mode = rospy.get_param("/is_clean_mode")
         if is_clean_mode:
             detectable_obj_lsit = obj_4_real + additional_obj
@@ -290,7 +289,7 @@ if __name__ == '__main__':
             except:
                 traceback.print_exc()
         names = []
-        if True: #face_exist:
+        if face_exist:
             # -------- object detection ---------
             objects_info = yolo_info.get_objects() #"/darknet_ros/detection_image"
             if len(objects_info) > 0:
@@ -329,14 +328,8 @@ if __name__ == '__main__':
                     # trans, rot = listener.lookupTransform(marker, marker, rospy.Time(0))
                     # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  marker)
                     br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
-        # try:
-        #     print(np.array(obj_positions)[:,0])
-        # except IndexError:
-        #     print(np.array(obj_positions))
-        print(names)
-        
-        
 
+        print(names)
         graph_data = np.array(obj_positions).reshape(1,-1)[0].tolist()
 
         # 先頭にdata_idを追加

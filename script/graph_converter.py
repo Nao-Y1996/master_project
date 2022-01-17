@@ -138,7 +138,7 @@ class graph_utilitys():
         dummy_graph_lsit = []
         removed_obj_data_list = []
         for i in range(int(obj_num)):
-            removed_obj_data_list.append([position_data[i],position_data[i+1],position_data[i+2],position_data[i+3]])
+            removed_obj_data_list.append([position_data[i*4],position_data[i*4+1],position_data[i*4+2],position_data[i*4+3]])
             dummy_postion_data =  np.reshape(np.delete(np.reshape(position_data,(-1,4)), i, axis=0), (1,-1))[0]
             dummy_graph, dummy_names = self.positionData2graph(dummy_postion_data, label=12345, include_names=False)
             dummy_graph_lsit.append([dummy_graph, dummy_names])

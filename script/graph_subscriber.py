@@ -3,10 +3,11 @@
 import rospy
 from std_msgs.msg import Float32MultiArray
 import numpy as np
+import os
 
 from graph_converter import graph_utilitys
 import matplotlib.pyplot as plt
-from classificator_gcn import classificator
+from classificator_nnconv import classificator
 import traceback
 graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
 
@@ -24,15 +25,36 @@ class DataSbscriber(object):
     def get_data(self):
         return  self.data
     
+def show_probability_graph(ax, labels, probability):
+    x = np.arange(len(labels))
+    width = 0.35
+    rects = ax.bar(x, probability, width)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    plt.ylim(0, 1)
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+    plt.draw()  # 描画する。
+    plt.pause(0.01)  # 0.01 秒ストップする。
+    plt.cla()
 
 if __name__ == '__main__':
 
     rospy.init_node('master_model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(10)
     print("start-----------------------------------")
-    cf = classificator(model='SI_gcn-w300-30cm.pt')
+    cf = classificator(model=os.path.dirname(os.path.abspath(__file__))+ '/model/master_model_nnconv.pt')
 
     data_sub = DataSbscriber(topic_name='graph_data')
+
+    # 認識の確率表示のグラフ設定
+    labels = ['eating', 'work', 'rest', 'reading']
+    fig, ax = plt.subplots()
 
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
@@ -45,6 +67,7 @@ if __name__ == '__main__':
         # グラフに変換
         position_data = graph_utils.removeDataId(data)
         graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
+        print('------------------------------------------------------------')
         print(node_names)
         
         # ノードを１つ取り除いたパターンのグラフを取得
@@ -59,24 +82,33 @@ if __name__ == '__main__':
             if robot_mode == 'state_recognition':
                 probability = cf.classificate(graph)
                 print(probability)
+                # show_probability_graph(ax, labels, np.round(probability, decimals=4).tolist())
 
                 # 不要な物体（ノード）の特定
                 if clean_mode:
                     for dummy_graph, removed_obj_data in zip(dummy_graph_lsit, removed_obj_data_list):
-                        dummy_probability = cf.classificate(dummy_graph)
+                        removed_obj_id = removed_obj_data[0]
+                        unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
+
+                        dummy_probability = cf.classificate(dummy_graph[0])
                         # あるノードを取り除いた時の認識結果ともとの認識結果が一致するか
-                        if dummy_probability.index(dummy_probability.max()) == probability.index(probability.max()):
+                        if dummy_probability.index(max(dummy_probability)) == probability.index(max(probability)):
+                            print(probability)
+                            print(dummy_probability)
                             # あるノードを取り除いた時の認識結果の確率が上昇するか
-                            if dummy_probability.max() > probability.max():
-                                removed_obj_id = removed_obj_data[0]
-                                unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
+                            if max(dummy_probability) > max(probability):
                                 print('=======不要ノード========')
+                                # print('dummy : ', dummy_probability)
+                                # print('graph : ', probability)
+                                print('diff : ',  max(dummy_probability) - max(probability))
                                 print(unnecessary_obj)
                                 print('=======================')
                             else:
-                                print('確率は上昇しませんでした')
+                                # print('確率は上昇しませんでした')
+                                pass
                         else:
-                            print('認識結果が一致していません')
+                            # print('認識結果が一致していません')
+                            pass
                 else:
                     pass
 
