@@ -159,13 +159,14 @@ class MediapipePoseSubscriber():
         return self.face_pose, self.face_pose_visibility
 
 conf_dir = os.path.dirname(__file__)+'/obj_conf/'
-
 MARKER_2_OBJECT ={}
 OBJECT_NAME_2_ID ={}
 ID_2_OBJECT_NAME = {}
 
-obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]# "cell phone",]
+obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]
 obj_4_marker = ['toast', 'sandwitch', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
+additional_obj = ['bottle','chair']
+
 marker_list = []
 for i in range(1,len(obj_4_marker)+1):
     marker_list.append('ar_marker/'+str(700+i))
@@ -173,8 +174,7 @@ for i in range(1,len(obj_4_marker)+1):
 for marker, obj_name in zip(marker_list, obj_4_marker):
     MARKER_2_OBJECT[marker] = obj_name
 
-objct_list = obj_4_real+obj_4_marker
-for i, name in enumerate(objct_list):
+for i, name in enumerate(obj_4_real + obj_4_marker + additional_obj):
     OBJECT_NAME_2_ID[name]=i
     ID_2_OBJECT_NAME[i] = name
 
@@ -260,6 +260,12 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         
         # time.sleep(1)
+        is_clean_mode = rospy.get_param("/is_clean_mode")
+        if is_clean_mode:
+            detectable_obj_lsit = obj_4_real + additional_obj
+        else:
+            detectable_obj_lsit = obj_4_real
+
         obj_moved = False
         face_exist = False
         obj_positions =[]
@@ -291,7 +297,7 @@ if __name__ == '__main__':
                 detect_obj_list = []
                 for obj in objects_info:
                     name = obj[0]
-                    if (name != 'person') and (name in obj_4_real):
+                    if (name != 'person') and (name in detectable_obj_lsit):
                         x, y = obj[1], obj[2]
                         obj_x, obj_y, obj_z = tf_pub.create_object_TF(name, x, y, create=True)
                         if obj_x is not None:

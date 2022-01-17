@@ -137,6 +137,7 @@ if __name__ == "__main__":
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
+                rospy.set_param("/is_clean_mode", 0)
 
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")

@@ -107,8 +107,8 @@ class graph_utilitys():
         edge_features = []
         for i, _ in enumerate(position_dist_matrix):
             for j, _ in enumerate(position_dist_matrix):
-                dist = position_dist_matrix[i][j]
-                normarized_dist = position_normarized_dist_matrix[i][j]
+                # dist = position_dist_matrix[i][j]
+                # normarized_dist = position_normarized_dist_matrix[i][j]
                 vec = position_vector_matrix[i][j]
                 # ここのif文にedgeを作る条件を入れる
                 if i!=j: # 自己ループはなし
