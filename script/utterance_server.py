@@ -66,14 +66,12 @@ s.connect(("8.8.8.8", 80))
 IP_ADDRESS = s.getsockname()[0]
 print('IP address = ',IP_ADDRESS)
 M_SIZE = 1024
-host = IP_ADDRESS
 port = 8890
-locaddr = (host, port)
+locaddr = (IP_ADDRESS, port)
 
 # ①ソケットを作成する
 sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
 print('Successfully created socket!')
-
 # ②使用するIPアドレスとポート番号を指定
 sock.bind(locaddr)
 
