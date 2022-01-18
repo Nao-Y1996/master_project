@@ -201,7 +201,7 @@ if __name__ == '__main__':
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)
     position_dir = save_dir+'/position_data/'
-    
+
     try:
         os.makedirs(image_dir)
         os.makedirs(position_dir)
@@ -242,7 +242,7 @@ if __name__ == '__main__':
     # data_server_ip = rospy.get_param('server_IP')
     # print(data_server_ip)
 
-    # UDPのためのソケットを作成する
+    # データ送信のためのソケットを作成する（UDP）
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     serv_address = ('192.168.0.109', 12345)
 
@@ -253,8 +253,8 @@ if __name__ == '__main__':
     yolo_info = GetYoloObjectInfo()
     tf_pub = TF_Publisher(exe_type='hsr')
 
-# グラフデータ配信用のパブリッシャー
-    graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=1)
+    # グラフのパブリッシャー
+    # graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=1)
 
     spin_rate=rospy.Rate(10)
     count_saved = 0
@@ -352,8 +352,8 @@ if __name__ == '__main__':
             traceback.print_exc()
 
 
-        #------------ グラフデータをUDPで送る ------------#
-        # send_len = sock.sendto(pickle.dumps(graph_data), serv_address)
+        #------------ データをUDPで送る ------------#
+        send_len = sock.sendto(pickle.dumps(graph_data), serv_address)
         #----------------------------------------------#
         rospy.loginfo(graph_data)
         
