@@ -201,7 +201,7 @@ if __name__ == '__main__':
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)
     position_dir = save_dir+'/position_data/'
-
+    
     try:
         os.makedirs(image_dir)
         os.makedirs(position_dir)
@@ -241,8 +241,10 @@ if __name__ == '__main__':
 
     # data_server_ip = rospy.get_param('server_IP')
     # print(data_server_ip)
-    # # UDPのためのソケットを作成する
-    # sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    # UDPのためのソケットを作成する
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address = ('192.168.0.109', 12345)
 
     # クラスのインスタンス化
     # face_sub = FacePoseSubscriber()
@@ -251,10 +253,10 @@ if __name__ == '__main__':
     yolo_info = GetYoloObjectInfo()
     tf_pub = TF_Publisher(exe_type='hsr')
 
-    # グラフデータ配信用のパブリッシャー
+# グラフデータ配信用のパブリッシャー
     graph_data_pub = rospy.Publisher('graph_data', Float32MultiArray, queue_size=1)
 
-    spin_rate=rospy.Rate(100)
+    spin_rate=rospy.Rate(10)
     count_saved = 0
     pre_graph_data = None
     while not rospy.is_shutdown():
@@ -329,7 +331,7 @@ if __name__ == '__main__':
                     # br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  marker)
                     br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
 
-        print(names)
+        
         graph_data = np.array(obj_positions).reshape(1,-1)[0].tolist()
 
         # 先頭にdata_idを追加
@@ -348,64 +350,46 @@ if __name__ == '__main__':
             pass            
         except:
             traceback.print_exc()
+
+
+        #------------ グラフデータをUDPで送る ------------#
+        # send_len = sock.sendto(pickle.dumps(graph_data), serv_address)
+        #----------------------------------------------#
+        rospy.loginfo(graph_data)
         
-
-        # グラフデータを配信
-        # print(map(lambda k: type(k), graph_data))
-        try:
-            publish_data = Float32MultiArray(data=graph_data)
-            graph_data_pub.publish(publish_data)
-        except rospy.exceptions.ROSSerializationException:
-            # 認識モードから通常モードへの切替時に
-            # rospy.exceptions.ROSSerializationException: field data[] must be float type
-            # のエラーが出る　のでそれ用
-            continue
-        except:
-            traceback.print_exc()
-
         obj_num = (len(graph_data)-1)/4
         # print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
             data_save_path = rospy.get_param("/data_save_path")
-
             if face_exist:
                 if (obj_num >= 2) and obj_moved:
                     data_save_path = rospy.get_param("/data_save_path")
                     with open(data_save_path, 'a') as f:
                         writer = csv.writer(f)
                         writer.writerow(graph_data)
-
                     pre_graph_data = graph_data
-
                     count_saved += 1
                 else:
                     pass
-
                 #　スクリーンショット
                 image_save_path = rospy.get_param("/image_save_path")
                 pag.screenshot(image_save_path+str(data_id)+'.jpg')
-
             else:
                 pass
-
             print(count_saved)
 
             if count_saved >= 1000:
-                
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'
                 rospy.set_param("/image_save_path", image_save_path)
                 rospy.set_param("/robot_mode", "nomal")
-
                 tts.say('終了しました。')
-
         else:
             count_saved = 0
             pass
 
         spin_rate.sleep()
-        # import time
  
         
         # print('------------------------------------------------')

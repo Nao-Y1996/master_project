@@ -66,14 +66,12 @@ s.connect(("8.8.8.8", 80))
 IP_ADDRESS = s.getsockname()[0]
 print('IP address = ',IP_ADDRESS)
 M_SIZE = 1024
-host = IP_ADDRESS
 port = 8890
-locaddr = (host, port)
+locaddr = (IP_ADDRESS, port)
 
 # ①ソケットを作成する
 sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
 print('Successfully created socket!')
-
 # ②使用するIPアドレスとポート番号を指定
 sock.bind(locaddr)
 
@@ -143,11 +141,11 @@ if __name__ == "__main__":
                 rospy.set_param("/robot_mode", "waite_state_name")
                 tts.say('はい、今何をしていますか？')
 
-            elif '片付け':
+            elif '片付け' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
 
-            elif 'ありがとう':
+            elif 'ありがとう' in message:
                 rospy.set_param("/is_clean_mode", 0)
 
             elif 'はい' in message:
