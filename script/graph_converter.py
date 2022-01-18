@@ -61,10 +61,6 @@ class graph_utilitys():
         return position_data
 
     def positionData2graph(self, position_data, label, include_names=False):
-        # 先頭の要素（countのデータ）を削除
-        # position_data = position_data[1:]
-        # position_data.pop(0)
-        print( position_data)
         if None in position_data:
             return None, None
         obj_num = int(len(position_data)/4)
@@ -95,13 +91,11 @@ class graph_utilitys():
         position_vector_matrix = [[0 for i in range(obj_num)] for j in range(obj_num)]
         for i, pos1 in enumerate(positions):
             for j, pos2 in enumerate(positions):
-                print(i, j)
-                print(pos1, pos2)
                 vec = np.array(pos1) - np.array(pos2)
                 position_vector_matrix[i][j] = vec
                 dist =((np.linalg.norm(vec)).tolist())
                 position_dist_matrix[i][j] = dist
-        position_normarized_dist_matrix = np.reshape(minmax_scale(np.array(position_dist_matrix).flatten()), (obj_num,obj_num))
+        # position_normarized_dist_matrix = np.reshape(minmax_scale(np.array(position_dist_matrix).flatten()), (obj_num,obj_num))
         # print('position_vector_matrix : \n',np.array(position_vector_matrix))
         # print('position_dist_matrix : \n',np.array(position_dist_matrix))
         # print('position_normarized_dist_matrix : \n',position_normarized_dist_matrix)
@@ -114,7 +108,7 @@ class graph_utilitys():
                 # dist = position_dist_matrix[i][j]
                 # normarized_dist = position_normarized_dist_matrix[i][j]
                 vec = position_vector_matrix[i][j]
-                # ここのif文にedgeを作る条件を入れる
+                # ------------ ここのif文にedgeを作る条件を入れる ------------
                 if i!=j: # 自己ループはなし
                     
                     # 基準(camera, face等)と物体は必ず接続、物体同士は0.3m以内であれば接続、エッジの特徴量は物体館の距離（距離は0~1正規化されたもの）

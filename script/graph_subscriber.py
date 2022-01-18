@@ -13,19 +13,6 @@ import traceback
 graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
 
 
-class DataSbscriber(object):
-
-    def __init__(self, topic_name):
-        self.data = None
-        self._image_sub = rospy.Subscriber(topic_name, Float32MultiArray, self.callback)
-        rospy.wait_for_message(topic_name, Float32MultiArray, timeout=5.0)
-
-    def callback(self, data):
-        self.data = data.data
-    
-    def get_data(self):
-        return  self.data
-
 def show_probability_graph(ax, labels, probability):
     x = np.arange(len(labels))
     width = 0.35
@@ -45,28 +32,26 @@ def show_probability_graph(ax, labels, probability):
     plt.cla()
 
 
-# 通信の設定
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-IP_ADDRESS = s.getsockname()[0]
-port = 12345
-locaddr = (IP_ADDRESS, port)
-print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
-
-# ①ソケットを作成する
-sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
-# ②使用するIPアドレスとポート番号を指定
-sock.bind(locaddr)
-
 if __name__ == '__main__':
 
     rospy.init_node('master_model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(10)
 
+    # dataを受け取るための通信の設定
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    IP_ADDRESS = s.getsockname()[0]
+    port = 12345
+    locaddr = (IP_ADDRESS, port)
+    sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
+    sock.bind(locaddr) # 使用するIPアドレスとポート番号を指定
+    print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
+
     # 認識モデルの設定
     cf = classificator(model=os.path.dirname(os.path.abspath(__file__))+ '/model/master_model_nnconv.pt')
 
-    data_sub = DataSbscriber(topic_name='graph_data')
+    # 認識確率の配信用
+    probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
 
     # 認識の確率表示のグラフ設定
     labels = ['eating', 'work', 'rest', 'reading']
@@ -76,23 +61,18 @@ if __name__ == '__main__':
         robot_mode = rospy.get_param("/robot_mode")
         clean_mode = rospy.get_param("/is_clean_mode")
         
-
-        # UDPでデータを受け取る
+        # dataをUDPでデータを受け取る
         print('------------------------------------------------------------')
         data, cli_addr = sock.recvfrom(1024)
         data = pickle.loads(data)
 
-        # グラフに変換
+        # グラフ形式に変換
         position_data = graph_utils.removeDataId(data)
         graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
-        # print(node_names)
-        # rospy.loginfo(data)
         
         # ノードを１つ取り除いたパターンのグラフを取得
         dummy_graph_lsit, removed_obj_data_list = graph_utils.convertData2dummygraphs(data)
-        # print(dummy_graph_lsit, removed_obj_data_list , sep=('\n'))
 
-        
         if graph is not None:
             # graph_utils.visualize_graph(graph, node_labels=node_names, save_graph_name=None, show_graph=True) # 状態グラフの表示
             
