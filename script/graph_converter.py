@@ -64,7 +64,9 @@ class graph_utilitys():
         # 先頭の要素（countのデータ）を削除
         # position_data = position_data[1:]
         # position_data.pop(0)
-
+        print( position_data)
+        if None in position_data:
+            return None, None
         obj_num = int(len(position_data)/4)
         #物体の数が0 or 1の時はグラフ作成できない
         if (obj_num==0) or (obj_num==1):
@@ -93,6 +95,8 @@ class graph_utilitys():
         position_vector_matrix = [[0 for i in range(obj_num)] for j in range(obj_num)]
         for i, pos1 in enumerate(positions):
             for j, pos2 in enumerate(positions):
+                print(i, j)
+                print(pos1, pos2)
                 vec = np.array(pos1) - np.array(pos2)
                 position_vector_matrix[i][j] = vec
                 dist =((np.linalg.norm(vec)).tolist())
