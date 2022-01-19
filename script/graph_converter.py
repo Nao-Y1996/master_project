@@ -9,6 +9,7 @@ import networkx as nx
 import numpy as np
 import csv
 import os
+import itertools
 from sklearn.preprocessing import minmax_scale
 import fasttext
 import fasttext.util
@@ -32,6 +33,13 @@ class graph_utilitys():
             _id2obj = json.load(f)
             for _id, _name in _id2obj.items():
                 self.ID_2_OBJECT_NAME[int(_id)] = _name
+
+        self.OBJECT_NAME_2_ID = {}
+        conf_dir = os.path.dirname(__file__)+'/obj_conf/'
+        with open(conf_dir+'OBJECT_NAME_2_ID.json') as f:
+            _obj2id = json.load(f)
+            for _name, _id in _obj2id.items():
+                self.OBJECT_NAME_2_ID[_name] = int(_id)
         
         self.ft = fasttext.load_model(fasttext_model)
 
@@ -172,6 +180,60 @@ class graph_utilitys():
                         obj_names_sets.append(obj_names)
         return datasets, obj_names_sets
     
+    def CreateExpandedData(self, data, remove_obj_id_list):
+        ExpandedDataList = [data]
+
+        data_id = data[0]
+        position_data = np.reshape(data[1:], (-1,4))
+
+        remove_pattern = []
+        for i in range(1, len(remove_obj_id_list)+1):
+            combinations =  list(itertools.combinations(remove_obj_id_list, i))
+            for comb in combinations:
+                remove_pattern.append(list(comb))
+        # print(remove_pattern)
+        for pattern in remove_pattern:
+            # print(f'--------- パターン : {pattern} ---------')
+            _position_data = position_data
+            # print(_position_data)
+            flag = False # パターンに含まれるid全てが、position_dataに含まれるかどうか
+            for id in pattern:
+                # print(f'id = {id} の行を削除')
+                try:
+                    remove_index = _position_data[:,0].tolist().index(id)
+                    flag = True
+                except ValueError:
+                    # print(f'id = {id} の物体は含まれていませんでした')
+                    flag = False
+                    continue
+                # print(f'{remove_index} 行目を削除')
+                _position_data = np.delete(_position_data, obj=remove_index, axis=0)
+            if flag and (_position_data.tolist() != position_data.tolist()):
+                new_data = _position_data.flatten().tolist()
+                new_data.insert(0, data_id)
+                ExpandedDataList.append(new_data)
+                # print(f'保存 : {new_data}')
+            else:
+                pass
+        return ExpandedDataList
+
+    def CreateExpandedCSVdata(self, origin_csv, expanded_csv, remove_obj_id_list):
+        with open(expanded_csv, 'w') as f:
+            pass
+        with open(origin_csv) as f:
+            csv_file = csv.reader(f)
+            for i, row in enumerate(csv_file):
+                _row = []
+                if '' in row:
+                        continue
+                for v in row:
+                    _row.append(float(v))
+                ExpandedDataList = self.CreateExpandedData(_row, remove_obj_id_list)
+                for Expandeddata in ExpandedDataList:
+                    with open(expanded_csv, 'a') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(Expandeddata)
+
     def visualize_graph(self, graph, node_labels, save_graph_name=None, show_graph=True):
         # plt.close()
         G = to_networkx(graph, node_attrs=['x'], edge_attrs=['edge_attr'])

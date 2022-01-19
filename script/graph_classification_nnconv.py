@@ -108,14 +108,27 @@ def test(model, iterator):
     accuracy = float(correct_num)/total_data_len
     return accuracy
 
+
 ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 graph_utils = graph_utilitys(fasttext_model=ft_path)
-base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
 
+base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
 csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
+
+# 学習データを拡張（pattern_n_expanded.csvを作成する）
+remove_obj_id_list = []
+for name in remove_obj_name_list:
+    remove_obj_id_list.append(graph_utils.OBJECT_NAME_2_ID[name])
+for origin_csv in csv_path_list.values():
+    expanded_csv = origin_csv.replace('.csv', '_expanded.csv')
+    graph_utils.CreateExpandedCSVdata(origin_csv, expanded_csv, remove_obj_id_list)
+
+# 拡張したデータを用いてグラフデータセットを作成
+csv_path_list = {0:base_dir+'/pattern_0_expanded.csv',1:base_dir+'/pattern_1_expanded.csv',2:base_dir+'/pattern_2_expanded.csv',3:base_dir+'/pattern_3_expanded.csv'}
 datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
+
 # data = datasets[0]
 # print("data 0 : ", data)
 # G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
