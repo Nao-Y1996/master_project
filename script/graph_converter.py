@@ -151,7 +151,7 @@ class graph_utilitys():
         datasets = []
         for num in range(len(csv_files)):
             file_path = csv_files[num]
-            positions_data = []
+            all_data = []
             with open(file_path) as f:
                 csv_file = csv.reader(f)
                 for i, row in enumerate(csv_file):
@@ -160,10 +160,11 @@ class graph_utilitys():
                             continue
                     for j, v in enumerate(row):
                         _row.append(float(v))
-                    positions_data.append(_row)# 先頭の要素（data_idのデータ）を削除してから追加
+                    all_data.append(_row)# 先頭の要素（data_idのデータ）を削除してから追加
                 # positions_data = [[float(v) for v in row] for row in csv_file]
-            print(file_path.split('/')[-1],' number of data ---> ', len(positions_data))
-            for row, position_data in enumerate(positions_data):
+            print(file_path.split('/')[-1],' number of data ---> ', len(all_data))
+            for row, data in enumerate(all_data):
+                position_data = self.removeDataId(data)
                 graph, obj_names = self.positionData2graph(position_data, label=num, include_names=include_names)
                 if graph is not None:
                     datasets.append(graph)

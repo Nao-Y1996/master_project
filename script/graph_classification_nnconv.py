@@ -36,18 +36,24 @@ class NNConvNet(nn.Module):
     def forward(self, data):
         x, edge_index, edge_attr = data.x, data.edge_index, data.edge_attr
         # print(x, edge_index, edge_attr, sep='\n')
-        # print(f'1 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # print(f'0 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # weight = self.nnconv1.nn(edge_attr).view(-1, self.nnconv1.in_channels_l, self.nnconv1.out_channels)
+        # print(f'edge weight matrix shape = {np.shape(weight)}')
         x = self.nnconv1(x, edge_index, edge_attr)
+        # print(f'1 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = F.relu(x)
         # print(f'2 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # print(np.shape(self.nnconv2.nn(edge_attr)))
         x = self.nnconv2(x, edge_index, edge_attr)
         # print(f'3 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = F.relu(x)
         # print(f'4 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # print(np.shape(self.nnconv3.nn(edge_attr)))
         x = self.nnconv3(x, edge_index, edge_attr)
         # print(f'5 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = F.relu(x)
         # print(f'6 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # print(np.shape(self.nnconv4.nn(edge_attr)))
         x = self.nnconv4(x, edge_index, edge_attr)
         # print(f'7 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = F.relu(x)
@@ -60,6 +66,7 @@ class NNConvNet(nn.Module):
         # print(f'11 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
         x = self.fc2(x)
         # print(f'12 ==> node:{np.shape(x)}, edge_index:{np.shape(edge_index)}, edge_attr:{np.shape(edge_attr)}')
+        # print(asdf)
         return x
 
 def train(model, iterator, optimizer, criterion):
@@ -141,6 +148,6 @@ acc = test(model, test_loader)
 print(f'Accuracy : {acc}')
 
 
-model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
-torch.save(model.state_dict(),model_path)
+# model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
+# torch.save(model.state_dict(),model_path)
 
