@@ -32,7 +32,7 @@
       <arg name="image" value="/hsrb/head_rgbd_sensor/rgb/image_raw"/>
       <arg name="network_param_file"       default="$(find darknet_ros)/config/yolov3.yaml"/>
     </include> 
-    <!-- <node pkg="master_project" name="voice_controller" type="utterance_server.py"/> -->
+    <node pkg="master_project" name="voice_controller" type="utterance_server.py"/>
     <!-- <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>  -->
 
     
