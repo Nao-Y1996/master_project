@@ -246,6 +246,13 @@ if __name__ == '__main__':
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     serv_address = ('192.168.0.109', 12345)
 
+    # グラフ収集：保存した数の送信用
+    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address1 = ('192.168.0.109', 54321)
+    # グラフ収集：検出物体名の送信用
+    sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address2 = ('192.168.0.109', 56789)
+
     # クラスのインスタンス化
     # face_sub = FacePoseSubscriber()
     # joint_state_sub = JointStateSbscriber()
@@ -361,8 +368,15 @@ if __name__ == '__main__':
         # print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
+            # ------------ データの送信 ------------#
+            # グラフ収集：保存した数の送信用
+            send_len1 = sock1.sendto(pickle.dumps(count_saved), serv_address1)
+            # グラフ収集：検出物体名の送信用
+            send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
+            #----------------------------------------------#
             data_save_path = rospy.get_param("/data_save_path")
             if face_exist:
+                # if (obj_num == 8) and obj_moved and ('book' in names):
                 if (obj_num >= 2) and obj_moved:
                     data_save_path = rospy.get_param("/data_save_path")
                     with open(data_save_path, 'a') as f:

@@ -113,13 +113,15 @@ ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 graph_utils = graph_utilitys(fasttext_model=ft_path)
 
 # 状態パターンごとのファイルを取得
-base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-20/user_1/position_data"
+base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-20/user_1"
 file_list = []
-files = glob.glob(base_dir + "/pattern*")
+files = glob.glob(base_dir + "/position_data/pattern*")
 for file in files:
     if not 'augmented' in file:
         file_list.append(file)
 file_list.sort()
+pattern_num = len(file_list)
+print(pattern_num)
 csv_path_dict = {}
 for i, file in enumerate(file_list):
     csv_path_dict[i] = file
@@ -170,14 +172,13 @@ print("data 0 : ", data)
 random.shuffle(datasets)
 train_dataset = datasets[:int(len(datasets)*0.85)]
 test_dataset = datasets[int(len(datasets)*0.85):]
-train_loader = DataLoader(train_dataset, batch_size=3000, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=3000, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=5000, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=5000, shuffle=False)
 
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=4
-                  ).to(device)
+device = 'cpu' #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=pattern_num).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
@@ -189,25 +190,29 @@ for epoch in range(10):
     train_loss, train_acc = train(model, train_loader , optimizer, criterion)
     train_loss_list.append(train_loss)
     train_acc_list.append(train_acc)
-    print(f'loss : {train_loss}  Accuracy : {train_acc}')
+    print(f'epoch = {epoch} :  loss = {train_loss}  Accuracy = {train_acc}')
+# モデルの保存
+model_path = base_dir + '/master_model_nnconv1.pt'
+torch.save(model.state_dict(),model_path)
 
-x, loss, acc = len(train_acc_list), train_loss_list, train_acc_list
+x, loss, acc = range(len(train_acc_list)), train_loss_list, train_acc_list
 # lossの描画
 fig = plt.figure()
 plt.plot(x, loss)
 plt.ylabel("Loss")
-fig.savefig("Loss.png")
+plt.show()
+fig.savefig(base_dir+"/Loss.png")
 
 # accの描画
 fig = plt.figure()
-plt.plot(x, loss)
+plt.plot(x, acc)
 plt.ylabel("Accuracy")
-fig.savefig("Accuracy.png")
+plt.show()
+fig.savefig(base_dir+"/Accuracy.png")
 
 print('--------test---------')
 acc = test(model, test_loader)
 print(f'Accuracy : {acc}')
 
 
-model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
-torch.save(model.state_dict(),model_path)
+

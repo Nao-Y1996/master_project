@@ -57,7 +57,7 @@ class classificator():
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
     def __init__(self,model):
         model_path = model
-        self.loading_model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=4)
+        self.loading_model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=3)
         self.loading_model.load_state_dict(torch.load(model_path))
 
     def classificate(self, graph):

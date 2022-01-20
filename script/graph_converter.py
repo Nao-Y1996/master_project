@@ -13,7 +13,7 @@ import itertools
 from sklearn.preprocessing import minmax_scale
 import fasttext
 import fasttext.util
-fasttext.util.download_model('en', if_exists='ignore')
+# fasttext.util.download_model('en', if_exists='ignore')
 class DictConstrustionError(Exception):
     pass
 import json

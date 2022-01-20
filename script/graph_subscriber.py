@@ -10,7 +10,7 @@ from graph_converter import graph_utilitys
 import matplotlib.pyplot as plt
 from classificator_nnconv import classificator
 import traceback
-graph_utils = graph_utilitys(fasttext_model='cc.en.300.bin')
+graph_utils = graph_utilitys(fasttext_model=os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin')
 
 
 def show_probability_graph(ax, labels, probability):
@@ -48,19 +48,21 @@ if __name__ == '__main__':
     print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
 
     # 認識モデルの設定
-    cf = classificator(model=os.path.dirname(os.path.abspath(__file__))+ '/model/master_model_nnconv.pt')
+    model_path = '/home/kubotalab-hsr/catkin_ws/src/master_project/script/experiment_data/2022-01-20/user_1/master_model_nnconv1.pt'
+    cf = classificator(model=model_path)
 
     # 認識確率の配信用
     probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
 
     # 認識の確率表示のグラフ設定
-    labels = ['eating', 'work', 'rest', 'reading']
+    labels = ['work', 'eating', 'reading']
     fig, ax = plt.subplots()
 
     # 
-    data_buf_len = 100
+    data_buf_len = 10
+    pattern_num = len(labels)
     count = 0
-    probability_list = np.array([[0.0]*4] * data_buf_len)
+    probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
     flag_display = False
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
