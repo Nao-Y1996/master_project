@@ -54,28 +54,15 @@ if __name__ == '__main__':
     labels = ['work', 'eating', 'reading']
     fig, ax = plt.subplots()
 
-    data_buf_len = 10
     pattern_num = len(labels)
-    count = 0
-    probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
-    flag_display = False
     while not rospy.is_shutdown():
 
         # probabilityをUDPで受け取る
         print('------------------------------------------------------------')
-        probability, cli_addr = sock.recvfrom(1024)
-        probability = pickle.loads(probability)
-
+        average_probability, cli_addr = sock.recvfrom(1024)
+        average_probability = pickle.loads(average_probability)
 
         # 認識確率の表示
-        probability_list[count] = probability
-        display_probability  = probability_list.mean(axis=0)
-        if flag_display:
-            show_probability_graph(ax, labels, np.round(display_probability, decimals=4).tolist())
-        count += 1
-        if count >= data_buf_len:
-            flag_display = True
-            count = 0
-
+        show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())
 
         spin_rate.sleep()

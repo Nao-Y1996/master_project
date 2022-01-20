@@ -102,6 +102,7 @@ if __name__ == "__main__":
             
             if 'モードの確認' in message:
                 robot_mode = rospy.get_param("/robot_mode")
+                is_clean_mode = rospy.get_param("/is_clean_mode")
                 if robot_mode == "state_recognition":
                     tts.say('現在、認識モードです')
                 elif robot_mode == "nomal":
@@ -112,6 +113,8 @@ if __name__ == "__main__":
                     tts.say('現在、記録中です')
                 else:
                     tts.say('モードが不明です。')
+                if is_clean_mode:
+                    tts.say('片付け機能が働いています')
 
             elif '終了' in message:
                 if (robot_mode=='graph_collecting'):

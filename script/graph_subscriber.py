@@ -83,49 +83,57 @@ if __name__ == '__main__':
             
             # 状態認識
             if robot_mode == 'state_recognition':
-                print(count)
                 probability = cf.classificate(graph)
 
+                # 認識確率の平滑化
+                probability_list[count] = probability
+                average_probability  = probability_list.mean(axis=0).tolist()
+                count += 1
+                if count >= data_buf_len:
+                    count = 0
+                
                 #------------ 認識結果をUDPで送信 ------------#
-                send_len = sock4probability.sendto(pickle.dumps(probability, protocol=2), serv_address)
+                send_len = sock4probability.sendto(pickle.dumps(average_probability, protocol=2), serv_address)
                 # 受け取る側がpython2の場合はprotocol=2を指定する
                 #----------------------------------------------#
 
                 # 認識確率の表示
-                # probability_list[count] = probability
-                # display_probability  = probability_list.mean(axis=0)
-                # if flag_display:
-                #     show_probability_graph(ax, labels, np.round(display_probability, decimals=4).tolist())
-                # count += 1
-                # if count >= data_buf_len:
-                #     flag_display = True
-                #     count = 0
+                # show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())
 
                 # 不要な物体（ノード）の特定
                 if clean_mode:
+                    state_now = labels[average_probability.index(max(average_probability))]
+                    print(f'状態 : {state_now}')
+                    print(f'確率 : {average_probability}')
                     # ノードを１つ取り除いたパターンのグラフを取得
                     dummy_graph_lsit, removed_obj_data_list = graph_utils.convertData2dummygraphs(data)
 
                     unnecessary_obj_candidate_info = []
                     for dummy_graph, removed_obj_data in zip(dummy_graph_lsit, removed_obj_data_list):
                         removed_obj_id = removed_obj_data[0]
+                        if removed_obj_id == 0:
+                            continue # faceは片付け対象としない
 
                         if dummy_graph[0] is not None:
+                            removed_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
+                            print()
+                            print(f'   removed  : {removed_obj}')
                             dummy_probability = cf.classificate(dummy_graph[0])
+                            print(f'probability : {dummy_probability}')
                             # あるノードを取り除いた時の認識結果ともとの認識結果が一致するか
-                            if dummy_probability.index(max(dummy_probability)) == probability.index(max(probability)):
+                            if dummy_probability.index(max(dummy_probability)) == average_probability.index(max(average_probability)):
                                 # あるノードを取り除いた時の認識結果の確率が上昇するか
-                                if max(dummy_probability) > max(probability):
-                                    # print('dummy : ', dummy_probability)
-                                    # print('graph : ', probability)
-                                    diff =  max(dummy_probability) - max(probability)
+                                if max(dummy_probability) > max(average_probability):
+                                    # print('dummy graph : ', dummy_probability)
+                                    # print(' true graph : ', probability)
+                                    diff =  max(dummy_probability) - max(average_probability)
                                     # print('diff : ', diff)
-                                    unnecessary_obj_candidate_info.append([removed_obj_id, probability, dummy_probability, diff])
+                                    unnecessary_obj_candidate_info.append([removed_obj_id, average_probability, dummy_probability, diff])
                                 else:
-                                    # print('確率は上昇しませんでした')
+                                    print('確率は上昇しませんでした')
                                     pass
                             else:
-                                # print('認識結果が一致していません')
+                                print('認識結果が一致していません')
                                 pass
 
                     print('=======不要ノード========')
