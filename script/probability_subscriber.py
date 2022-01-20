@@ -42,7 +42,8 @@ if __name__ == '__main__':
     port = 5624
     sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
     sock.bind((IP_ADDRESS, port)) # 使用するIPアドレスとポート番号を指定
-    print(f'Probability Subscriber : IP address = {IP_ADDRESS}  port = {port}')
+    print('Probability Subscriber : IP address = ' + str(IP_ADDRESS) + ' port = ' + str(port))
+
 
 
     # 認識の確率表示のグラフ設定
