@@ -48,11 +48,14 @@ if __name__ == '__main__':
     print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
 
     # 認識モデルの設定
-    model_path = '/home/kubotalab-hsr/catkin_ws/src/master_project/script/experiment_data/2022-01-20/user_1/master_model_nnconv1.pt'
+    model_path = os.path.dirname(os.path.abspath(__file__))+ '/experiment_data/2022-01-20/user_1/master_model_nnconv1.pt'
     cf = classificator(model=model_path)
 
     # 認識確率の配信用
-    probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
+    # probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
+    # 認識確率送信のためのソケットを作成する（UDP）
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address = ('192.168.0.109', 5624)
 
     # 認識の確率表示のグラフ設定
     labels = ['work', 'eating', 'reading']
@@ -84,6 +87,10 @@ if __name__ == '__main__':
             if robot_mode == 'state_recognition':
                 print(count)
                 probability = cf.classificate(graph)
+
+                #------------ 認識結果をUDPで送信 ------------#
+                send_len = sock.sendto(pickle.dumps(probability), serv_address)
+                #----------------------------------------------#
 
                 # 認識確率の表示
                 probability_list[count] = probability
@@ -138,15 +145,16 @@ if __name__ == '__main__':
                     print('=======================')
                 else:
                     pass
-
-                try:
-                    publish_data = Float32MultiArray(data=probability)
-                    probability_pub.publish(publish_data)
-                except rospy.exceptions.ROSSerializationException:
-                    # 認識モードから通常モードへの切替時に
-                    # rospy.exceptions.ROSSerializationException: field data[] must be float type
-                    # のエラーが出るのでそれ用
-                    continue
-                except:
-                    traceback.print_exc()
+                 
+                
+                # try:
+                #     publish_data = Float32MultiArray(data=probability)
+                #     probability_pub.publish(publish_data)
+                # except rospy.exceptions.ROSSerializationException:
+                #     # 認識モードから通常モードへの切替時に
+                #     # rospy.exceptions.ROSSerializationException: field data[] must be float type
+                #     # のエラーが出るのでそれ用
+                #     continue
+                # except:
+                #     traceback.print_exc()
         spin_rate.sleep()

@@ -107,7 +107,7 @@ if __name__ == "__main__":
                 elif robot_mode == "nomal":
                     tts.say('現在、通常モードです')
                 elif robot_mode == "waite_state_name":
-                    tts.say('現在、記録の準備中です。　今、何をしているか教えてもらえたら記録を開始できます。')
+                    tts.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
                 elif robot_mode == "graph_collecting":
                     tts.say('現在、記録中です')
                 else:
