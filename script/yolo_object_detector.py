@@ -25,7 +25,7 @@ class GetYoloObjectInfo():
         
 if __name__ == '__main__':
     rospy.init_node('YoloSubscriber', anonymous=True)
-    yolodetector = YoloObjectDetector()
+    yolodetector = GetYoloObjectInfo()
     while not rospy.is_shutdown():
         objects_info = yolodetector.get_objects()
         print(objects_info)
