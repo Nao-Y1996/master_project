@@ -180,8 +180,8 @@ class graph_utilitys():
                         obj_names_sets.append(obj_names)
         return datasets, obj_names_sets
     
-    def CreateExpandedData(self, data, remove_obj_id_list):
-        ExpandedDataList = [data]
+    def CreateAugmentedData(self, data, remove_obj_id_list):
+        AugmentedDataList = [data]
 
         data_id = data[0]
         position_data = np.reshape(data[1:], (-1,4))
@@ -211,28 +211,31 @@ class graph_utilitys():
             if flag and (_position_data.tolist() != position_data.tolist()):
                 new_data = _position_data.flatten().tolist()
                 new_data.insert(0, data_id)
-                ExpandedDataList.append(new_data)
+                AugmentedDataList.append(new_data)
                 # print(f'保存 : {new_data}')
             else:
                 pass
-        return ExpandedDataList
+        return AugmentedDataList
 
-    def CreateExpandedCSVdata(self, origin_csv, expanded_csv, remove_obj_id_list):
-        with open(expanded_csv, 'w') as f:
+    def CreateAugmentedCSVdata(self, origin_csv, augmented_csv, remove_obj_id_list):
+        with open(augmented_csv, 'w') as f:
             pass
         with open(origin_csv) as f:
             csv_file = csv.reader(f)
+            data_num = 0
             for i, row in enumerate(csv_file):
                 _row = []
                 if '' in row:
                         continue
                 for v in row:
                     _row.append(float(v))
-                ExpandedDataList = self.CreateExpandedData(_row, remove_obj_id_list)
-                for Expandeddata in ExpandedDataList:
-                    with open(expanded_csv, 'a') as f:
+                AugmentedDataList = self.CreateAugmentedData(_row, remove_obj_id_list)
+                for Augmenteddata in AugmentedDataList:
+                    with open(augmented_csv, 'a') as f:
                         writer = csv.writer(f)
-                        writer.writerow(Expandeddata)
+                        writer.writerow(Augmenteddata)
+                        data_num += 1
+        return data_num
 
     def visualize_graph(self, graph, node_labels, save_graph_name=None, show_graph=True):
         # plt.close()

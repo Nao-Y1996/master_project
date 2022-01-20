@@ -17,7 +17,7 @@ import numpy as np
 import random
 import csv
 import os
-
+import glob
 import fasttext
 
 class NNConvNet(nn.Module):
@@ -112,25 +112,55 @@ def test(model, iterator):
 ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 graph_utils = graph_utilitys(fasttext_model=ft_path)
 
-base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
-csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
+# 状態パターンごとのファイルを取得
+base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-20/user_1/position_data"
+file_list = []
+files = glob.glob(base_dir + "/pattern*")
+for file in files:
+    if not 'augmented' in file:
+        file_list.append(file)
+file_list.sort()
+csv_path_dict = {}
+for i, file in enumerate(file_list):
+    csv_path_dict[i] = file
 
-# 学習データを拡張（pattern_n_expanded.csvを作成する）
-remove_obj_id_list = []
-for name in remove_obj_name_list:
-    remove_obj_id_list.append(graph_utils.OBJECT_NAME_2_ID[name])
-for origin_csv in csv_path_list.values():
-    expanded_csv = origin_csv.replace('.csv', '_expanded.csv')
-    graph_utils.CreateExpandedCSVdata(origin_csv, expanded_csv, remove_obj_id_list)
+# 学習データを拡張（augmented_pattern_n.csvを作成する）
+remove_obj_names_list = [['sandwitch', 'soup', 'salada', 'book'], # pattern_0 : 仕事
+                         ["laptop", "mouse", "keyboard", 'book'], # pattern_1 : 食事
+                         ["laptop", "mouse", "keyboard", 'sandwitch', 'soup', 'salada']] # pattern_2 : 読書
+remove_obj_ids_list = []
+for remove_obj_names in remove_obj_names_list:
+    remove_obj_ids = []
+    for name in remove_obj_names:
+        remove_obj_ids.append(graph_utils.OBJECT_NAME_2_ID[name])
+    remove_obj_ids_list.append(remove_obj_ids)
+data_num_list = []
+for origin_csv, remove_obj_ids in zip(csv_path_dict.values(), remove_obj_ids_list):
+    augmented_csv = origin_csv.replace('pattern', 'augmented_pattern')
+    data_num = graph_utils.CreateAugmentedCSVdata(origin_csv, augmented_csv, remove_obj_ids)
+    data_num_list.append(data_num)
+
+# 拡張した学習データのデータ数を揃える（一番少ないものに合わせる。多いものはランダムに選択）
+min_data_num = min(data_num_list)
+print("データ数 : ",data_num_list, ' 最小 : ',min_data_num)
+print(f'データ数を{min_data_num}に揃えます')
+for k, v in csv_path_dict.items():
+    csv_path_dict[k] = v.replace('pattern', 'augmented_pattern')
+for file in csv_path_dict.values():
+    with open(file) as f:
+        csv_file = csv.reader(f)
+        data = [[float(v) for v in row] for row in csv_file]
+    data = random.sample(data, min_data_num)
+    with open(file, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
 
 # 拡張したデータを用いてグラフデータセットを作成
-csv_path_list = {0:base_dir+'/pattern_0_expanded.csv',1:base_dir+'/pattern_1_expanded.csv',2:base_dir+'/pattern_2_expanded.csv',3:base_dir+'/pattern_3_expanded.csv'}
-datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
+datasets,_ = graph_utils.csv2graphDataset(csv_path_dict)
 print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 print("dataset length : ", len(datasets))
-
-# data = datasets[0]
-# print("data 0 : ", data)
+data = datasets[0]
+print("data 0 : ", data)
 # G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
 # print(G.get_edge_data)
 # pos = nx.spring_layout(G, k=0.3)
@@ -140,8 +170,8 @@ print("dataset length : ", len(datasets))
 random.shuffle(datasets)
 train_dataset = datasets[:int(len(datasets)*0.85)]
 test_dataset = datasets[int(len(datasets)*0.85):]
-train_loader = DataLoader(train_dataset, batch_size=100, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=100, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=3000, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=3000, shuffle=False)
 
 
 
@@ -153,14 +183,31 @@ optimizer = torch.optim.Adam(model.parameters())
 
 
 print('-------train---------')
-for epoch in range(3):
+train_loss_list = []
+train_acc_list = []
+for epoch in range(10):
     train_loss, train_acc = train(model, train_loader , optimizer, criterion)
+    train_loss_list.append(train_loss)
+    train_acc_list.append(train_acc)
     print(f'loss : {train_loss}  Accuracy : {train_acc}')
+
+x, loss, acc = len(train_acc_list), train_loss_list, train_acc_list
+# lossの描画
+fig = plt.figure()
+plt.plot(x, loss)
+plt.ylabel("Loss")
+fig.savefig("Loss.png")
+
+# accの描画
+fig = plt.figure()
+plt.plot(x, loss)
+plt.ylabel("Accuracy")
+fig.savefig("Accuracy.png")
+
 print('--------test---------')
 acc = test(model, test_loader)
 print(f'Accuracy : {acc}')
 
 
-# model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
-# torch.save(model.state_dict(),model_path)
-
+model_path = os.path.dirname(os.path.abspath(__file__)) + '/model/master_model_nnconv.pt'
+torch.save(model.state_dict(),model_path)
