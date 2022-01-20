@@ -10,19 +10,6 @@ import socket
 import pickle
 
 
-# class ProbabilitySbscriber(object):
-
-#     def __init__(self, topic_name):
-#         self.probability = None
-#         self._probability_sub = rospy.Subscriber(topic_name, Float32MultiArray, self.callback)
-#         rospy.wait_for_message(topic_name, Float32MultiArray, timeout=5.0)
-
-#     def callback(self, data):
-#         self.probability = data.data
-    
-#     def get_probability(self):
-#         return  self.probability
-
 def show_probability_graph(ax, labels, probability):
     x = np.arange(len(labels))
     width = 0.35
@@ -47,7 +34,6 @@ if __name__ == '__main__':
     rospy.init_node('probability_subscriber', anonymous=True)
     spin_rate=rospy.Rate(10)
 
-    # probability_sub = ProbabilitySbscriber(topic_name='probability')
 
     # 認識結果（probability）を受け取るための通信の設定
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -73,11 +59,8 @@ if __name__ == '__main__':
     probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
     flag_display = False
     while not rospy.is_shutdown():
-        # robot_mode = rospy.get_param("/robot_mode")
-
 
         # probabilityをUDPで受け取る
-        # probability = probability_sub.get_probability()
         print('------------------------------------------------------------')
         probability, cli_addr = sock.recvfrom(1024)
         probability = pickle.loads(probability)

@@ -43,19 +43,17 @@ if __name__ == '__main__':
     IP_ADDRESS = s.getsockname()[0]
     port = 12345
     locaddr = (IP_ADDRESS, port)
-    sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
-    sock.bind(locaddr) # 使用するIPアドレスとポート番号を指定
+    sock4data = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
+    sock4data.bind(locaddr) # 使用するIPアドレスとポート番号を指定
     print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
 
     # 認識モデルの設定
     model_path = os.path.dirname(os.path.abspath(__file__))+ '/experiment_data/2022-01-20/user_1/master_model_nnconv1.pt'
     cf = classificator(model=model_path)
 
-    # 認識確率の配信用
-    # probability_pub = rospy.Publisher('probability', Float32MultiArray, queue_size=1)
     # 認識確率送信のためのソケットを作成する（UDP）
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.109', 5624)
+    sock4probability = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address = ('192.168.0.110', 5624)
 
     # 認識の確率表示のグラフ設定
     labels = ['work', 'eating', 'reading']
@@ -73,7 +71,7 @@ if __name__ == '__main__':
         
         # dataをUDPでデータを受け取る
         print('------------------------------------------------------------')
-        data, cli_addr = sock.recvfrom(1024)
+        data, cli_addr = sock4data.recvfrom(1024)
         data = pickle.loads(data)
         
         # グラフ形式に変換
@@ -89,18 +87,19 @@ if __name__ == '__main__':
                 probability = cf.classificate(graph)
 
                 #------------ 認識結果をUDPで送信 ------------#
-                send_len = sock.sendto(pickle.dumps(probability), serv_address)
+                send_len = sock4probability.sendto(pickle.dumps(probability, protocol=2), serv_address)
+                # 受け取る側がpython2の場合はprotocol=2を指定する
                 #----------------------------------------------#
 
                 # 認識確率の表示
-                probability_list[count] = probability
-                display_probability  = probability_list.mean(axis=0)
-                if flag_display:
-                    show_probability_graph(ax, labels, np.round(display_probability, decimals=4).tolist())
-                count += 1
-                if count >= data_buf_len:
-                    flag_display = True
-                    count = 0
+                # probability_list[count] = probability
+                # display_probability  = probability_list.mean(axis=0)
+                # if flag_display:
+                #     show_probability_graph(ax, labels, np.round(display_probability, decimals=4).tolist())
+                # count += 1
+                # if count >= data_buf_len:
+                #     flag_display = True
+                #     count = 0
 
                 # 不要な物体（ノード）の特定
                 if clean_mode:
@@ -146,15 +145,4 @@ if __name__ == '__main__':
                 else:
                     pass
                  
-                
-                # try:
-                #     publish_data = Float32MultiArray(data=probability)
-                #     probability_pub.publish(publish_data)
-                # except rospy.exceptions.ROSSerializationException:
-                #     # 認識モードから通常モードへの切替時に
-                #     # rospy.exceptions.ROSSerializationException: field data[] must be float type
-                #     # のエラーが出るのでそれ用
-                #     continue
-                # except:
-                #     traceback.print_exc()
         spin_rate.sleep()
