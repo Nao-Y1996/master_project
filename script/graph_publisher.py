@@ -190,13 +190,21 @@ with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
 
 
 if __name__ == '__main__':
-    args = sys.argv
-    user_id = None
-    user_id = int(args[1])
-    rospy.set_param("/user_id", user_id)
+    user_name = rospy.get_param("/user_name")
+    print('current user is '+user_name)
+    while True:
+        y_n = input('Do you continue? (y/n)')
+        if y_n == 'y':
+            break
+        elif y_n == 'n':
+            sys.exit("finished program")
+        else:
+            pass
+    user_dir = rospy.get_param("/user_dir")
 
     # 保存用ディレクトリの設定
-    save_dir = rospy.get_param("/base_dir") +"/user_"+str(user_id)
+    time_now = str(datetime.now()).split(' ')
+    save_dir = user_dir + time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
     rospy.set_param("/save_dir", save_dir)
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)
@@ -208,7 +216,7 @@ if __name__ == '__main__':
     except OSError:
         print('directory exist')
 
-    db_file = save_dir+"/state.csv"
+    db_file = user_dir+"/state.csv"
     is_known_user = os.path.isfile(db_file)
 
     if not is_known_user:

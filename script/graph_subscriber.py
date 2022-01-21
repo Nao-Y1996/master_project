@@ -48,7 +48,8 @@ if __name__ == '__main__':
     print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
 
     # 認識モデルの設定
-    model_path = os.path.dirname(os.path.abspath(__file__))+ '/experiment_data/2022-01-20/user_1/master_model_nnconv1.pt'
+    user_dir = rospy.get_param("/user_dir")
+    model_path = user_dir+'/master_model_nnconv1.pt'
     cf = classificator(model=model_path)
 
     # 認識確率送信のためのソケットを作成する（UDP）
@@ -56,7 +57,7 @@ if __name__ == '__main__':
     serv_address = ('192.168.0.110', 5624)
 
     # 認識の確率表示のグラフ設定
-    labels = ['work', 'eating', 'reading']
+    labels = ['working', 'eating', 'reading']
     fig, ax = plt.subplots()
 
     # 

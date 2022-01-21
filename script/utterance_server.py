@@ -76,14 +76,15 @@ print('Successfully created socket!')
 sock.bind(locaddr)
 
 if __name__ == "__main__":
-    # rospy.init_node('main_controller', anonymous=True)
+    user_name = input('enter user name')
     
+    rospy.set_param("/user_name", user_name)
     rospy.set_param("/robot_mode", "nomal")
     rospy.set_param("/is_clean_mode", 0)
 
     # 保存用ディレクトリの設定
-    base_dir = os.path.dirname(__file__)+'/experiment_data/'+str(datetime.now()).split(' ')[0]
-    rospy.set_param("/base_dir", base_dir)
+    user_dir = os.path.dirname(__file__)+'/experiment_data/'+user_name
+    rospy.set_param("/user_dir", user_dir)
 
     while not rospy.is_shutdown():
         state_name = None

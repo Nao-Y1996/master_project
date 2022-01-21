@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # save_dir = rospy.get_param("/save_dir")
     # read_data = pd.read_csv(save_dir +'/state.csv',encoding="utf-8")
     # labels = read_data['state'].tolist()
-    labels = ['work', 'eating', 'reading']
+    labels = ['working', 'eating', 'reading']
     fig, ax = plt.subplots()
 
     pattern_num = len(labels)

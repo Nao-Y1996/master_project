@@ -252,11 +252,13 @@ class graph_utilitys():
             plt.clf()
 
 if __name__ == '__main__':
+    user_name = input('enter user name')
+    
     ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
     graph_utils = graph_utilitys(fasttext_model=ft_path)
-    base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-14/user_1/position_data"
+    user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name+"/position_data"
 
-    csv_path_list = {0:base_dir+'/pattern_0.csv',1:base_dir+'/pattern_1.csv',2:base_dir+'/pattern_2.csv',3:base_dir+'/pattern_3.csv'}
+    csv_path_list = {0:user_dir+'/pattern_0.csv',1:user_dir+'/pattern_1.csv',2:user_dir+'/pattern_2.csv',3:user_dir+'/pattern_3.csv'}
     datasets,_ = graph_utils.csv2graphDataset(csv_path_list)
     print(datasets)
     print(len(datasets))

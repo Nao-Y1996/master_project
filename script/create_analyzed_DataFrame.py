@@ -39,21 +39,22 @@ def show_probability_graph(ax, labels, probability, count=None, is_save=False):
 
 
 if __name__ == '__main__':
+    user_name = input('enter user name')
     ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
     graph_utils = graph_utilitys(fasttext_model=ft_path)
-    base_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-20/user_1"
+    user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
 
     
     # 認識モデルの設定
-    model_path = base_dir+ '/master_model_nnconv1.pt'
+    model_path = user_dir+ '/master_model_nnconv1.pt'
     cf = classificator(model=model_path)
     
     # 読み込むデータ
-    data_dir = base_dir+ '/position_data'
-    csv_path_dict = {0:data_dir+'/pattern_0.csv',1:data_dir+'/pattern_1.csv',2:data_dir+'/pattern_2.csv'}
+    data_dir = user_dir+ '/position_data'
+    csv_path_dict = {0:data_dir+'/augmented_pattern_0.csv',1:data_dir+'/augmented_pattern_1.csv',2:data_dir+'/augmented_pattern_2.csv'}
 
     # 認識の確率表示のグラフ設定
-    labels = ['work', 'eating', 'reading']
+    labels = ['working', 'eating', 'reading']
     # fig, ax = plt.subplots()
     
     # 3次元グラフの表示
