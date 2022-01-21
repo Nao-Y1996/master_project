@@ -191,20 +191,25 @@ with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
 
 if __name__ == '__main__':
     user_name = rospy.get_param("/user_name")
+    print()
+    print('=============================')
     print('current user is '+user_name)
-    while True:
-        y_n = input('Do you continue? (y/n)')
-        if y_n == 'y':
-            break
-        elif y_n == 'n':
-            sys.exit("finished program")
-        else:
-            pass
+    print('=============================')
+    print()
+    rospy.sleep(3)
+    # while True:
+    #     y_n = input('Do you continue? (y/n)')
+    #     if y_n == 'y':
+    #         break
+    #     elif y_n == 'n':
+    #         sys.exit("finished program")
+    #     else:
+    #         pass
     user_dir = rospy.get_param("/user_dir")
 
     # 保存用ディレクトリの設定
     time_now = str(datetime.now()).split(' ')
-    save_dir = user_dir + time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
+    save_dir = user_dir + '/'+time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
     rospy.set_param("/save_dir", save_dir)
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)

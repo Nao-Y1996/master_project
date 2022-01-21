@@ -64,10 +64,10 @@ def add_new_state(csv_file, state_name):
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 IP_ADDRESS = s.getsockname()[0]
-print('IP address = ',IP_ADDRESS)
 M_SIZE = 1024
 port = 8890
 locaddr = (IP_ADDRESS, port)
+print('utterance server : IP address = ', IP_ADDRESS, '  port = ', port)
 
 # ①ソケットを作成する
 sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -76,7 +76,11 @@ print('Successfully created socket!')
 sock.bind(locaddr)
 
 if __name__ == "__main__":
-    user_name = input('enter user name')
+    # user_name = input('enter user name')
+    args = sys.argv
+    user_name = None
+    user_name = args[1]
+    
     
     rospy.set_param("/user_name", user_name)
     rospy.set_param("/robot_mode", "nomal")
@@ -120,7 +124,8 @@ if __name__ == "__main__":
             elif '終了' in message:
                 if (robot_mode=='graph_collecting'):
                     save_dir = rospy.get_param("/save_dir")
-                    db_file = save_dir+"/state.csv"
+                    user_dir = rospy.get_param("/user_dir")
+                    db_file = user_dir+"/state.csv"
 
                     state_index = rospy.get_param("/state_index")
                     state_name = get_stateName(db_file, state_index)
@@ -165,7 +170,8 @@ if __name__ == "__main__":
                     tts.say(state_name + '、を記録します。')
                     
                     save_dir = rospy.get_param("/save_dir")
-                    db_file = save_dir+"/state.csv"
+                    user_dir = rospy.get_param("/user_dir")
+                    db_file = user_dir+"/state.csv"
 
                     state_index = get_state_index(db_file, state_name)
                     add_new_state(db_file, state_name)
