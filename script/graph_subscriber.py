@@ -48,7 +48,7 @@ if __name__ == '__main__':
     print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
 
     # 認識モデルの設定
-    user_dir = rospy.get_param("/user_dir")
+    user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
     model_path = user_dir+'/master_model_nnconv1.pt'
     cf = classificator(model=model_path)
 
@@ -92,6 +92,10 @@ if __name__ == '__main__':
                 count += 1
                 if count >= data_buf_len:
                     count = 0
+                state_now = labels[average_probability.index(max(average_probability))]
+                if not clean_mode:
+                    print(f'状態 : {state_now}')
+                    print(f'確率 : {average_probability}')
                 
                 #------------ 認識結果をUDPで送信 ------------#
                 send_len = sock4probability.sendto(pickle.dumps(average_probability, protocol=2), serv_address)
@@ -103,9 +107,6 @@ if __name__ == '__main__':
 
                 # 不要な物体（ノード）の特定
                 if clean_mode:
-                    state_now = labels[average_probability.index(max(average_probability))]
-                    print(f'状態 : {state_now}')
-                    print(f'確率 : {average_probability}')
                     # ノードを１つ取り除いたパターンのグラフを取得
                     dummy_graph_lsit, removed_obj_data_list = graph_utils.convertData2dummygraphs(data)
 
@@ -117,10 +118,10 @@ if __name__ == '__main__':
 
                         if dummy_graph[0] is not None:
                             removed_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
-                            print()
-                            print(f'   removed  : {removed_obj}')
+                            # print()
+                            # print(f'   removed  : {removed_obj}')
                             dummy_probability = cf.classificate(dummy_graph[0])
-                            print(f'probability : {dummy_probability}')
+                            # print(f'probability : {dummy_probability}')
                             # あるノードを取り除いた時の認識結果ともとの認識結果が一致するか
                             if dummy_probability.index(max(dummy_probability)) == average_probability.index(max(average_probability)):
                                 # あるノードを取り除いた時の認識結果の確率が上昇するか
@@ -131,17 +132,17 @@ if __name__ == '__main__':
                                     # print('diff : ', diff)
                                     unnecessary_obj_candidate_info.append([removed_obj_id, average_probability, dummy_probability, diff])
                                 else:
-                                    print('確率は上昇しませんでした')
+                                    # print('確率は上昇しませんでした')
                                     pass
                             else:
-                                print('認識結果が一致していません')
+                                # print('認識結果が一致していません')
                                 pass
 
                     print('=======不要ノード========')
                     unnecessary_obj_candidate_info = np.array(unnecessary_obj_candidate_info)
                     try:
-                        for id, diff in zip(unnecessary_obj_candidate_info[:,0], list(unnecessary_obj_candidate_info[:,-1])):
-                            print(graph_utils.ID_2_OBJECT_NAME[int(id)], diff)
+                        # for id, diff in zip(unnecessary_obj_candidate_info[:,0], list(unnecessary_obj_candidate_info[:,-1])):
+                        #     print(graph_utils.ID_2_OBJECT_NAME[int(id)], diff)
                         unnecessary_obj_index = np.argmax(unnecessary_obj_candidate_info[:,-1])
                         unnecessary_obj_id = unnecessary_obj_candidate_info[unnecessary_obj_index][0]
                         unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(unnecessary_obj_id)]
