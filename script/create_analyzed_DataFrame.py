@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     
     # 認識モデルの設定
-    model_path = user_dir+ '/master_model_nnconv1.pt'
+    model_path = user_dir+ '/model_nnconv.pt'
     cf = classificator(model=model_path)
     
     # 読み込むデータ

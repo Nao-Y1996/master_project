@@ -53,14 +53,14 @@ if __name__ == '__main__':
     # labels = read_data['state'].tolist()
     labels = ['working', 'eating', 'reading']
     fig, ax = plt.subplots()
-
     pattern_num = len(labels)
     while not rospy.is_shutdown():
 
         # probabilityをUDPで受け取る
-        print('------------------------------------------------------------')
-        average_probability, cli_addr = sock.recvfrom(1024)
-        average_probability = pickle.loads(average_probability)
+        data, cli_addr = sock.recvfrom(1024)
+        data = pickle.loads(data)
+        average_probability, data_id = data[0:3], data[3]
+        print(average_probability, data_id)
 
         # 認識確率の表示
         show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())

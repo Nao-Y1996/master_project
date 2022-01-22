@@ -214,6 +214,7 @@ if __name__ == '__main__':
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)
     position_dir = save_dir+'/position_data/'
+    recognition_file_path = position_dir + '/recognition.csv'
 
     try:
         os.makedirs(image_dir)
@@ -232,9 +233,8 @@ if __name__ == '__main__':
         print('created csv file for state database')
 
         # 認識結果の保存用ファイルの作成
-        probability_file_path = position_dir + '/porobability.csv'
-        with open(probability_file_path, 'w') as f:
-            print('created csv file for porobability')
+        with open(recognition_file_path, 'w') as f:
+            print('created csv file for recognition')
         
         for i in range(10):
             try:
@@ -375,7 +375,7 @@ if __name__ == '__main__':
         #------------ データをUDPで送る ------------#
         send_len = sock.sendto(pickle.dumps(graph_data), serv_address)
         #----------------------------------------------#
-        rospy.loginfo(graph_data)
+        print(graph_data)
         
         obj_num = (len(graph_data)-1)/4
         # print(obj_num)
@@ -412,6 +412,10 @@ if __name__ == '__main__':
                 rospy.set_param("/image_save_path", image_save_path)
                 rospy.set_param("/robot_mode", "nomal")
                 tts.say('終了しました。')
+        elif robot_mode == 'state_recognition':
+            with open(recognition_file_path, 'a') as f:
+                writer = csv.writer(f)
+                writer.writerow(graph_data)
         else:
             count_saved = 0
             pass

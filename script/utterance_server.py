@@ -141,10 +141,13 @@ if __name__ == "__main__":
             
             elif '認識モード' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
+                rospy.set_param("/is_clean_mode", 0)
+                tts.say('認識モードに切り替わりました')
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/is_clean_mode", 0)
+                tts.say('通常モードに切り替わりました')
 
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
@@ -153,6 +156,7 @@ if __name__ == "__main__":
             elif '片付け' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
+                tts.say('片付けモードに切り替わりました')
 
             elif 'ありがとう' in message:
                 rospy.set_param("/is_clean_mode", 0)

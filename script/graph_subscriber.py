@@ -96,11 +96,6 @@ if __name__ == '__main__':
                 if not clean_mode:
                     print(f'状態 : {state_now}')
                     print(f'確率 : {average_probability}')
-                
-                #------------ 認識結果をUDPで送信 ------------#
-                send_len = sock4probability.sendto(pickle.dumps(average_probability, protocol=2), serv_address)
-                # 受け取る側がpython2の場合はprotocol=2を指定する
-                #----------------------------------------------#
 
                 # 認識確率の表示
                 # show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())
@@ -153,6 +148,11 @@ if __name__ == '__main__':
                         traceback.print_exc()
                     print('=======================')
                 else:
-                    pass
+                    unnecessary_obj_id = -123
+
+                #------------ 認識結果をUDPで送信 ------------#
+                send_len = sock4probability.sendto(pickle.dumps(average_probability+[unnecessary_obj_id], protocol=2), serv_address)
+                # 受け取る側がpython2の場合はprotocol=2を指定する
+                #----------------------------------------------#
                  
         spin_rate.sleep()
