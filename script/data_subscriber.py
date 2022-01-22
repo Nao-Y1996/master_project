@@ -37,30 +37,43 @@ if __name__ == '__main__':
     rospy.init_node('model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(20)
 
-    # dataを受け取るための通信の設定
+# ------------------------dataを受け取るための通信の設定--------------------
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     IP_ADDRESS = s.getsockname()[0]
-    port = 12345
-    locaddr = (IP_ADDRESS, port)
-    sock4data = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
-    sock4data.bind(locaddr) # 使用するIPアドレスとポート番号を指定
-    print(f'data server : IP address = {IP_ADDRESS}  port = {port}')
+
+    port4data = 12345
+    port4savedDataCount = 54321
+    port4objNames = 56789
+
+    sock4data = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
+    socksavedDataCount = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
+    sock4objNames = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
+
+    sock4data.bind((IP_ADDRESS, port4data))
+    port4savedDataCount.bind((IP_ADDRESS, port4savedDataCount))
+    sock4objNames.bind((IP_ADDRESS, port4objNames))
+
+    print(f'data server : IP address = {IP_ADDRESS}  port = {port4data}')
+    print(f'count saved : IP address = {IP_ADDRESS}  port = {port4savedDataCount}')
+    print(f'object names : IP address = {IP_ADDRESS}  port = {port4objNames}')
+# ----------------------------------------------------------------------
+    
+# ------------------------認識確率の送信のための設定------------------------
+    sock4probability = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    serv_address = ('192.168.0.110', 5624)
+# ----------------------------------------------------------------------
 
     # 認識モデルの設定
     user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
     model_path = user_dir+'/model_nnconv.pt'
     cf = classificator(model=model_path)
 
-    # 認識確率送信のためのソケットを作成する（UDP）
-    sock4probability = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.110', 5624)
-
     # 認識の確率表示のグラフ設定
     labels = ['working', 'eating', 'reading']
     fig, ax = plt.subplots()
 
-    # 
+    
     data_buf_len = 10
     pattern_num = len(labels)
     count = 0
@@ -150,9 +163,21 @@ if __name__ == '__main__':
                 else:
                     unnecessary_obj_id = -123
 
-                #------------ 認識結果をUDPで送信 ------------#
+                #　認識結果をUDPで送信（受け取る側がpython2なのでprotocol=2を指定する）
                 send_len = sock4probability.sendto(pickle.dumps(average_probability+[unnecessary_obj_id], protocol=2), serv_address)
-                # 受け取る側がpython2の場合はprotocol=2を指定する
-                #----------------------------------------------#
-                 
+                
+            
+            # データ収集中の確認用
+            elif robot_mode == 'graph_collecting':
+                # データの保存回数を受け取る
+                count_saved, _ = socksavedDataCount.recvfrom(1024)
+                count_saved = pickle.loads(count_saved)
+
+                # 物体名を受け取る
+                obj_names, _ = sock4objNames.recvfrom(1024)
+                obj_names = pickle.loads(obj_names)
+
+                print(count_saved, obj_names)
+            else:
+                pass
         spin_rate.sleep()
