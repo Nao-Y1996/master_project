@@ -104,8 +104,11 @@ if __name__ == "__main__":
             if python_version == 3:
                 message = message.decode(encoding='utf-8')
                 print(message)
+
+            if ('はい' in message) or ('現在'in message) or ('今'in message):
+                pass
             
-            if 'モードの確認' in message:
+            elif 'モードの確認' in message:
                 robot_mode = rospy.get_param("/robot_mode")
                 is_clean_mode = rospy.get_param("/is_clean_mode")
                 if robot_mode == "state_recognition":
@@ -134,6 +137,7 @@ if __name__ == "__main__":
                     image_save_path = save_dir+'/images/'
                     rospy.set_param("/image_save_path", image_save_path)
                     rospy.set_param("/robot_mode", "nomal")
+                    rospy.set_param("/cllecting_state_name", '')
 
                     tts.say(state_name + 'の記録は完了です。')
                 else:
@@ -142,12 +146,12 @@ if __name__ == "__main__":
             elif '認識モード' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('はい、認識機能をオンにします')
+                tts.say('はい、認識機能をオンにします。')
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('はい、モードを切り替えました。')
+                tts.say('はい、通常機能に戻ります。')
 
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
@@ -160,11 +164,8 @@ if __name__ == "__main__":
 
             elif 'ありがとう' in message:
                 rospy.set_param("/is_clean_mode", 0)
+                tts.say('はい、どういたしまして')
 
-            elif 'はい' in message:
-                pass
-            elif '今' in message:
-                pass
 
             else :
                 robot_mode = rospy.get_param("/robot_mode")
@@ -192,6 +193,7 @@ if __name__ == "__main__":
                     # データ収集モードに切り替え
                     rospy.set_param("/robot_mode", "graph_collecting")
                     print(state_name +' のデータを収集します')
+                    rospy.set_param("/cllecting_state_name", state_name)
 
             
 

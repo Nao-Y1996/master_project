@@ -44,19 +44,19 @@ if __name__ == '__main__':
 
     port4data = 12345
     port4savedDataCount = 54321
-    port4objNames = 56789
+    # port4objNames = 56789
 
     sock4data = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
     socksavedDataCount = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
-    sock4objNames = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
+    # sock4objNames = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
 
     sock4data.bind((IP_ADDRESS, port4data))
     socksavedDataCount.bind((IP_ADDRESS, port4savedDataCount))
-    sock4objNames.bind((IP_ADDRESS, port4objNames))
+    # sock4objNames.bind((IP_ADDRESS, port4objNames))
 
     print(f'data server : IP address = {IP_ADDRESS}  port = {port4data}')
     print(f'count saved : IP address = {IP_ADDRESS}  port = {port4savedDataCount}')
-    print(f'object names : IP address = {IP_ADDRESS}  port = {port4objNames}')
+    # print(f'object names : IP address = {IP_ADDRESS}  port = {port4objNames}')
 # ----------------------------------------------------------------------
     
 # ------------------------認識確率の送信のための設定------------------------
@@ -82,21 +82,21 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
         clean_mode = rospy.get_param("/is_clean_mode")
-        
-        # dataをUDPでデータを受け取る
-        print('------------------------------------------------------------')
-        data, cli_addr = sock4data.recvfrom(1024)
-        data = pickle.loads(data)
-        
-        # グラフ形式に変換
-        position_data = graph_utils.removeDataId(data)
-        graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
-        
-        if graph is not None:
-            # graph_utils.visualize_graph(graph, node_labels=node_names, save_graph_name=None, show_graph=True) # 状態グラフの表示
+                
+        if robot_mode == 'state_recognition':
             
-            # 状態認識
-            if robot_mode == 'state_recognition':
+            # dataをUDPでデータを受け取る
+            print('------------------------------------------------------------')
+            data, cli_addr = sock4data.recvfrom(1024)
+            data = pickle.loads(data)
+            
+            # グラフ形式に変換
+            position_data = graph_utils.removeDataId(data)
+            graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
+            if graph is not None:
+                # graph_utils.visualize_graph(graph, node_labels=node_names, save_graph_name=None, show_graph=True) # 状態グラフの表示
+
+                # 状態認識
                 probability = cf.classificate(graph)
 
                 # 認識確率の平滑化
@@ -165,19 +165,20 @@ if __name__ == '__main__':
 
                 #　認識結果をUDPで送信（受け取る側がpython2なのでprotocol=2を指定する）
                 send_len = sock4probability.sendto(pickle.dumps(average_probability+[unnecessary_obj_id], protocol=2), serv_address)
-                
-            
-            # データ収集中の確認用
-            elif robot_mode == 'graph_collecting':
-                # データの保存回数を受け取る
-                count_saved, _ = socksavedDataCount.recvfrom(1024)
-                count_saved = pickle.loads(count_saved)
-
-                # 物体名を受け取る
-                obj_names, _ = sock4objNames.recvfrom(1024)
-                obj_names = pickle.loads(obj_names)
-
-                print(count_saved, obj_names)
             else:
                 pass
+            
+        # データ収集中の確認用
+        elif robot_mode == 'graph_collecting':
+            # データの保存回数を受け取る
+            count_saved, _ = socksavedDataCount.recvfrom(1024)
+            count_saved = pickle.loads(count_saved)
+
+            # 物体名を受け取る
+            # obj_names, _ = sock4objNames.recvfrom(1024)
+            # obj_names = pickle.loads(obj_names)
+
+            print(count_saved)
+        else:
+            pass
         spin_rate.sleep()

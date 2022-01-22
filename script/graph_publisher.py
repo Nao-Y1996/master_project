@@ -191,11 +191,11 @@ with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
 
 if __name__ == '__main__':
     user_name = rospy.get_param("/user_name")
-    print()
+    print
     print('=============================')
     print('current user is '+user_name)
     print('=============================')
-    print()
+    print
     rospy.sleep(3)
     # while True:
     #     y_n = input('Do you continue? (y/n)')
@@ -278,6 +278,7 @@ if __name__ == '__main__':
 
     spin_rate=rospy.Rate(10)
     count_saved = 0
+    count_ideal_saved = 0
     pre_graph_data = None
     while not rospy.is_shutdown():
         
@@ -375,23 +376,44 @@ if __name__ == '__main__':
         #------------ データをUDPで送る ------------#
         send_len = sock.sendto(pickle.dumps(graph_data), serv_address)
         #----------------------------------------------#
-        print(graph_data)
         
         obj_num = (len(graph_data)-1)/4
-        # print(obj_num)
         robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
+            state_name = rospy.get_param("/cllecting_state_name")
             # ------------ データの送信 ------------#
             # グラフ収集：保存した数の送信用
-            send_len1 = sock1.sendto(pickle.dumps(count_saved), serv_address1)
+            print(count_ideal_saved)
+            send_len1 = sock1.sendto(pickle.dumps(count_ideal_saved), serv_address1)
             # グラフ収集：検出物体名の送信用
             send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
             #----------------------------------------------#
             data_save_path = rospy.get_param("/data_save_path")
             if face_exist:
-                # if (obj_num == 8) and obj_moved and ('book' in names):
+                
                 if (obj_num >= 2) and obj_moved:
+                    # print(names)
+                    # print state_name
                     data_save_path = rospy.get_param("/data_save_path")
+                    ideal_data_save_path = data_save_path.replace('pattern', 'ideal_pattern')
+                    if state_name == '読書'.decode('utf-8'):
+                        can_save_IdealData = True if 'book' in names else False
+                    elif state_name == '仕事'.decode('utf-8'):
+                        can_save_IdealData = True if 'laptop' in names else False
+                    elif state_name == '食事'.decode('utf-8'):
+                        can_save_IdealData = True
+                    else:
+                        can_save_IdealData = False
+
+                    if can_save_IdealData:
+                        with open(ideal_data_save_path, 'a') as f:
+                            writer = csv.writer(f)
+                            writer.writerow(graph_data)
+                        pre_graph_data = graph_data
+                        count_ideal_saved += 1
+                    else:
+                        pass
+            
                     with open(data_save_path, 'a') as f:
                         writer = csv.writer(f)
                         writer.writerow(graph_data)
@@ -404,21 +426,26 @@ if __name__ == '__main__':
                 pag.screenshot(image_save_path+str(data_id)+'.jpg')
             else:
                 pass
-            print(count_saved)
+            print('保存したデータ数 : '+str(count_saved) + '  |  保存した理想データ数 : ' + str(count_ideal_saved))
 
-            if count_saved >= 1000:
+            if count_ideal_saved >= 1000:
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'
                 rospy.set_param("/image_save_path", image_save_path)
                 rospy.set_param("/robot_mode", "nomal")
+                rospy.set_param("/cllecting_state_name", '')
                 tts.say('終了しました。')
         elif robot_mode == 'state_recognition':
             with open(recognition_file_path, 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(graph_data)
+            print(names)
+            
         else:
             count_saved = 0
-            pass
+            count_ideal_saved = 0
+            print(names)
+            
 
         spin_rate.sleep()
  
