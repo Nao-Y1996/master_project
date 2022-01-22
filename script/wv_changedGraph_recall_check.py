@@ -3,55 +3,55 @@ import numpy as np
 import csv
 import os
 from graph_converter import graph_utilitys
-from classificator_gcn import classificator
+from classificator_nnconv import classificator
 import fasttext
 import matplotlib.pyplot as plt
 
-base_dir = os.path.abspath('')+'/experiment_data/SI'
-csv_path_list = {0:base_dir+'/position_data/work.csv',
-                 1:base_dir+'/position_data/meal_and_working_tools.csv',
-                 2:base_dir+'/position_data/meal_while_working.csv',
-                 3:base_dir+'/position_data/meal.csv'
+base_dir = os.path.abspath('')+'/experiment_data/nao/position_data/'
+csv_path_list = {0:base_dir+'row_augmented_pattern_0.csv',
+                 1:base_dir+'row_augmented_pattern_1.csv',
+                 2:base_dir+'row_augmented_pattern_2.csv',
                  }
+# ==============物体名の入れ替えパターンを生成=========================
+# 組み合わせの総パターンを得る（７個の物体をへんこうする時は１２７通り）
+import itertools
+obj_name_change_patterns = {0:{'sandwich':'bagel'},
+                            1:{'soup':'chowder'},
+                            2:{'salada':'coleslaw'},
+                            3:{'book':'comic'},
+                            4:{'laptop':'tablet'},
+                            5:{'keyboard':'trackpad'},
+                            6:{'mouse':'trackpad'}}
+all_pattern = []
+count = 1
+for i in range(1,8):
+    # print(f'{i}個の物体名を入れ替えるパターン')
+    comb  = list(itertools.combinations(list(range(7)), i))
+    for key_num_list in comb:
+        pattern = {}
+        for num in list(key_num_list):
+            pattern.update(obj_name_change_patterns[num])
+        # print(f'変更パターン{count} : {pattern}')
+        count += 1
+        all_pattern.append(pattern)
+print(len(all_pattern))
+# ===================================================================
 
-obj_name_change_patterns = [
-                            {'sandwich':'toast'},#1
-                            {'sandwich':'book'},#2
-                            {'orange':'grape'},#3
-                            {'orange':'book'},#4
-                            {'banana':'apple'},#5
-                            {'banana':'book'},#6
-                            {'donut':'cookie'},#7
-                            {'donut':'book'},#8
-                            {'sandwich':'toast','orange':'grape'},#9
-                            {'sandwich':'book','orange':'chair'},#10
-                            {'sandwich':'toast','orange':'grape','banana':'apple'},#11
-                            {'sandwich':'book','orange':'chair','banana':'t-shirt'},#12
-                            {'sandwich':'toast','orange':'grape','banana':'apple','donut':'cookie'},#13
-                            {'sandwich':'book','orange':'chair','banana':'t-shirt','donut':'clock'},#14
-                            {'laptop':'tvmonitor'},#15
-                            {'laptop':'book'},#16
-                            {'mouse':'cell phone'},#17
-                            {'mouse':'book'},#18
-                            {'keyboard':'iPad'},#19
-                            {'keyboard':'book'},#20
-                            {'laptop':'tvmonitor','mouse':'cell phone'},#21
-                            {'laptop':'book','mouse':'chair'},#22
-                            {'laptop':'tvmonitor','mouse':'cell phone','keyboard':'iPad'},#23
-                            {'laptop':'book','mouse':'chair','keyboard':'t-shirt'}#24
-                            ]
-
-cf = classificator(model='SI_gcn-w300-30cm.pt')
-model_path =  os.path.abspath('') +'/w2v_model/cc.en.300.bin'
-ft = fasttext.load_model(model_path)
+cf = classificator(model='./experiment_data/nao/row_augmented_5000_nnconv.pt')
+model_path =  os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+# ft = fasttext.load_model(model_path)
 df = pd.DataFrame()
 related_graph_ids = []
-for i, pattern in enumerate(obj_name_change_patterns):
-    save_dir = base_dir+'/RecallCheck-wvChangedPattern/pattern_'+str(i)
-    if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
+for i, pattern in enumerate(all_pattern):
+    print(pattern)
+    f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
+    f.write(str(pattern).replace('{','').replace('}','').replace(':',' -->').replace("'", "")+'\n')
+    f.close()
+    # save_dir = base_dir+'/RecallCheck-wvChangedPattern/pattern_'+str(i)
+    # if not os.path.exists(save_dir):
+    #     os.makedirs(save_dir)
     # インスタンスを作り直す（ID_2_OBJECT_NAMEをリセット）
-    graph_util = graph_utilitys(fasttext_model=ft)
+    graph_util = graph_utilitys(fasttext_model=model_path)
     # if i>0: # 認識物体の名前を変更
     graph_util.changeID_2_OBJECT_NAME(pattern)
     # データセットを作成
@@ -74,16 +74,23 @@ for i, pattern in enumerate(obj_name_change_patterns):
         result = np.argmax(probability)
         if is_related_graph and (result == int(graph.y)):
             crrect_num += 1
-        if is_related_graph and (result != int(graph.y)):
-            file_name = str(count)+'_'+str(result)+'->'+str(int(graph.y))+'.png'
-            graph_util.visualize_graph(graph, node_labels=obj_names, save_graph_name=save_dir+'/'+file_name, show_graph=False)
+        # if is_related_graph and (result != int(graph.y)):
+        #     file_name = str(count)+'_'+str(result)+'->'+str(int(graph.y))+'.png'
+        #     graph_util.visualize_graph(graph, node_labels=obj_names, save_graph_name=save_dir+'/'+file_name, show_graph=False)
         probabilitys.append(probability)
-    print('パターン'+str(i+1)+' 正解率：\n' , crrect_num, '/', related_graph_count, ' = ', end='')
     try:
-        print(crrect_num/related_graph_count)
+        ans = str(crrect_num/related_graph_count)
     except:
-        print('')
+        ans = ''
         pass
+    # print('パターン'+str(i+1)+' 正解率\n' , crrect_num, '/', related_graph_count, ' = ', end='')
+    f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
+    f.write('パターン'+str(i+1)+' 正解率\n')
+    f.write(str(crrect_num) + ' / ' + str(related_graph_count)+' = ' + ans + '\n')
+    f.close()
+    
+    # if i>2:
+    #     break
 #     df['pattern_'+str(i)] = p_results
 #     df['pattern_'+str(i)+'_is_related'] = is_related_graph_list
 # df.to_csv( base_dir+'/RecallCheck-wvChangedPattern/to_csv_out.csv')

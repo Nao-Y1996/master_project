@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
                     # 収集するデータを保存するファイルを指定
                     image_save_path = save_dir+'/images/pattern_'+str(state_index)+'/'
-                    data_save_path = save_dir+'/position_data/pattern_'+str(state_index)+'.csv'
+                    data_save_path = save_dir+'/position_data/row_pattern_'+str(state_index)+'.csv'
                     print(data_save_path + ' にデータを保存します')
                     rospy.set_param("/data_save_path", data_save_path)
                     rospy.set_param("/image_save_path", image_save_path)

@@ -164,7 +164,7 @@ OBJECT_NAME_2_ID ={}
 ID_2_OBJECT_NAME = {}
 
 obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]
-obj_4_marker = ['toast', 'sandwitch', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
+obj_4_marker = ['toast', 'sandwich', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
 additional_obj = ['bottle','chair']
 
 marker_list = []
@@ -388,14 +388,13 @@ if __name__ == '__main__':
             # グラフ収集：検出物体名の送信用
             send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
             #----------------------------------------------#
-            data_save_path = rospy.get_param("/data_save_path")
+            # data_save_path = rospy.get_param("/data_save_path") 
             if face_exist:
-                
                 if (obj_num >= 2) and obj_moved:
                     # print(names)
                     # print state_name
-                    data_save_path = rospy.get_param("/data_save_path")
-                    ideal_data_save_path = data_save_path.replace('pattern', 'ideal_pattern')
+                    data_save_path = rospy.get_param("/data_save_path") # row_pattern_n.csv
+                    ideal_data_save_path = data_save_path.replace('row', 'ideal') # ideal_pattern_n.csv
                     if state_name == '読書'.decode('utf-8'):
                         can_save_IdealData = True if 'book' in names else False
                     elif state_name == '仕事'.decode('utf-8'):

@@ -46,12 +46,12 @@ if __name__ == '__main__':
 
     
     # 認識モデルの設定
-    model_path = user_dir+ '/model_nnconv.pt'
+    model_path = user_dir+ '/row_5000_nnconv.pt'
     cf = classificator(model=model_path)
     
     # 読み込むデータ
     data_dir = user_dir+ '/position_data'
-    csv_path_dict = {0:data_dir+'/pattern_0.csv',1:data_dir+'/pattern_1.csv',2:data_dir+'/pattern_2.csv'}
+    csv_path_dict = {0:data_dir+'/row_pattern_0.csv',1:data_dir+'/row_pattern_1.csv',2:data_dir+'/row_pattern_2.csv'}
 
     # 認識の確率表示のグラフ設定
     labels = ['working', 'eating', 'reading']
