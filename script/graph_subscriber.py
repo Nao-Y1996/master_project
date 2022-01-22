@@ -34,7 +34,7 @@ def show_probability_graph(ax, labels, probability):
 
 if __name__ == '__main__':
 
-    rospy.init_node('master_model_nnconv', anonymous=True)
+    rospy.init_node('model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(20)
 
     # dataを受け取るための通信の設定
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     # 認識モデルの設定
     user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
-    model_path = user_dir+'/master_model_nnconv1.pt'
+    model_path = user_dir+'/model_nnconv.pt'
     cf = classificator(model=model_path)
 
     # 認識確率送信のためのソケットを作成する（UDP）

@@ -51,7 +51,7 @@ if __name__ == '__main__':
     
     # 読み込むデータ
     data_dir = user_dir+ '/position_data'
-    csv_path_dict = {0:data_dir+'/augmented_pattern_0.csv',1:data_dir+'/augmented_pattern_1.csv',2:data_dir+'/augmented_pattern_2.csv'}
+    csv_path_dict = {0:data_dir+'/pattern_0.csv',1:data_dir+'/pattern_1.csv',2:data_dir+'/pattern_2.csv'}
 
     # 認識の確率表示のグラフ設定
     labels = ['working', 'eating', 'reading']
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     
     # while not rospy.is_shutdown():
     for true_label, csv_file_name in csv_path_dict.items():
-        columun_names= ['state', 'probability', "objects", 'removed_obj', 'dummy_state', 'dummy_probability', 'state_match', 'run_up', 'diff', 'is_unnecessary']
+        columun_names= ['dataID', 'state', 'probability', "objects", 'removed_obj', 'dummy_state', 'dummy_probability', 'state_match', 'run_up', 'diff', 'is_unnecessary']
         df = pd.DataFrame(columns=columun_names,)
         analyze_data = [None]*len(columun_names)
         # csvファイルの読み込み
@@ -87,7 +87,7 @@ if __name__ == '__main__':
                 for j, v in enumerate(_row):
                     data.append(float(v))
                 # dataをグラフ形式に変換
-                data_id = data[0]
+                data_id = int(data[0])
                 position_data = graph_utils.removeDataId(data)
                 graph, node_names = graph_utils.positionData2graph(position_data, 10000, include_names=True)
                 
@@ -135,10 +135,10 @@ if __name__ == '__main__':
                     print(f'===================================== {data_id} ===========================================')
                     # print(f'状態 : {state_now}')
                     # print(f'確率 : {average_probability}')
-                    
-                    analyze_data[0] = state_now
-                    analyze_data[1] = probability
-                    analyze_data[2] = node_names
+                    analyze_data[0] = data_id
+                    analyze_data[1] = state_now
+                    analyze_data[2] = probability
+                    analyze_data[3] = node_names
                     
                     
                     # ノードを１つ取り除いたパターンのグラフを取得
@@ -180,13 +180,13 @@ if __name__ == '__main__':
                                 state_match = False
                                 pass
                             
-                            analyze_data[3] = removed_obj
-                            analyze_data[4] = dummy_state
-                            analyze_data[5] = dummy_probability
-                            analyze_data[6] = state_match
-                            analyze_data[7] = run_up
-                            analyze_data[8] = diff
-                            analyze_data[9] = False
+                            analyze_data[4] = removed_obj
+                            analyze_data[5] = dummy_state
+                            analyze_data[6] = dummy_probability
+                            analyze_data[7] = state_match
+                            analyze_data[8] = run_up
+                            analyze_data[9] = diff
+                            analyze_data[10] = False
                             df.loc[count] = analyze_data
                             count += 1
                                 

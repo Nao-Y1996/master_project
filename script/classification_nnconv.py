@@ -108,13 +108,13 @@ def test(model, iterator):
     accuracy = float(correct_num)/total_data_len
     return accuracy
 
-user_name = input('enter user name')
+user_name = input('enter user name \n')
 
 ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 graph_utils = graph_utilitys(fasttext_model=ft_path)
 
 # 状態パターンごとのファイルを取得
-user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/2022-01-20/"+user_name
+user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
 file_list = []
 files = glob.glob(user_dir + "/position_data/pattern*")
 for file in files:
@@ -122,7 +122,7 @@ for file in files:
         file_list.append(file)
 file_list.sort()
 pattern_num = len(file_list)
-print(pattern_num)
+print('状態パターン数 : ', pattern_num)
 csv_path_dict = {}
 for i, file in enumerate(file_list):
     csv_path_dict[i] = file
@@ -192,8 +192,8 @@ for epoch in range(10):
     train_loss_list.append(train_loss)
     train_acc_list.append(train_acc)
     print(f'epoch = {epoch} :  loss = {train_loss}  Accuracy = {train_acc}')
-# モデルの保存
-model_path = user_dir + '/master_model_nnconv1.pt'
+# モデルを2箇所に保存
+model_path = user_dir + '/model_nnconv.pt'
 torch.save(model.state_dict(),model_path)
 
 x, loss, acc = range(len(train_acc_list)), train_loss_list, train_acc_list

@@ -208,8 +208,8 @@ if __name__ == '__main__':
     user_dir = rospy.get_param("/user_dir")
 
     # 保存用ディレクトリの設定
-    time_now = str(datetime.now()).split(' ')
-    save_dir = user_dir + '/'+time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
+    #time_now = str(datetime.now()).split(' ')
+    save_dir = user_dir # + '/'+time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
     rospy.set_param("/save_dir", save_dir)
     image_dir = save_dir+'/images/'
     rospy.set_param("/image_save_path", image_dir)
