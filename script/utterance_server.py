@@ -109,17 +109,17 @@ if __name__ == "__main__":
                 robot_mode = rospy.get_param("/robot_mode")
                 is_clean_mode = rospy.get_param("/is_clean_mode")
                 if robot_mode == "state_recognition":
-                    tts.say('現在、認識モードです')
+                    tts.say('現在、認識モードです。')
                 elif robot_mode == "nomal":
-                    tts.say('現在、通常モードです')
+                    tts.say('現在、通常モードです。')
                 elif robot_mode == "waite_state_name":
                     tts.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
                 elif robot_mode == "graph_collecting":
-                    tts.say('現在、記録中です')
+                    tts.say('現在、記録中です。')
                 else:
                     tts.say('モードが不明です。')
                 if is_clean_mode:
-                    tts.say('片付け機能が働いています')
+                    tts.say('片付け機能が働いています。')
 
             elif '終了' in message:
                 if (robot_mode=='graph_collecting'):
@@ -142,12 +142,12 @@ if __name__ == "__main__":
             elif '認識モード' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('認識モードに切り替わりました')
+                tts.say('はい、認識機能をオンにします')
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('通常モードに切り替わりました')
+                tts.say('はい、モードを切り替えました。')
 
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
@@ -156,7 +156,7 @@ if __name__ == "__main__":
             elif '片付け' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
-                tts.say('片付けモードに切り替わりました')
+                tts.say('はい、不要なものを探します。')
 
             elif 'ありがとう' in message:
                 rospy.set_param("/is_clean_mode", 0)

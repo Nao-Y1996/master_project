@@ -55,12 +55,16 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     pattern_num = len(labels)
     while not rospy.is_shutdown():
+        robot_mode = rospy.get_param('robot_mode')
 
-        # probabilityをUDPで受け取る
-        data, cli_addr = sock.recvfrom(1024)
-        data = pickle.loads(data)
-        average_probability, data_id = data[0:3], data[3]
-        print(average_probability, data_id)
+        if robot_mode=='state_recognition':
+            # probabilityをUDPで受け取る
+            data, cli_addr = sock.recvfrom(1024)
+            data = pickle.loads(data)
+            average_probability, data_id = data[0:3], data[3]
+            print(average_probability, data_id)
+        else:
+            average_probability, data_id = [0.0, 0.0, 0.0], [0]
 
         # 認識確率の表示
         show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())

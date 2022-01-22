@@ -51,7 +51,7 @@ if __name__ == '__main__':
     sock4objNames = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
 
     sock4data.bind((IP_ADDRESS, port4data))
-    port4savedDataCount.bind((IP_ADDRESS, port4savedDataCount))
+    socksavedDataCount.bind((IP_ADDRESS, port4savedDataCount))
     sock4objNames.bind((IP_ADDRESS, port4objNames))
 
     print(f'data server : IP address = {IP_ADDRESS}  port = {port4data}')
