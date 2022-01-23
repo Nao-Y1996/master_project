@@ -65,8 +65,9 @@ if __name__ == '__main__':
 # ----------------------------------------------------------------------
 
     # 認識モデルの設定
-    user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
-    model_path = user_dir+'/model_nnconv.pt'
+    # user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
+    # model_path = user_dir+'/model_nnconv.pt'
+    model_path = '/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/experiment_data/nao/row_augmented_5000_nnconv.pt'
     cf = classificator(model=model_path)
 
     # 認識の確率表示のグラフ設定

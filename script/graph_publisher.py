@@ -165,7 +165,7 @@ ID_2_OBJECT_NAME = {}
 
 obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]
 obj_4_marker = ['toast', 'sandwich', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
-additional_obj = ['bottle','chair']
+additional_obj = ['bottle']#,'chair']
 
 marker_list = []
 for i in range(1,len(obj_4_marker)+1):
@@ -279,11 +279,14 @@ if __name__ == '__main__':
     spin_rate=rospy.Rate(10)
     count_saved = 0
     count_ideal_saved = 0
+    recognition_count = 0
     pre_graph_data = None
     while not rospy.is_shutdown():
-        
+
+        robot_mode = rospy.get_param("/robot_mode")
         is_clean_mode = rospy.get_param("/is_clean_mode")
-        if is_clean_mode:
+
+        if is_clean_mode or (robot_mode == 'state_recognition'):
             detectable_obj_lsit = obj_4_real + additional_obj
         else:
             detectable_obj_lsit = obj_4_real
@@ -378,7 +381,6 @@ if __name__ == '__main__':
         #----------------------------------------------#
         
         obj_num = (len(graph_data)-1)/4
-        robot_mode = rospy.get_param("/robot_mode")
         if robot_mode == 'graph_collecting':
             state_name = rospy.get_param("/cllecting_state_name")
             # ------------ データの送信 ------------#
@@ -438,11 +440,16 @@ if __name__ == '__main__':
             with open(recognition_file_path, 'a') as f:
                 writer = csv.writer(f)
                 writer.writerow(graph_data)
+                #　スクリーンショット
+                image_save_path = rospy.get_param("/image_save_path")
+                pag.screenshot(image_save_path+str(data_id)+'.jpg')
+            recognition_count += 1
             print(names)
             
         else:
             count_saved = 0
             count_ideal_saved = 0
+            recognition_count = 0
             print(names)
             
 
