@@ -39,19 +39,19 @@ def show_probability_graph(ax, labels, probability, count=None, is_save=False):
 
 
 if __name__ == '__main__':
-    user_name = input('enter user name')
-    ft_path = os.path.dirname(__file__) +'/w2v_model/cc.en.300.bin'
+    user_name = input('enter user name\n')
+    ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
     graph_utils = graph_utilitys(fasttext_model=ft_path)
     user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
 
     
     # 認識モデルの設定
-    model_path = user_dir+ '/row_5000_nnconv.pt'
+    model_path = user_dir+ '/row_augmented_5000_nnconv.pt'
     cf = classificator(model=model_path)
     
     # 読み込むデータ
     data_dir = user_dir+ '/position_data'
-    csv_path_dict = {0:data_dir+'/row_pattern_0.csv',1:data_dir+'/row_pattern_1.csv',2:data_dir+'/row_pattern_2.csv'}
+    csv_path_dict = {0:data_dir+'/row_augmented_pattern_0.csv',1:data_dir+'/row_augmented_pattern_1.csv',2:data_dir+'/row_augmented_pattern_2.csv'}
 
     # 認識の確率表示のグラフ設定
     labels = ['working', 'eating', 'reading']
@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
                     # 不要な物体（ノード）の特定
                     state_now = labels[average_probability.index(max(average_probability))]
-                    print(f'===================================== {data_id} ===========================================')
+                    print(f'===================================== {data_id}  {count}===========================================')
                     # print(f'状態 : {state_now}')
                     # print(f'確率 : {average_probability}')
                     analyze_data[0] = data_id
@@ -169,7 +169,7 @@ if __name__ == '__main__':
                                     run_up = True
                                     diff =  (max(dummy_probability) - max(average_probability)) * 100
                                     # print(f'diff : {diff}')
-                                    unnecessary_obj_candidate_info.append([removed_obj_id, average_probability, dummy_probability, diff, count])
+                                    unnecessary_obj_candidate_info.append([average_probability, dummy_probability, removed_obj_id, diff, count])
                                 else:
                                     # print('確率は上昇せず')
                                     run_up = False
@@ -190,17 +190,22 @@ if __name__ == '__main__':
                             df.loc[count] = analyze_data
                             count += 1
                                 
-
-                    # print('~~~~~~~~~不要ノード~~~~~~~~~')
-                    unnecessary_obj_candidate_info = np.array(unnecessary_obj_candidate_info)
-                    # for _id, diff, _count in zip(unnecessary_obj_candidate_info[:,0], unnecessary_obj_candidate_info[:,-1], _countList):
-                    #     print(graph_utils.ID_2_OBJECT_NAME[int(_id)], diff)
-                    unnecessary_obj_index = np.argmax(unnecessary_obj_candidate_info[:,-2])
-                    unnecessary_obj_count = unnecessary_obj_candidate_info[unnecessary_obj_index][-1]
-                    unnecessary_obj_id = unnecessary_obj_candidate_info[unnecessary_obj_index][0]
-                    unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(unnecessary_obj_id)]
-                    # print(unnecessary_obj_count, unnecessary_obj)
-                    df.at[unnecessary_obj_count, 'is_unnecessary'] = True
-                    # print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                    if len(unnecessary_obj_candidate_info)!=0:
+                        # print('~~~~~~~~~不要ノード~~~~~~~~~')
+                        unnecessary_obj_candidate_info = np.array(unnecessary_obj_candidate_info)
+                        # for _id, diff, _count in zip(unnecessary_obj_candidate_info[:,0], unnecessary_obj_candidate_info[:,-1], _countList):
+                        #     print(graph_utils.ID_2_OBJECT_NAME[int(_id)], diff)
+                        # print(unnecessary_obj_candidate_info)
+                        unnecessary_obj_index = np.argmax(unnecessary_obj_candidate_info[:,3])
+                        # print(unnecessary_obj_index)
+                        unnecessary_obj_count = unnecessary_obj_candidate_info[unnecessary_obj_index][-1]
+                        unnecessary_obj_id = unnecessary_obj_candidate_info[unnecessary_obj_index][2]
+                        # print(unnecessary_obj_id)
+                        unnecessary_obj = graph_utils.ID_2_OBJECT_NAME[int(unnecessary_obj_id)]
+                        # print(unnecessary_obj_count, unnecessary_obj)
+                        df.at[unnecessary_obj_count, 'is_unnecessary'] = True
+                        # print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                    else:
+                        pass
                 
         df.to_csv(csv_file_name.replace('.csv', '_analyzed.csv'))
