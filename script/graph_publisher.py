@@ -393,16 +393,18 @@ if __name__ == '__main__':
             # data_save_path = rospy.get_param("/data_save_path") 
             if face_exist:
                 if (obj_num >= 2) and obj_moved:
+                # if len(set(names))>=8 and (obj_num >= 2) and obj_moved: # yamada
                     # print(names)
                     # print state_name
                     data_save_path = rospy.get_param("/data_save_path") # row_pattern_n.csv
                     ideal_data_save_path = data_save_path.replace('row', 'ideal') # ideal_pattern_n.csv
                     if state_name == '読書'.decode('utf-8'):
-                        can_save_IdealData = True if 'book' in names else False
+                        can_save_IdealData = True if ('book' in names)else False
                     elif state_name == '仕事'.decode('utf-8'):
-                        can_save_IdealData = True if 'laptop' in names else False
-                    elif state_name == '食事'.decode('utf-8'):
-                        can_save_IdealData = True
+                        can_save_IdealData = True if (('laptop' in names) and \
+                                                      ('tvmonitor' in names)) else False
+                    elif state_name == '昼食'.decode('utf-8'):
+                        can_save_IdealData = True if ( ('sandwich' in names) ) else False
                     else:
                         can_save_IdealData = False
 
@@ -435,7 +437,7 @@ if __name__ == '__main__':
                 rospy.set_param("/image_save_path", image_save_path)
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/cllecting_state_name", '')
-                tts.say('終了しました。')
+                tts.say('記録は完了です。')
         elif robot_mode == 'state_recognition':
             with open(recognition_file_path, 'a') as f:
                 writer = csv.writer(f)
@@ -443,8 +445,12 @@ if __name__ == '__main__':
                 #　スクリーンショット
                 image_save_path = rospy.get_param("/image_save_path")
                 pag.screenshot(image_save_path+str(data_id)+'.jpg')
-            recognition_count += 1
+                recognition_count += 1
             print(names)
+            if recognition_count >1000:
+                tts.say('終了')
+                rospy.set_param("/robot_mode", "nomal")
+
             
         else:
             count_saved = 0

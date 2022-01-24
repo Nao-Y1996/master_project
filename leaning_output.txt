@@ -1,0 +1,1188 @@
+~~~~~~~~~~~~~~~~~~~~~ kusakari データタイプ=ideal データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [13166, 6988, 1709]  最小 :  1709
+データ数を1709に揃えます
+ideal_augmented_pattern_0.csv  number of data --->  1709
+ideal_augmented_pattern_1.csv  number of data --->  1709
+ideal_augmented_pattern_2.csv  number of data --->  1709
+dataset length :  5127
+-------train/test---------
+epoch = 0
+train loss = 0.00042791800065474075  train Accuracy = 0.4315255559890753
+test loss = 0.00039355245283724923  test Accuracy = 0.5807332293291732
+epoch = 1
+train loss = 0.0003937127950179405  train Accuracy = 0.5778384705423332
+test loss = 0.0003636796928233178  test Accuracy = 0.6017940717628705
+epoch = 2
+train loss = 0.00036476633300364504  train Accuracy = 0.5965665236051502
+test loss = 0.0003355324919249822  test Accuracy = 0.6446957878315133
+epoch = 3
+train loss = 0.00033721566153744725  train Accuracy = 0.6468981662114709
+test loss = 0.0003071913899571959  test Accuracy = 0.7437597503900156
+epoch = 4
+train loss = 0.00030916689710137066  train Accuracy = 0.7460007803355443
+test loss = 0.00027848194337300316  test Accuracy = 0.8794851794071763
+epoch = 5
+train loss = 0.00028042929552980945  train Accuracy = 0.8716348029652751
+test loss = 0.0002493257874073737  test Accuracy = 0.9368174726989079
+epoch = 6
+train loss = 0.0002508783219523882  train Accuracy = 0.9274287943815841
+test loss = 0.00022001443619661137  test Accuracy = 0.9648985959438378
+epoch = 7
+train loss = 0.00022104046468477998  train Accuracy = 0.9644947327350761
+test loss = 0.0001903594632788493  test Accuracy = 0.9773790951638065
+epoch = 8
+train loss = 0.00019098049116190457  train Accuracy = 0.9765899336714787
+test loss = 0.00016082207237874476  test Accuracy = 0.9875195007800313
+epoch = 9
+train loss = 0.00016109931994544963  train Accuracy = 0.9871244635193133
+test loss = 0.00013207543100842077  test Accuracy = 0.9906396255850234
+epoch = 10
+train loss = 0.00013198306725167503  train Accuracy = 0.9902458056964495
+test loss = 0.00010527396071905651  test Accuracy = 0.9906396255850234
+epoch = 11
+train loss = 0.0001047291050560066  train Accuracy = 0.9918064767850175
+test loss = 8.153251129639874e-05  test Accuracy = 0.9910296411856474
+epoch = 12
+train loss = 8.048939835127564e-05  train Accuracy = 0.9929769801014436
+test loss = 6.142346981721066e-05  test Accuracy = 0.9933697347893916
+epoch = 13
+train loss = 5.9915511021147095e-05  train Accuracy = 0.9937573156457277
+test loss = 4.514593880931598e-05  test Accuracy = 0.9957098283931357
+epoch = 14
+train loss = 4.3356251167776616e-05  train Accuracy = 0.9972688255950058
+test loss = 3.2723089462137444e-05  test Accuracy = 0.9960998439937597
+epoch = 15
+train loss = 3.079765367638167e-05  train Accuracy = 0.9980491611392899
+test loss = 2.3776963178806485e-05  test Accuracy = 0.9964898595943837
+epoch = 16
+train loss = 2.1834134288100213e-05  train Accuracy = 0.9976589933671479
+test loss = 1.753155612815375e-05  test Accuracy = 0.9960998439937597
+epoch = 17
+train loss = 1.5629765766931147e-05  train Accuracy = 0.9972688255950058
+test loss = 1.3171304336948068e-05  test Accuracy = 0.9968798751950078
+epoch = 18
+train loss = 1.1355588899382472e-05  train Accuracy = 0.9968786578228638
+test loss = 1.0078241133280738e-05  test Accuracy = 0.9968798751950078
+epoch = 19
+train loss = 8.391434420517911e-06  train Accuracy = 0.9968786578228638
+test loss = 7.79986361189863e-06  test Accuracy = 0.9964898595943837
+epoch = 20
+train loss = 6.304774760409253e-06  train Accuracy = 0.9972688255950058
+test loss = 6.034518061743325e-06  test Accuracy = 0.9964898595943837
+epoch = 21
+train loss = 4.795397741925749e-06  train Accuracy = 0.9972688255950058
+test loss = 4.582702401624455e-06  test Accuracy = 0.9964898595943837
+epoch = 22
+train loss = 3.67271108898017e-06  train Accuracy = 0.9972688255950058
+test loss = 3.3981498046058945e-06  test Accuracy = 0.9972698907956318
+epoch = 23
+train loss = 2.8255603803445992e-06  train Accuracy = 0.998439328911432
+test loss = 2.483782277103984e-06  test Accuracy = 0.9984399375975039
+epoch = 24
+train loss = 2.219174180791753e-06  train Accuracy = 0.998439328911432
+test loss = 1.8236171396074355e-06  test Accuracy = 0.9984399375975039
+epoch = 25
+train loss = 1.8057850535800575e-06  train Accuracy = 0.9988294966835739
+test loss = 1.3925854150095428e-06  test Accuracy = 0.998829953198128
+epoch = 26
+train loss = 1.5362334836287466e-06  train Accuracy = 0.9988294966835739
+test loss = 1.1256253768147991e-06  test Accuracy = 0.999219968798752
+epoch = 27
+train loss = 1.3545148439452465e-06  train Accuracy = 0.9988294966835739
+test loss = 9.457532617201021e-07  test Accuracy = 0.999219968798752
+epoch = 28
+train loss = 1.210563914603988e-06  train Accuracy = 0.998439328911432
+test loss = 8.175185156547335e-07  test Accuracy = 0.999219968798752
+epoch = 29
+train loss = 1.0974405619010206e-06  train Accuracy = 0.998439328911432
+test loss = 7.212945778073972e-07  test Accuracy = 0.999219968798752
+
+
+~~~~~~~~~~~~~~~~~~~~~ kusakari データタイプ=ideal データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ideal_pattern_0.csv  number of data --->  992
+ideal_pattern_1.csv  number of data --->  973
+ideal_pattern_2.csv  number of data --->  987
+dataset length :  2952
+-------train/test---------
+epoch = 0
+train loss = 0.0007284068802830973  train Accuracy = 0.3780487804878049
+test loss = 0.0006722040615753753  test Accuracy = 0.5142276422764228
+epoch = 1
+train loss = 0.0006729820717964068  train Accuracy = 0.5074525745257452
+test loss = 0.0006241016190872606  test Accuracy = 0.6178861788617886
+epoch = 2
+train loss = 0.0006250002923696668  train Accuracy = 0.6178861788617886
+test loss = 0.0005763807109377895  test Accuracy = 0.760840108401084
+epoch = 3
+train loss = 0.0005772229294143718  train Accuracy = 0.7757452574525745
+test loss = 0.0005265614043083295  test Accuracy = 0.8441734417344173
+epoch = 4
+train loss = 0.0005274482858859427  train Accuracy = 0.8502710027100271
+test loss = 0.0004725018087118299  test Accuracy = 0.9613821138211383
+epoch = 5
+train loss = 0.00047306038015257053  train Accuracy = 0.9586720867208672
+test loss = 0.0004149207739326043  test Accuracy = 0.9871273712737128
+epoch = 6
+train loss = 0.00041515588114255167  train Accuracy = 0.9898373983739838
+test loss = 0.00035593725316892795  test Accuracy = 0.9939024390243902
+epoch = 7
+train loss = 0.0003559269556185094  train Accuracy = 0.9939024390243902
+test loss = 0.00029723851015251183  test Accuracy = 0.9952574525745257
+epoch = 8
+train loss = 0.0002969745294188419  train Accuracy = 0.994579945799458
+test loss = 0.0002403438373955931  test Accuracy = 0.9952574525745257
+epoch = 9
+train loss = 0.00024001142842982841  train Accuracy = 0.9939024390243902
+test loss = 0.00018725855159888746  test Accuracy = 0.9952574525745257
+epoch = 10
+train loss = 0.00018703848688906123  train Accuracy = 0.994579945799458
+test loss = 0.00014040453566445244  test Accuracy = 0.9952574525745257
+epoch = 11
+train loss = 0.00014035287628651958  train Accuracy = 0.9952574525745257
+test loss = 0.00010166591825847057  test Accuracy = 0.9952574525745257
+epoch = 12
+train loss = 0.00010180823646263701  train Accuracy = 0.9959349593495935
+test loss = 7.196058466182492e-05  test Accuracy = 0.9952574525745257
+epoch = 13
+train loss = 7.225051118429438e-05  train Accuracy = 0.9959349593495935
+test loss = 5.059287476991896e-05  test Accuracy = 0.9959349593495935
+epoch = 14
+train loss = 5.0957196046343344e-05  train Accuracy = 0.9952574525745257
+test loss = 3.603177503518619e-05  test Accuracy = 0.9959349593495935
+epoch = 15
+train loss = 3.636117297701719e-05  train Accuracy = 0.9952574525745257
+test loss = 2.659527902922979e-05  test Accuracy = 0.9959349593495935
+epoch = 16
+train loss = 2.6719296366218628e-05  train Accuracy = 0.9959349593495935
+test loss = 2.0660340109572503e-05  test Accuracy = 0.9959349593495935
+epoch = 17
+train loss = 2.041145740203095e-05  train Accuracy = 0.9966124661246613
+test loss = 1.6892578725407762e-05  test Accuracy = 0.9959349593495935
+epoch = 18
+train loss = 1.608463241478938e-05  train Accuracy = 0.9966124661246613
+test loss = 1.4233016749707663e-05  test Accuracy = 0.9959349593495935
+epoch = 19
+train loss = 1.2803074416671665e-05  train Accuracy = 0.997289972899729
+test loss = 1.2117854463375681e-05  test Accuracy = 0.997289972899729
+epoch = 20
+train loss = 1.0025929180062238e-05  train Accuracy = 0.9979674796747967
+test loss = 1.0207983183101587e-05  test Accuracy = 0.997289972899729
+epoch = 21
+train loss = 7.499774746334327e-06  train Accuracy = 0.9979674796747967
+test loss = 8.25830543449093e-06  test Accuracy = 0.997289972899729
+epoch = 22
+train loss = 5.143054768564255e-06  train Accuracy = 0.9979674796747967
+test loss = 6.292096710180849e-06  test Accuracy = 0.997289972899729
+epoch = 23
+train loss = 3.328555084381323e-06  train Accuracy = 0.9993224932249323
+test loss = 4.476173856575799e-06  test Accuracy = 0.9979674796747967
+epoch = 24
+train loss = 2.417433880733927e-06  train Accuracy = 1.0
+test loss = 3.0950543427774255e-06  test Accuracy = 0.9993224932249323
+epoch = 25
+train loss = 1.9068358059679751e-06  train Accuracy = 1.0
+test loss = 2.1841741724792856e-06  test Accuracy = 0.9993224932249323
+epoch = 26
+train loss = 1.4969559139029444e-06  train Accuracy = 1.0
+test loss = 1.591407229523187e-06  test Accuracy = 0.9993224932249323
+epoch = 27
+train loss = 1.1372938531332304e-06  train Accuracy = 1.0
+test loss = 1.2004923871730967e-06  test Accuracy = 1.0
+epoch = 28
+train loss = 8.430076715079588e-07  train Accuracy = 1.0
+test loss = 9.57662014411838e-07  test Accuracy = 1.0
+epoch = 29
+train loss = 6.240272173925548e-07  train Accuracy = 1.0
+test loss = 8.234082529356648e-07  test Accuracy = 1.0
+
+
+~~~~~~~~~~~~~~~~~~~~~ kusakari データタイプ=row データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [25453, 7012, 1799]  最小 :  1799
+データ数を1799に揃えます
+row_augmented_pattern_0.csv  number of data --->  1799
+row_augmented_pattern_1.csv  number of data --->  1799
+row_augmented_pattern_2.csv  number of data --->  1799
+dataset length :  5234
+-------train/test---------
+epoch = 0
+train loss = 0.0004564394785057829  train Accuracy = 0.18570882690103171
+test loss = 0.00041435231313388405  test Accuracy = 0.32862055789071454
+epoch = 1
+train loss = 0.0004167262497502153  train Accuracy = 0.3030187237294612
+test loss = 0.0003882342274060539  test Accuracy = 0.6503630110813909
+epoch = 2
+train loss = 0.0003890108415358022  train Accuracy = 0.6358425678257547
+test loss = 0.00036639218846030666  test Accuracy = 0.8238440962934658
+epoch = 3
+train loss = 0.0003662752339891864  train Accuracy = 0.8410393580435613
+test loss = 0.00034456026203358135  test Accuracy = 0.8368360718379825
+epoch = 4
+train loss = 0.00034380004658332797  train Accuracy = 0.8498280473824991
+test loss = 0.0003203209183532225  test Accuracy = 0.8643484906381352
+epoch = 5
+train loss = 0.0003191605067954612  train Accuracy = 0.8742835307604127
+test loss = 0.00029328710303126195  test Accuracy = 0.9189912113106611
+epoch = 6
+train loss = 0.00029200766439149977  train Accuracy = 0.9174627435995415
+test loss = 0.0002645659091411586  test Accuracy = 0.9495605655330531
+epoch = 7
+train loss = 0.0002634531220817639  train Accuracy = 0.9529996178830722
+test loss = 0.00023517747120316082  test Accuracy = 0.9633167749331295
+epoch = 8
+train loss = 0.00023441215394150907  train Accuracy = 0.9675200611387085
+test loss = 0.00020581130813814366  test Accuracy = 0.9686664119220482
+epoch = 9
+train loss = 0.00020541978966520175  train Accuracy = 0.9701948796331678
+test loss = 0.00017717455605946745  test Accuracy = 0.9713412304165074
+epoch = 10
+train loss = 0.00017709176550396172  train Accuracy = 0.9740160489109667
+test loss = 0.00014975515539791004  test Accuracy = 0.9701948796331678
+epoch = 11
+train loss = 0.00014999807222590083  train Accuracy = 0.9736339319831868
+test loss = 0.0001245301713641017  test Accuracy = 0.9698127627053879
+epoch = 12
+train loss = 0.00012485366948105517  train Accuracy = 0.9709591134887275
+test loss = 0.00010271177384795967  test Accuracy = 0.9675200611387085
+epoch = 13
+train loss = 0.00010284009351500765  train Accuracy = 0.9705769965609476
+test loss = 8.463010015403855e-05  test Accuracy = 0.9686664119220482
+epoch = 14
+train loss = 8.456116306631447e-05  train Accuracy = 0.9698127627053879
+test loss = 6.931262317849882e-05  test Accuracy = 0.9701948796331678
+epoch = 15
+train loss = 6.909725385446515e-05  train Accuracy = 0.9709591134887275
+test loss = 5.67170081359082e-05  test Accuracy = 0.9740160489109667
+epoch = 16
+train loss = 5.634222428763145e-05  train Accuracy = 0.9743981658387466
+test loss = 4.773145419839779e-05  test Accuracy = 0.9782193351165457
+epoch = 17
+train loss = 4.71385081259859e-05  train Accuracy = 0.9801299197554452
+test loss = 4.0905802792886945e-05  test Accuracy = 0.9801299197554452
+epoch = 18
+train loss = 3.999794798130565e-05  train Accuracy = 0.9812762705387849
+test loss = 3.532360973001028e-05  test Accuracy = 0.9805120366832251
+epoch = 19
+train loss = 3.407352643473985e-05  train Accuracy = 0.9816583874665648
+test loss = 3.163221857681683e-05  test Accuracy = 0.9801299197554452
+epoch = 20
+train loss = 3.0256016340062597e-05  train Accuracy = 0.9797478028276653
+test loss = 2.8937460016921864e-05  test Accuracy = 0.9801299197554452
+epoch = 21
+train loss = 2.757726072764005e-05  train Accuracy = 0.9812762705387849
+test loss = 2.649981054496255e-05  test Accuracy = 0.9812762705387849
+epoch = 22
+train loss = 2.5089509873432107e-05  train Accuracy = 0.9824226213221245
+test loss = 2.4976712012044975e-05  test Accuracy = 0.9835689721054642
+epoch = 23
+train loss = 2.3434890229874182e-05  train Accuracy = 0.984333205961024
+test loss = 2.3610795960883673e-05  test Accuracy = 0.9850974398165838
+epoch = 24
+train loss = 2.1979641233366956e-05  train Accuracy = 0.9862437905999236
+test loss = 2.17484710983616e-05  test Accuracy = 0.9850974398165838
+epoch = 25
+train loss = 2.0218497077426612e-05  train Accuracy = 0.9866259075277035
+test loss = 2.0312093394741923e-05  test Accuracy = 0.9835689721054642
+epoch = 26
+train loss = 1.8893778438006915e-05  train Accuracy = 0.9870080244554834
+test loss = 1.8968830866625987e-05  test Accuracy = 0.9839510890332441
+epoch = 27
+train loss = 1.7311515120727487e-05  train Accuracy = 0.988536492166603
+test loss = 1.8051186669724654e-05  test Accuracy = 0.9850974398165838
+epoch = 28
+train loss = 1.5902437232676745e-05  train Accuracy = 0.9900649598777226
+test loss = 1.723319861467075e-05  test Accuracy = 0.9854795567443638
+epoch = 29
+train loss = 1.459956072330657e-05  train Accuracy = 0.9912113106610623
+test loss = 1.6174567055510893e-05  test Accuracy = 0.9854795567443638
+
+
+~~~~~~~~~~~~~~~~~~~~~ kusakari データタイプ=row データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row_pattern_0.csv  number of data --->  1908
+row_pattern_1.csv  number of data --->  976
+row_pattern_2.csv  number of data --->  1032
+dataset length :  3916
+-------train/test---------
+epoch = 0
+train loss = 0.0005531976488442659  train Accuracy = 0.45045965270684374
+test loss = 0.0005045533789068735  test Accuracy = 0.5357507660878448
+epoch = 1
+train loss = 0.0005038402540812819  train Accuracy = 0.5219611848825332
+test loss = 0.0004689217039951874  test Accuracy = 0.5617977528089888
+epoch = 2
+train loss = 0.0004679175575127762  train Accuracy = 0.5515832482124617
+test loss = 0.00043757182219664095  test Accuracy = 0.6210418794688458
+epoch = 3
+train loss = 0.0004358114151472456  train Accuracy = 0.6205311542390194
+test loss = 0.0004039305101497911  test Accuracy = 0.6961184882533197
+epoch = 4
+train loss = 0.000401243521804342  train Accuracy = 0.7048008171603677
+test loss = 0.000369048672628354  test Accuracy = 0.7257405515832482
+epoch = 5
+train loss = 0.0003655163516063125  train Accuracy = 0.7354443309499489
+test loss = 0.00033379900930363747  test Accuracy = 0.72829417773238
+epoch = 6
+train loss = 0.00032965682134930276  train Accuracy = 0.7379979570990807
+test loss = 0.00029803314783721703  test Accuracy = 0.7323799795709908
+epoch = 7
+train loss = 0.00029383348614982007  train Accuracy = 0.7425944841675178
+test loss = 0.00026228488161322773  test Accuracy = 0.7711950970377937
+epoch = 8
+train loss = 0.00025848333511703227  train Accuracy = 0.7906026557711952
+test loss = 0.00022715272284869154  test Accuracy = 0.8922369765066395
+epoch = 9
+train loss = 0.00022407716275235607  train Accuracy = 0.9116445352400409
+test loss = 0.0001934154588915598  test Accuracy = 0.9443309499489275
+epoch = 10
+train loss = 0.00019107328250288842  train Accuracy = 0.9545454545454546
+test loss = 0.0001619135213214847  test Accuracy = 0.95658835546476
+epoch = 11
+train loss = 0.00016014291633746232  train Accuracy = 0.9662921348314607
+test loss = 0.00013369539480530813  test Accuracy = 0.9749744637385087
+epoch = 12
+train loss = 0.00013228302652185613  train Accuracy = 0.9780388151174668
+test loss = 0.00010885846961871839  test Accuracy = 0.9851889683350358
+epoch = 13
+train loss = 0.00010757849183584258  train Accuracy = 0.9856996935648621
+test loss = 8.716712019903788e-05  test Accuracy = 0.9908069458631257
+epoch = 14
+train loss = 8.59302096639639e-05  train Accuracy = 0.9897854954034729
+test loss = 6.853451189395721e-05  test Accuracy = 0.9923391215526047
+epoch = 15
+train loss = 6.728846126971376e-05  train Accuracy = 0.9923391215526047
+test loss = 5.2973863966496655e-05  test Accuracy = 0.9923391215526047
+epoch = 16
+train loss = 5.169879869615947e-05  train Accuracy = 0.992849846782431
+test loss = 4.045974626847989e-05  test Accuracy = 0.9923391215526047
+epoch = 17
+train loss = 3.916169759323697e-05  train Accuracy = 0.9938712972420838
+test loss = 3.0894007484321085e-05  test Accuracy = 0.9923391215526047
+epoch = 18
+train loss = 2.956294109312336e-05  train Accuracy = 0.9943820224719101
+test loss = 2.3906198125694088e-05  test Accuracy = 0.9933605720122574
+epoch = 19
+train loss = 2.2476630340557663e-05  train Accuracy = 0.9954034729315628
+test loss = 1.8950664001660645e-05  test Accuracy = 0.9954034729315628
+epoch = 20
+train loss = 1.7317209822773567e-05  train Accuracy = 0.9954034729315628
+test loss = 1.551901904506508e-05  test Accuracy = 0.9959141981613892
+epoch = 21
+train loss = 1.3562148594819732e-05  train Accuracy = 0.9969356486210419
+test loss = 1.3150811286698323e-05  test Accuracy = 0.9964249233912156
+epoch = 22
+train loss = 1.0779240683284307e-05  train Accuracy = 0.9974463738508682
+test loss = 1.1531726492376687e-05  test Accuracy = 0.9964249233912156
+epoch = 23
+train loss = 8.626599378495709e-06  train Accuracy = 0.9974463738508682
+test loss = 1.0310816821148495e-05  test Accuracy = 0.9959141981613892
+epoch = 24
+train loss = 6.832248047070313e-06  train Accuracy = 0.9979570990806946
+test loss = 9.278237888165221e-06  test Accuracy = 0.9959141981613892
+epoch = 25
+train loss = 5.277244239071416e-06  train Accuracy = 0.9979570990806946
+test loss = 8.306885566238973e-06  test Accuracy = 0.9954034729315628
+epoch = 26
+train loss = 3.936426072886577e-06  train Accuracy = 0.9979570990806946
+test loss = 7.329467280679387e-06  test Accuracy = 0.9959141981613892
+epoch = 27
+train loss = 2.9380689636709984e-06  train Accuracy = 0.9994892747701737
+test loss = 6.3209419649577606e-06  test Accuracy = 0.9969356486210419
+epoch = 28
+train loss = 2.266707153756845e-06  train Accuracy = 0.9994892747701737
+test loss = 5.348238797213376e-06  test Accuracy = 0.9974463738508682
+epoch = 29
+train loss = 1.789048072464376e-06  train Accuracy = 0.9994892747701737
+test loss = 4.546642607882756e-06  test Accuracy = 0.9974463738508682
+
+
+~~~~~~~~~~~~~~~~~~~~~ tou データタイプ=ideal データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [1666, 3809, 2606]  最小 :  1666
+データ数を1666に揃えます
+ideal_augmented_pattern_0.csv  number of data --->  1666
+ideal_augmented_pattern_1.csv  number of data --->  1666
+ideal_augmented_pattern_2.csv  number of data --->  1666
+dataset length :  4998
+-------train/test---------
+epoch = 0
+train loss = 0.0004549637562086602  train Accuracy = 0.20568227290916366
+test loss = 0.00042541688229857374  test Accuracy = 0.5914365746298519
+epoch = 1
+train loss = 0.00042326882535240656  train Accuracy = 0.6014405762304922
+test loss = 0.00040038851272015155  test Accuracy = 0.6598639455782312
+epoch = 2
+train loss = 0.00039853654703458533  train Accuracy = 0.6654661864745899
+test loss = 0.0003774617614150763  test Accuracy = 0.6610644257703081
+epoch = 3
+train loss = 0.0003757600356884697  train Accuracy = 0.6702681072428972
+test loss = 0.0003532860793319403  test Accuracy = 0.662264905962385
+epoch = 4
+train loss = 0.0003514923587614367  train Accuracy = 0.6710684273709484
+test loss = 0.0003263843016607278  test Accuracy = 0.662264905962385
+epoch = 5
+train loss = 0.00032441372297057253  train Accuracy = 0.6710684273709484
+test loss = 0.00029673054963409923  test Accuracy = 0.662264905962385
+epoch = 6
+train loss = 0.000294529709543119  train Accuracy = 0.6710684273709484
+test loss = 0.00026527625553700486  test Accuracy = 0.662264905962385
+epoch = 7
+train loss = 0.0002629636000899994  train Accuracy = 0.6710684273709484
+test loss = 0.00023355356165293266  test Accuracy = 0.662264905962385
+epoch = 8
+train loss = 0.00023128779805531833  train Accuracy = 0.6710684273709484
+test loss = 0.00020283863705699564  test Accuracy = 0.6738695478191277
+epoch = 9
+train loss = 0.00020068120651123  train Accuracy = 0.6914765906362546
+test loss = 0.00017435447413141893  test Accuracy = 0.8499399759903962
+epoch = 10
+train loss = 0.00017241325651277966  train Accuracy = 0.8695478191276511
+test loss = 0.00014911457842566958  test Accuracy = 0.9487795118047219
+epoch = 11
+train loss = 0.0001474893560596541  train Accuracy = 0.9591836734693877
+test loss = 0.00012616416653331254  test Accuracy = 0.9747899159663865
+epoch = 12
+train loss = 0.00012483390248647068  train Accuracy = 0.974389755902361
+test loss = 0.00010479553168465873  test Accuracy = 0.9867947178871549
+epoch = 13
+train loss = 0.00010374108520971866  train Accuracy = 0.985594237695078
+test loss = 8.492837814676042e-05  test Accuracy = 0.992797118847539
+epoch = 14
+train loss = 8.41510014421418e-05  train Accuracy = 0.9931972789115646
+test loss = 6.702242969941882e-05  test Accuracy = 0.9935974389755903
+epoch = 15
+train loss = 6.647279211023705e-05  train Accuracy = 0.9923969587835134
+test loss = 5.173472677912412e-05  test Accuracy = 0.9919967987194878
+epoch = 16
+train loss = 5.1340045762949345e-05  train Accuracy = 0.9915966386554622
+test loss = 3.9429682977393226e-05  test Accuracy = 0.9919967987194878
+epoch = 17
+train loss = 3.911625771295457e-05  train Accuracy = 0.9915966386554622
+test loss = 2.995344782982315e-05  test Accuracy = 0.992797118847539
+epoch = 18
+train loss = 2.970374157639588e-05  train Accuracy = 0.9915966386554622
+test loss = 2.2950739849085996e-05  test Accuracy = 0.9931972789115646
+epoch = 19
+train loss = 2.2789801047200344e-05  train Accuracy = 0.9923969587835134
+test loss = 1.7968102210328405e-05  test Accuracy = 0.9931972789115646
+epoch = 20
+train loss = 1.7917957626470998e-05  train Accuracy = 0.992797118847539
+test loss = 1.4497798268629962e-05  test Accuracy = 0.9939975990396158
+epoch = 21
+train loss = 1.4573908081146276e-05  train Accuracy = 0.992797118847539
+test loss = 1.206810848147166e-05  test Accuracy = 0.9935974389755903
+epoch = 22
+train loss = 1.2244982998959776e-05  train Accuracy = 0.992797118847539
+test loss = 1.0331515737083636e-05  test Accuracy = 0.9939975990396158
+epoch = 23
+train loss = 1.0576733455461424e-05  train Accuracy = 0.9931972789115646
+test loss = 9.036747788657852e-06  test Accuracy = 0.9943977591036415
+epoch = 24
+train loss = 9.302868276369386e-06  train Accuracy = 0.9931972789115646
+test loss = 8.02485071787504e-06  test Accuracy = 0.994797919167667
+epoch = 25
+train loss = 8.270686336544429e-06  train Accuracy = 0.9935974389755903
+test loss = 7.169553730525031e-06  test Accuracy = 0.994797919167667
+epoch = 26
+train loss = 7.423734357233952e-06  train Accuracy = 0.9943977591036415
+test loss = 6.41261916510722e-06  test Accuracy = 0.9951980792316927
+epoch = 27
+train loss = 6.7237330799629426e-06  train Accuracy = 0.994797919167667
+test loss = 5.701010828377867e-06  test Accuracy = 0.9959983993597439
+epoch = 28
+train loss = 6.130497743125533e-06  train Accuracy = 0.9951980792316927
+test loss = 5.0322750077194195e-06  test Accuracy = 0.9963985594237695
+epoch = 29
+train loss = 5.580438655011412e-06  train Accuracy = 0.9959983993597439
+test loss = 4.424668457947907e-06  test Accuracy = 0.9967987194877951
+
+
+~~~~~~~~~~~~~~~~~~~~~ tou データタイプ=ideal データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ideal_pattern_0.csv  number of data --->  931
+ideal_pattern_1.csv  number of data --->  972
+ideal_pattern_2.csv  number of data --->  966
+dataset length :  2869
+-------train/test---------
+epoch = 0
+train loss = 0.000768952871798804  train Accuracy = 0.3312412831241283
+test loss = 0.0006955753220082991  test Accuracy = 0.5790940766550523
+epoch = 1
+train loss = 0.0006947658301397348  train Accuracy = 0.5822873082287309
+test loss = 0.0006351529513501955  test Accuracy = 0.7846689895470383
+epoch = 2
+train loss = 0.0006339469381622358  train Accuracy = 0.796373779637378
+test loss = 0.0005762692527903913  test Accuracy = 0.8940766550522649
+epoch = 3
+train loss = 0.0005762652290083541  train Accuracy = 0.898186889818689
+test loss = 0.0005161966180967537  test Accuracy = 0.9651567944250871
+epoch = 4
+train loss = 0.000517925208582539  train Accuracy = 0.9560669456066946
+test loss = 0.00045643251532046224  test Accuracy = 0.9874564459930314
+epoch = 5
+train loss = 0.0004599098131746428  train Accuracy = 0.9776847977684798
+test loss = 0.0003960039142116852  test Accuracy = 0.981184668989547
+epoch = 6
+train loss = 0.00040080174907647083  train Accuracy = 0.9755927475592747
+test loss = 0.00033516483024437666  test Accuracy = 0.9846689895470383
+epoch = 7
+train loss = 0.0003404966458117114  train Accuracy = 0.9818688981868898
+test loss = 0.0002769124840194755  test Accuracy = 0.9853658536585366
+epoch = 8
+train loss = 0.0002821674531473774  train Accuracy = 0.9804741980474198
+test loss = 0.00022522113464435218  test Accuracy = 0.9804878048780488
+epoch = 9
+train loss = 0.00023026219887380985  train Accuracy = 0.9714086471408647
+test loss = 0.0001799896826727465  test Accuracy = 0.9818815331010453
+epoch = 10
+train loss = 0.00018515401471775114  train Accuracy = 0.9728033472803347
+test loss = 0.00014117454610219817  test Accuracy = 0.9860627177700348
+epoch = 11
+train loss = 0.00014673910172580842  train Accuracy = 0.9797768479776848
+test loss = 0.0001109087820252475  test Accuracy = 0.9888501742160278
+epoch = 12
+train loss = 0.00011672024489114142  train Accuracy = 0.9832635983263598
+test loss = 8.81642207036035e-05  test Accuracy = 0.9881533101045297
+epoch = 13
+train loss = 9.385186716436175e-05  train Accuracy = 0.9825662482566249
+test loss = 7.037707322150573e-05  test Accuracy = 0.9895470383275261
+epoch = 14
+train loss = 7.579822191965962e-05  train Accuracy = 0.9839609483960948
+test loss = 5.724114408061064e-05  test Accuracy = 0.9881533101045297
+epoch = 15
+train loss = 6.249934601151959e-05  train Accuracy = 0.9818688981868898
+test loss = 4.7185149965385944e-05  test Accuracy = 0.9888501742160278
+epoch = 16
+train loss = 5.2192465322952056e-05  train Accuracy = 0.9825662482566249
+test loss = 3.9741446228392864e-05  test Accuracy = 0.9902439024390244
+epoch = 17
+train loss = 4.4256848811770746e-05  train Accuracy = 0.9867503486750349
+test loss = 3.4332106649252596e-05  test Accuracy = 0.9916376306620209
+epoch = 18
+train loss = 3.832463575124408e-05  train Accuracy = 0.9909344490934449
+test loss = 2.9598059658389472e-05  test Accuracy = 0.9916376306620209
+epoch = 19
+train loss = 3.318154256962333e-05  train Accuracy = 0.9909344490934449
+test loss = 2.563323708776813e-05  test Accuracy = 0.9916376306620209
+epoch = 20
+train loss = 2.8895390852558398e-05  train Accuracy = 0.9909344490934449
+test loss = 2.2425274088823005e-05  test Accuracy = 0.9923344947735192
+epoch = 21
+train loss = 2.518162713223754e-05  train Accuracy = 0.9923291492329149
+test loss = 1.9681931372718942e-05  test Accuracy = 0.9937282229965156
+epoch = 22
+train loss = 2.1683532781015712e-05  train Accuracy = 0.9937238493723849
+test loss = 1.745993329880545e-05  test Accuracy = 0.9951219512195122
+epoch = 23
+train loss = 1.8747319497240803e-05  train Accuracy = 0.99302649930265
+test loss = 1.5466430513285595e-05  test Accuracy = 0.9951219512195122
+epoch = 24
+train loss = 1.6182763670860807e-05  train Accuracy = 0.9944211994421199
+test loss = 1.3541314711969488e-05  test Accuracy = 0.9951219512195122
+epoch = 25
+train loss = 1.379687240349864e-05  train Accuracy = 0.995118549511855
+test loss = 1.1952405711084293e-05  test Accuracy = 0.9951219512195122
+epoch = 26
+train loss = 1.1797430645804359e-05  train Accuracy = 0.995118549511855
+test loss = 1.0624768712171695e-05  test Accuracy = 0.9951219512195122
+epoch = 27
+train loss = 1.0089926042358912e-05  train Accuracy = 0.995118549511855
+test loss = 9.366243636358905e-06  test Accuracy = 0.9965156794425087
+epoch = 28
+train loss = 8.562840833075376e-06  train Accuracy = 0.99581589958159
+test loss = 8.277954592106649e-06  test Accuracy = 0.9965156794425087
+epoch = 29
+train loss = 7.368152703949597e-06  train Accuracy = 0.9965132496513249
+test loss = 7.372211911537091e-06  test Accuracy = 0.9965156794425087
+
+
+~~~~~~~~~~~~~~~~~~~~~ tou データタイプ=row データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [3645, 4113, 3697]  最小 :  3645
+データ数を3645に揃えます
+row_augmented_pattern_0.csv  number of data --->  3645
+row_augmented_pattern_1.csv  number of data --->  3645
+row_augmented_pattern_2.csv  number of data --->  3645
+dataset length :  10907
+-------train/test---------
+epoch = 0
+train loss = 0.00020313282614560515  train Accuracy = 0.3344947735191638
+test loss = 0.00018698698354370654  test Accuracy = 0.5654565456545655
+epoch = 1
+train loss = 0.00018698144304452852  train Accuracy = 0.567210709701082
+test loss = 0.0001730928282882864  test Accuracy = 0.9107077374404107
+epoch = 2
+train loss = 0.00017331423900246773  train Accuracy = 0.9044562626077388
+test loss = 0.0001596193808446142  test Accuracy = 0.9332599926659333
+epoch = 3
+train loss = 0.00016007564624427503  train Accuracy = 0.9319640564826701
+test loss = 0.00014545207588411224  test Accuracy = 0.9327099376604328
+epoch = 4
+train loss = 0.0001461205079361821  train Accuracy = 0.931597285897671
+test loss = 0.00013065572007042522  test Accuracy = 0.9361936193619362
+epoch = 5
+train loss = 0.00013148093822569492  train Accuracy = 0.9330643682376674
+test loss = 0.00011553966959710955  test Accuracy = 0.942060872753942
+epoch = 6
+train loss = 0.00011647775066941675  train Accuracy = 0.9376490005501559
+test loss = 0.00010017286214279437  test Accuracy = 0.9514118078474514
+epoch = 7
+train loss = 0.00010120734236294166  train Accuracy = 0.9473684210526315
+test loss = 8.516127826269616e-05  test Accuracy = 0.9569123579024569
+epoch = 8
+train loss = 8.629200962646585e-05  train Accuracy = 0.9552539886301119
+test loss = 7.116835022042599e-05  test Accuracy = 0.9583791712504584
+epoch = 9
+train loss = 7.237273466689815e-05  train Accuracy = 0.9578213827251054
+test loss = 5.863327157335662e-05  test Accuracy = 0.9618628529519618
+epoch = 10
+train loss = 5.990476121208153e-05  train Accuracy = 0.9600220062350999
+test loss = 4.7790597636576405e-05  test Accuracy = 0.9646131279794646
+epoch = 11
+train loss = 4.910884943223537e-05  train Accuracy = 0.9614890885750963
+test loss = 3.874126779407995e-05  test Accuracy = 0.9671800513384672
+epoch = 12
+train loss = 4.007558953361994e-05  train Accuracy = 0.964790023840088
+test loss = 3.1409385574139386e-05  test Accuracy = 0.9704803813714705
+epoch = 13
+train loss = 3.272853279341127e-05  train Accuracy = 0.9680909591050798
+test loss = 2.558820897683933e-05  test Accuracy = 0.9724972497249725
+epoch = 14
+train loss = 2.6876863461775494e-05  train Accuracy = 0.9688245002750779
+test loss = 2.1030822427971354e-05  test Accuracy = 0.9746974697469747
+epoch = 15
+train loss = 2.227839326368829e-05  train Accuracy = 0.9708417384925729
+test loss = 1.7457954834178116e-05  test Accuracy = 0.976897689768977
+epoch = 16
+train loss = 1.86289272766561e-05  train Accuracy = 0.9728589767100678
+test loss = 1.4665955626400653e-05  test Accuracy = 0.978914558122479
+epoch = 17
+train loss = 1.573130179605811e-05  train Accuracy = 0.9750596002200623
+test loss = 1.2460255911379101e-05  test Accuracy = 0.9812981298129813
+epoch = 18
+train loss = 1.3384549263178176e-05  train Accuracy = 0.977993764900055
+test loss = 1.0697115082901653e-05  test Accuracy = 0.9834983498349835
+epoch = 19
+train loss = 1.1455406349950944e-05  train Accuracy = 0.9818448560425453
+test loss = 9.269383573733191e-06  test Accuracy = 0.9856985698569857
+epoch = 20
+train loss = 9.88240064272591e-06  train Accuracy = 0.9853291766000367
+test loss = 8.101447689957264e-06  test Accuracy = 0.9880821415474881
+epoch = 21
+train loss = 8.602158483968357e-06  train Accuracy = 0.986796258940033
+test loss = 7.123404619979649e-06  test Accuracy = 0.9893656032269894
+epoch = 22
+train loss = 7.548328306660529e-06  train Accuracy = 0.988813497157528
+test loss = 6.285756635150063e-06  test Accuracy = 0.9904657132379905
+epoch = 23
+train loss = 6.6686214634241065e-06  train Accuracy = 0.9902805794975243
+test loss = 5.5663442689287475e-06  test Accuracy = 0.991932526585992
+epoch = 24
+train loss = 5.93017232695698e-06  train Accuracy = 0.9922978177150192
+test loss = 4.949242144353144e-06  test Accuracy = 0.9932159882654932
+epoch = 25
+train loss = 5.305515677037424e-06  train Accuracy = 0.9928479735925179
+test loss = 4.427317293585549e-06  test Accuracy = 0.9937660432709937
+epoch = 26
+train loss = 4.772386192051223e-06  train Accuracy = 0.9933981294700165
+test loss = 3.992418338844179e-06  test Accuracy = 0.993949394939494
+epoch = 27
+train loss = 4.306546599082765e-06  train Accuracy = 0.9939482853475151
+test loss = 3.6146562118909715e-06  test Accuracy = 0.9941327466079941
+epoch = 28
+train loss = 3.893144924706676e-06  train Accuracy = 0.9937649000550156
+test loss = 3.2812772236073195e-06  test Accuracy = 0.9946828016134946
+epoch = 29
+train loss = 3.5290355428126938e-06  train Accuracy = 0.9941316706400146
+test loss = 2.9960650640570903e-06  test Accuracy = 0.9952328566189952
+
+
+~~~~~~~~~~~~~~~~~~~~~ tou データタイプ=row データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row_pattern_0.csv  number of data --->  2002
+row_pattern_1.csv  number of data --->  1052
+row_pattern_2.csv  number of data --->  1396
+dataset length :  4450
+-------train/test---------
+epoch = 0
+train loss = 0.0004955897170506166  train Accuracy = 0.3092134831460674
+test loss = 0.0004708045788025588  test Accuracy = 0.6921348314606741
+epoch = 1
+train loss = 0.00047253447971986923  train Accuracy = 0.6669662921348315
+test loss = 0.000450049571776658  test Accuracy = 0.7559550561797753
+epoch = 2
+train loss = 0.0004528045118524787  train Accuracy = 0.7253932584269663
+test loss = 0.0004300328051106314  test Accuracy = 0.7779775280898876
+epoch = 3
+train loss = 0.0004332701811629735  train Accuracy = 0.748314606741573
+test loss = 0.0004095112607720193  test Accuracy = 0.8130337078651685
+epoch = 4
+train loss = 0.00041290218910474454  train Accuracy = 0.7878651685393259
+test loss = 0.00038786392533377316  test Accuracy = 0.828314606741573
+epoch = 5
+train loss = 0.00039127143581261793  train Accuracy = 0.8017977528089888
+test loss = 0.00036421719561801865  test Accuracy = 0.8462921348314607
+epoch = 6
+train loss = 0.00036768085501167214  train Accuracy = 0.8278651685393258
+test loss = 0.00033761136987236107  test Accuracy = 0.8597752808988764
+epoch = 7
+train loss = 0.0003413137960969732  train Accuracy = 0.8368539325842697
+test loss = 0.0003081829360361849  test Accuracy = 0.8710112359550561
+epoch = 8
+train loss = 0.0003121808941444654  train Accuracy = 0.8512359550561798
+test loss = 0.00027688776509145674  test Accuracy = 0.8759550561797753
+epoch = 9
+train loss = 0.00028110833650224666  train Accuracy = 0.8575280898876404
+test loss = 0.0002451773975672347  test Accuracy = 0.8912359550561798
+epoch = 10
+train loss = 0.0002494894788506326  train Accuracy = 0.8782022471910113
+test loss = 0.00021433318598886554  test Accuracy = 0.8993258426966292
+epoch = 11
+train loss = 0.00021843958436773065  train Accuracy = 0.8898876404494382
+test loss = 0.00018495007847132308  test Accuracy = 0.9087640449438202
+epoch = 12
+train loss = 0.0001883759391441774  train Accuracy = 0.9042696629213484
+test loss = 0.00015755744462602595  test Accuracy = 0.9325842696629213
+epoch = 13
+train loss = 0.00015996729390005046  train Accuracy = 0.9361797752808989
+test loss = 0.00013274077619059702  test Accuracy = 0.9501123595505618
+epoch = 14
+train loss = 0.00013407362980789013  train Accuracy = 0.9487640449438203
+test loss = 0.00011066108607174305  test Accuracy = 0.9573033707865168
+epoch = 15
+train loss = 0.00011125555868898885  train Accuracy = 0.9568539325842697
+test loss = 9.085951896196001e-05  test Accuracy = 0.9635955056179776
+epoch = 16
+train loss = 9.13418009040061e-05  train Accuracy = 0.9626966292134832
+test loss = 7.334926155176056e-05  test Accuracy = 0.9667415730337079
+epoch = 17
+train loss = 7.429908500628526e-05  train Accuracy = 0.9658426966292135
+test loss = 5.8628695734431236e-05  test Accuracy = 0.9739325842696629
+epoch = 18
+train loss = 6.03232089053379e-05  train Accuracy = 0.9725842696629213
+test loss = 4.687500468800577e-05  test Accuracy = 0.9775280898876404
+epoch = 19
+train loss = 4.938268929385067e-05  train Accuracy = 0.9748314606741573
+test loss = 3.7778492054242766e-05  test Accuracy = 0.9815730337078652
+epoch = 20
+train loss = 4.104654105861535e-05  train Accuracy = 0.9770786516853932
+test loss = 3.102813543898336e-05  test Accuracy = 0.9842696629213483
+epoch = 21
+train loss = 3.49756907880976e-05  train Accuracy = 0.9793258426966293
+test loss = 2.6056225715058575e-05  test Accuracy = 0.9847191011235955
+epoch = 22
+train loss = 3.0469827437668705e-05  train Accuracy = 0.9802247191011236
+test loss = 2.2363138667653117e-05  test Accuracy = 0.9856179775280899
+epoch = 23
+train loss = 2.6846928208061818e-05  train Accuracy = 0.9824719101123596
+test loss = 1.9751249739293303e-05  test Accuracy = 0.9860674157303371
+epoch = 24
+train loss = 2.39362090491177e-05  train Accuracy = 0.9838202247191011
+test loss = 1.7930004703864623e-05  test Accuracy = 0.9874157303370786
+epoch = 25
+train loss = 2.1594037835517627e-05  train Accuracy = 0.9856179775280899
+test loss = 1.6497674952732043e-05  test Accuracy = 0.9874157303370786
+epoch = 26
+train loss = 1.9622808426953435e-05  train Accuracy = 0.9869662921348314
+test loss = 1.5326056922419688e-05  test Accuracy = 0.9878651685393258
+epoch = 27
+train loss = 1.8008080091369285e-05  train Accuracy = 0.9878651685393258
+test loss = 1.4471299527736192e-05  test Accuracy = 0.9887640449438202
+epoch = 28
+train loss = 1.6676408521245035e-05  train Accuracy = 0.988314606741573
+test loss = 1.3879271370641301e-05  test Accuracy = 0.9901123595505618
+epoch = 29
+train loss = 1.5438523855102197e-05  train Accuracy = 0.9892134831460674
+test loss = 1.3515873069173835e-05  test Accuracy = 0.990561797752809
+
+
+~~~~~~~~~~~~~~~~~~~~~ ozawa データタイプ=ideal データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [3267, 3629, 3714]  最小 :  3267
+データ数を3267に揃えます
+ideal_augmented_pattern_0.csv  number of data --->  3267
+ideal_augmented_pattern_1.csv  number of data --->  3267
+ideal_augmented_pattern_2.csv  number of data --->  3267
+dataset length :  9801
+-------train/test---------
+epoch = 0
+train loss = 0.00022522196477773237  train Accuracy = 0.2748979591836735
+test loss = 0.00020584664133659942  test Accuracy = 0.6011018159559274
+epoch = 1
+train loss = 0.00020593706442385303  train Accuracy = 0.6085714285714285
+test loss = 0.00018806177556478254  test Accuracy = 0.7302591307896348
+epoch = 2
+train loss = 0.000188504019562079  train Accuracy = 0.7312244897959184
+test loss = 0.00017013565128468853  test Accuracy = 0.871046725158131
+epoch = 3
+train loss = 0.00017078849734092247  train Accuracy = 0.8634693877551021
+test loss = 0.00015147600434697712  test Accuracy = 0.9485819220567231
+epoch = 4
+train loss = 0.0001522476089243986  train Accuracy = 0.9371428571428572
+test loss = 0.00013204980348961812  test Accuracy = 0.9647010814119568
+epoch = 5
+train loss = 0.0001329406061950995  train Accuracy = 0.9593877551020408
+test loss = 0.00011235124066128484  test Accuracy = 0.9653132013874719
+epoch = 6
+train loss = 0.00011333359747516866  train Accuracy = 0.9648979591836735
+test loss = 9.31588490868899e-05  test Accuracy = 0.9726586410936544
+epoch = 7
+train loss = 9.416295557605977e-05  train Accuracy = 0.9714285714285714
+test loss = 7.536239318520748e-05  test Accuracy = 0.9765354009385839
+epoch = 8
+train loss = 7.635297215714747e-05  train Accuracy = 0.9744897959183674
+test loss = 5.964618316841865e-05  test Accuracy = 0.9830646806774128
+epoch = 9
+train loss = 6.0587981525732545e-05  train Accuracy = 0.980204081632653
+test loss = 4.627194253310114e-05  test Accuracy = 0.9865333605386656
+epoch = 10
+train loss = 4.716238197015256e-05  train Accuracy = 0.9830612244897959
+test loss = 3.515009708828742e-05  test Accuracy = 0.98979800040808
+epoch = 11
+train loss = 3.5995798451559884e-05  train Accuracy = 0.9879591836734694
+test loss = 2.6080875196303183e-05  test Accuracy = 0.9924505203019792
+epoch = 12
+train loss = 2.6854334437117286e-05  train Accuracy = 0.9914285714285714
+test loss = 1.8909728617065904e-05  test Accuracy = 0.9944909202203632
+epoch = 13
+train loss = 1.9565469452313015e-05  train Accuracy = 0.9946938775510205
+test loss = 1.3476189387815141e-05  test Accuracy = 0.9961232401550704
+epoch = 14
+train loss = 1.4019786399237964e-05  train Accuracy = 0.996938775510204
+test loss = 9.417538435160932e-06  test Accuracy = 0.9977555600897776
+epoch = 15
+train loss = 9.890307425236215e-06  train Accuracy = 0.9983673469387755
+test loss = 6.4811537981373856e-06  test Accuracy = 0.9977555600897776
+epoch = 16
+train loss = 6.921392466340746e-06  train Accuracy = 0.9983673469387755
+test loss = 4.489786985260543e-06  test Accuracy = 0.9977555600897776
+epoch = 17
+train loss = 4.896321238911882e-06  train Accuracy = 0.9985714285714286
+test loss = 3.1573824862683704e-06  test Accuracy = 0.9985717200571312
+epoch = 18
+train loss = 3.522493857510236e-06  train Accuracy = 0.9985714285714286
+test loss = 2.258038613850232e-06  test Accuracy = 0.9987757600489696
+epoch = 19
+train loss = 2.5809978191949884e-06  train Accuracy = 0.9985714285714286
+test loss = 1.6634382719508096e-06  test Accuracy = 0.9987757600489696
+epoch = 20
+train loss = 1.959958474855034e-06  train Accuracy = 0.9985714285714286
+test loss = 1.2740747456987448e-06  test Accuracy = 0.9987757600489696
+epoch = 21
+train loss = 1.5653527284763297e-06  train Accuracy = 0.9985714285714286
+test loss = 1.0135640017574258e-06  test Accuracy = 0.9987757600489696
+epoch = 22
+train loss = 1.311355403491429e-06  train Accuracy = 0.9985714285714286
+test loss = 8.330552161676352e-07  test Accuracy = 0.9987757600489696
+epoch = 23
+train loss = 1.1428981563266443e-06  train Accuracy = 0.9985714285714286
+test loss = 7.022787900244404e-07  test Accuracy = 0.9987757600489696
+epoch = 24
+train loss = 1.0267135744192163e-06  train Accuracy = 0.9987755102040816
+test loss = 6.05464045857561e-07  test Accuracy = 0.9987757600489696
+epoch = 25
+train loss = 9.440095639046358e-07  train Accuracy = 0.9987755102040816
+test loss = 5.327281518368982e-07  test Accuracy = 0.9987757600489696
+epoch = 26
+train loss = 8.833001614833365e-07  train Accuracy = 0.9987755102040816
+test loss = 4.77302914503958e-07  test Accuracy = 0.9987757600489696
+epoch = 27
+train loss = 8.375025639424519e-07  train Accuracy = 0.9987755102040816
+test loss = 4.3522208926021457e-07  test Accuracy = 0.998979800040808
+epoch = 28
+train loss = 8.012572949638172e-07  train Accuracy = 0.9987755102040816
+test loss = 4.024473637482313e-07  test Accuracy = 0.998979800040808
+epoch = 29
+train loss = 7.706941390524105e-07  train Accuracy = 0.9987755102040816
+test loss = 3.7653546516590275e-07  test Accuracy = 0.9993878800244848
+
+
+~~~~~~~~~~~~~~~~~~~~~ ozawa データタイプ=ideal データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ideal_pattern_0.csv  number of data --->  1006
+ideal_pattern_1.csv  number of data --->  996
+ideal_pattern_2.csv  number of data --->  995
+dataset length :  2997
+-------train/test---------
+epoch = 0
+train loss = 0.000763305038890151  train Accuracy = 0.03337783711615487
+test loss = 0.000684545865609218  test Accuracy = 0.52368245496998
+epoch = 1
+train loss = 0.0006864568260865154  train Accuracy = 0.5173564753004005
+test loss = 0.0006218925565779408  test Accuracy = 0.723148765843896
+epoch = 2
+train loss = 0.0006237421159909787  train Accuracy = 0.7222963951935915
+test loss = 0.0005611198754848203  test Accuracy = 0.8432288192128086
+epoch = 3
+train loss = 0.0005628994612572826  train Accuracy = 0.8324432576769025
+test loss = 0.0005020086887759157  test Accuracy = 0.9212808539026017
+epoch = 4
+train loss = 0.0005037038523619261  train Accuracy = 0.9165554072096128
+test loss = 0.00044401074505552124  test Accuracy = 0.9553035356904603
+epoch = 5
+train loss = 0.00044587469387436424  train Accuracy = 0.9579439252336449
+test loss = 0.00038581454332388583  test Accuracy = 0.9873248832555037
+epoch = 6
+train loss = 0.00038785812692425755  train Accuracy = 0.9946595460614153
+test loss = 0.0003281530537074053  test Accuracy = 0.9939959973315544
+epoch = 7
+train loss = 0.00033030866860388436  train Accuracy = 0.9959946595460614
+test loss = 0.0002729732088441448  test Accuracy = 0.9953302201467645
+epoch = 8
+train loss = 0.0002751806191353995  train Accuracy = 0.9973297730307076
+test loss = 0.0002232915246542332  test Accuracy = 0.9966644429619747
+epoch = 9
+train loss = 0.00022562063026810203  train Accuracy = 0.9973297730307076
+test loss = 0.00017930246178828692  test Accuracy = 0.9979986657771848
+epoch = 10
+train loss = 0.0001815246127157886  train Accuracy = 0.9993324432576769
+test loss = 0.000140950292488032  test Accuracy = 1.0
+epoch = 11
+train loss = 0.0001427897106662134  train Accuracy = 1.0
+test loss = 0.00010828922357934566  test Accuracy = 1.0
+epoch = 12
+train loss = 0.00010973066887327126  train Accuracy = 1.0
+test loss = 8.107760574437524e-05  test Accuracy = 1.0
+epoch = 13
+train loss = 8.218468866933968e-05  train Accuracy = 1.0
+test loss = 5.9076985611447974e-05  test Accuracy = 1.0
+epoch = 14
+train loss = 5.991989187150199e-05  train Accuracy = 1.0
+test loss = 4.200584654652174e-05  test Accuracy = 1.0
+epoch = 15
+train loss = 4.262840238527876e-05  train Accuracy = 1.0
+test loss = 2.9274586183059366e-05  test Accuracy = 1.0
+epoch = 16
+train loss = 2.972531481801429e-05  train Accuracy = 1.0
+test loss = 2.0172480516150605e-05  test Accuracy = 1.0
+epoch = 17
+train loss = 2.0487738825450434e-05  train Accuracy = 1.0
+test loss = 1.3873326512000177e-05  test Accuracy = 1.0
+epoch = 18
+train loss = 1.4090543744640453e-05  train Accuracy = 1.0
+test loss = 9.555175149933825e-06  test Accuracy = 1.0
+epoch = 19
+train loss = 9.712658061562617e-06  train Accuracy = 1.0
+test loss = 6.603350424225765e-06  test Accuracy = 1.0
+epoch = 20
+train loss = 6.742529864503799e-06  train Accuracy = 1.0
+test loss = 4.594745779232314e-06  test Accuracy = 1.0
+epoch = 21
+train loss = 4.735229429956749e-06  train Accuracy = 1.0
+test loss = 3.2267823387894176e-06  test Accuracy = 1.0
+epoch = 22
+train loss = 3.3778413876552926e-06  train Accuracy = 1.0
+test loss = 2.2955017016481128e-06  test Accuracy = 1.0
+epoch = 23
+train loss = 2.457075926396891e-06  train Accuracy = 1.0
+test loss = 1.6583933409867564e-06  test Accuracy = 1.0
+epoch = 24
+train loss = 1.8230488633261982e-06  train Accuracy = 1.0
+test loss = 1.2167674297338887e-06  test Accuracy = 1.0
+epoch = 25
+train loss = 1.37813328373655e-06  train Accuracy = 1.0
+test loss = 9.075296592909229e-07  test Accuracy = 1.0
+epoch = 26
+train loss = 1.059045569998559e-06  train Accuracy = 1.0
+test loss = 6.865840181559225e-07  test Accuracy = 1.0
+epoch = 27
+train loss = 8.252885774553857e-07  train Accuracy = 1.0
+test loss = 5.27372397047488e-07  test Accuracy = 1.0
+epoch = 28
+train loss = 6.506559970566085e-07  train Accuracy = 1.0
+test loss = 4.118136481305533e-07  test Accuracy = 1.0
+epoch = 29
+train loss = 5.191054011139278e-07  train Accuracy = 1.0
+test loss = 3.271873976993036e-07  test Accuracy = 1.0
+
+
+~~~~~~~~~~~~~~~~~~~~~ ozawa データタイプ=row データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+データ数 :  [8211, 3817, 3823]  最小 :  3817
+データ数を3817に揃えます
+row_augmented_pattern_0.csv  number of data --->  3817
+row_augmented_pattern_1.csv  number of data --->  3817
+row_augmented_pattern_2.csv  number of data --->  3817
+dataset length :  11385
+-------train/test---------
+epoch = 0
+train loss = 0.00018490500125094192  train Accuracy = 0.4650386507378777
+test loss = 0.0001629755468919661  test Accuracy = 0.6527314245564728
+epoch = 1
+train loss = 0.00016335156587170448  train Accuracy = 0.6472241742796908
+test loss = 0.000145670055987105  test Accuracy = 0.823994379062006
+epoch = 2
+train loss = 0.00014602828009063228  train Accuracy = 0.8150035137034435
+test loss = 0.00012996764001288482  test Accuracy = 0.864219216581767
+epoch = 3
+train loss = 0.00013031307359187433  train Accuracy = 0.8552354181307098
+test loss = 0.00011512614628268988  test Accuracy = 0.8819603021254172
+epoch = 4
+train loss = 0.00011539791179892887  train Accuracy = 0.8784258608573436
+test loss = 0.00010097674906368982  test Accuracy = 0.9032144739153346
+epoch = 5
+train loss = 0.00010115331273135885  train Accuracy = 0.9002108222066058
+test loss = 8.768189273775933e-05  test Accuracy = 0.9290356578253997
+epoch = 6
+train loss = 8.778453124549635e-05  train Accuracy = 0.9290231904427266
+test loss = 7.535942551877364e-05  test Accuracy = 0.951695064113824
+epoch = 7
+train loss = 7.542926433299179e-05  train Accuracy = 0.9509838369641602
+test loss = 6.403903979608512e-05  test Accuracy = 0.9659230634112067
+epoch = 8
+train loss = 6.411006269702924e-05  train Accuracy = 0.966268446943078
+test loss = 5.380398105197185e-05  test Accuracy = 0.9733005445283681
+epoch = 9
+train loss = 5.389907078598891e-05  train Accuracy = 0.9724174279690794
+test loss = 4.4659128219239974e-05  test Accuracy = 0.9782188652731425
+epoch = 10
+train loss = 4.477021418569462e-05  train Accuracy = 0.9764581869290232
+test loss = 3.6520531720694644e-05  test Accuracy = 0.9812049885824697
+epoch = 11
+train loss = 3.661376568773475e-05  train Accuracy = 0.9789177793394237
+test loss = 2.941398394038718e-05  test Accuracy = 0.9829615317056034
+epoch = 12
+train loss = 2.9465386503947425e-05  train Accuracy = 0.9810260014054814
+test loss = 2.3332281647050147e-05  test Accuracy = 0.984191111891797
+epoch = 13
+train loss = 2.3353745400361083e-05  train Accuracy = 0.9824314827828531
+test loss = 1.819139673989204e-05  test Accuracy = 0.9852450377656772
+epoch = 14
+train loss = 1.8226850623407586e-05  train Accuracy = 0.9848910751932537
+test loss = 1.4048300705746734e-05  test Accuracy = 0.9864746179518707
+epoch = 15
+train loss = 1.4100941087859497e-05  train Accuracy = 0.9862965565706254
+test loss = 1.0945379927730845e-05  test Accuracy = 0.9870015808888108
+epoch = 16
+train loss = 1.0966754617275525e-05  train Accuracy = 0.9880534082923401
+test loss = 8.725761927516394e-06  test Accuracy = 0.9887581240119445
+epoch = 17
+train loss = 8.645057756760049e-06  train Accuracy = 0.9905130007027407
+test loss = 7.190095578432712e-06  test Accuracy = 0.9892850869488846
+epoch = 18
+train loss = 6.958124969345704e-06  train Accuracy = 0.9924455375966268
+test loss = 6.172853138709391e-06  test Accuracy = 0.9901633585104515
+epoch = 19
+train loss = 5.775666648413376e-06  train Accuracy = 0.9938510189739986
+test loss = 5.512033884792907e-06  test Accuracy = 0.9901633585104515
+epoch = 20
+train loss = 4.968913867598424e-06  train Accuracy = 0.9938510189739986
+test loss = 5.072013496431256e-06  test Accuracy = 0.9901633585104515
+epoch = 21
+train loss = 4.402825835299006e-06  train Accuracy = 0.9945537596626844
+test loss = 4.727749362386385e-06  test Accuracy = 0.9906903214473916
+epoch = 22
+train loss = 3.982608246493322e-06  train Accuracy = 0.9942023893183415
+test loss = 4.395095269290128e-06  test Accuracy = 0.9910416300720183
+epoch = 23
+train loss = 3.641430361854804e-06  train Accuracy = 0.9945537596626844
+test loss = 4.059406893546063e-06  test Accuracy = 0.9915685930089584
+epoch = 24
+train loss = 3.3501332111326807e-06  train Accuracy = 0.9950808151791989
+test loss = 3.7688120019136445e-06  test Accuracy = 0.9935007904444054
+epoch = 25
+train loss = 3.1161389051192424e-06  train Accuracy = 0.9954321855235418
+test loss = 3.576477612968323e-06  test Accuracy = 0.9931494818197787
+epoch = 26
+train loss = 2.941638309814858e-06  train Accuracy = 0.9959592410400562
+test loss = 3.4726926480741715e-06  test Accuracy = 0.9933251361320921
+epoch = 27
+train loss = 2.811177557128798e-06  train Accuracy = 0.9957835558678847
+test loss = 3.4218509095049734e-06  test Accuracy = 0.9929738275074653
+epoch = 28
+train loss = 2.7059109453491483e-06  train Accuracy = 0.9952565003513704
+test loss = 3.400358673916034e-06  test Accuracy = 0.992798173195152
+epoch = 29
+train loss = 2.613849414333188e-06  train Accuracy = 0.9952565003513704
+test loss = 3.384895414642724e-06  test Accuracy = 0.9935007904444054
+
+
+~~~~~~~~~~~~~~~~~~~~~ ozawa データタイプ=row データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+row_pattern_0.csv  number of data --->  2580
+row_pattern_1.csv  number of data --->  1047
+row_pattern_2.csv  number of data --->  1023
+dataset length :  4650
+-------train/test---------
+epoch = 0
+train loss = 0.00045817857147544943  train Accuracy = 0.250752688172043
+test loss = 0.0003960396910226473  test Accuracy = 0.6124731182795699
+epoch = 1
+train loss = 0.0003923165670005224  train Accuracy = 0.6223655913978494
+test loss = 0.0003563453561516218  test Accuracy = 0.5501075268817204
+epoch = 2
+train loss = 0.0003522506836921938  train Accuracy = 0.5595698924731183
+test loss = 0.00032195473230013286  test Accuracy = 0.5621505376344086
+epoch = 3
+train loss = 0.00031733482114730343  train Accuracy = 0.5681720430107526
+test loss = 0.00028405850933444117  test Accuracy = 0.6563440860215054
+epoch = 4
+train loss = 0.00027888203179964456  train Accuracy = 0.6550537634408602
+test loss = 0.00024435963681949084  test Accuracy = 0.8464516129032258
+epoch = 5
+train loss = 0.00023876895186721638  train Accuracy = 0.8443010752688173
+test loss = 0.00020567078744211504  test Accuracy = 0.9440860215053763
+epoch = 6
+train loss = 0.00019995568900979974  train Accuracy = 0.9483870967741935
+test loss = 0.00017085909843444824  test Accuracy = 0.9574193548387097
+epoch = 7
+train loss = 0.00016536722901046918  train Accuracy = 0.963010752688172
+test loss = 0.00014078326122735137  test Accuracy = 0.9711827956989247
+epoch = 8
+train loss = 0.00013567786062917403  train Accuracy = 0.9759139784946237
+test loss = 0.00011458596875590663  test Accuracy = 0.9913978494623656
+epoch = 9
+train loss = 0.00010981628971715128  train Accuracy = 0.9948387096774194
+test loss = 9.185708979124663e-05  test Accuracy = 0.9918279569892473
+epoch = 10
+train loss = 8.750542517631284e-05  train Accuracy = 0.995268817204301
+test loss = 7.259920720131166e-05  test Accuracy = 0.9909677419354839
+epoch = 11
+train loss = 6.858826965414068e-05  train Accuracy = 0.9948387096774194
+test loss = 5.668306863436135e-05  test Accuracy = 0.9905376344086021
+epoch = 12
+train loss = 5.284686883290609e-05  train Accuracy = 0.995268817204301
+test loss = 4.359138588751516e-05  test Accuracy = 0.9905376344086021
+epoch = 13
+train loss = 3.9768978472678894e-05  train Accuracy = 0.9956989247311828
+test loss = 3.282762022428615e-05  test Accuracy = 0.9931182795698925
+epoch = 14
+train loss = 2.903874522896223e-05  train Accuracy = 0.9978494623655914
+test loss = 2.433417304869621e-05  test Accuracy = 0.995268817204301
+epoch = 15
+train loss = 2.0670488636980776e-05  train Accuracy = 0.9995698924731182
+test loss = 1.8040329538365847e-05  test Accuracy = 0.995268817204301
+epoch = 16
+train loss = 1.4531431339120353e-05  train Accuracy = 0.9995698924731182
+test loss = 1.3556608589746619e-05  test Accuracy = 0.9961290322580645
+epoch = 17
+train loss = 1.0189025472569209e-05  train Accuracy = 0.9995698924731182
+test loss = 1.0432740372996176e-05  test Accuracy = 0.9961290322580645
+epoch = 18
+train loss = 7.1543086600560015e-06  train Accuracy = 0.9995698924731182
+test loss = 8.356918090133258e-06  test Accuracy = 0.9961290322580645
+epoch = 19
+train loss = 5.047611331426969e-06  train Accuracy = 0.9995698924731182
+test loss = 7.034005016408941e-06  test Accuracy = 0.9961290322580645
+epoch = 20
+train loss = 3.597088638813265e-06  train Accuracy = 0.9995698924731182
+test loss = 6.175877185918951e-06  test Accuracy = 0.9961290322580645
+epoch = 21
+train loss = 2.6064464241586704e-06  train Accuracy = 0.9995698924731182
+test loss = 5.607677082861623e-06  test Accuracy = 0.9961290322580645
+epoch = 22
+train loss = 1.9284762361998198e-06  train Accuracy = 0.9995698924731182
+test loss = 5.221515893936158e-06  test Accuracy = 0.9961290322580645
+epoch = 23
+train loss = 1.459786147680334e-06  train Accuracy = 0.9995698924731182
+test loss = 4.945051686097217e-06  test Accuracy = 0.9961290322580645
+epoch = 24
+train loss = 1.1335809024110918e-06  train Accuracy = 0.9995698924731182
+test loss = 4.7078864869251046e-06  test Accuracy = 0.9961290322580645
+epoch = 25
+train loss = 8.987645388290446e-07  train Accuracy = 0.9995698924731182
+test loss = 4.466356289002203e-06  test Accuracy = 0.9961290322580645
+epoch = 26
+train loss = 7.241272858233862e-07  train Accuracy = 0.9995698924731182
+test loss = 4.198928513834554e-06  test Accuracy = 0.9961290322580645
+epoch = 27
+train loss = 5.903505590013278e-07  train Accuracy = 0.9995698924731182
+test loss = 3.889446216885761e-06  test Accuracy = 0.9961290322580645
+epoch = 28
+train loss = 4.847561539981955e-07  train Accuracy = 0.9995698924731182
+test loss = 3.543131213675263e-06  test Accuracy = 0.9978494623655914
+epoch = 29
+train loss = 3.9931266538558467e-07  train Accuracy = 1.0
+test loss = 3.1631668248484212e-06  test Accuracy = 0.9987096774193548
+
+

@@ -112,148 +112,171 @@ def test(model, iterator):
     return epoch_loss, epoch_accuracy
 
 
-# userの選択
-user_name = input('enter user name \n')
+# # userの選択
+# user_name = input('enter user name \n')
 
-# 学習用データの選択
-train_data_type = input('enter train_data_type (ideal or row) \n')
-if (train_data_type=='ideal') or \
-   (train_data_type=='row') :
-    pass
-else:
-    sys.exit('enter train_data_type (ideal or row) \n')
+# # 学習用データの選択
+# train_data_type = input('enter train_data_type (ideal or row) \n')
+# if (train_data_type=='ideal') or \
+#    (train_data_type=='row') :
+#     pass
+# else:
+#     sys.exit('enter train_data_type (ideal or row) \n')
 
-# データの拡張をするかどうかを選択
-can_augment = input('Do you augment data ? (y/n)\n')
-if can_augment=='y':
-    can_augment = True
-elif can_augment=='n':
-    can_augment = False
-else:
-    sys.exit('Do you augment data ? (y/n)\n')
-"""
-user_name = 'nao'
-train_data_type = 'row'
-can_augment = False
-"""
-ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
-graph_utils = graph_utilitys(fasttext_model=ft_path)
+# # データの拡張をするかどうかを選択
+# can_augment = input('Do you augment data ? (y/n)\n')
+# if can_augment=='y':
+#     can_augment = True
+# elif can_augment=='n':
+#     can_augment = False
+# else:
+#     sys.exit('Do you augment data ? (y/n)\n')
+users = ['yamada']#['comb-kusakari_ozawa', 'comb-kusakari_tou', 'comb-tou_ozawa']
+train_data_type_list = ['ideal'] # ['ideal', 'row']
+can_augment_list = ['y','n']
 
-# 状態パターンごとのファイルを取得
-user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
-files = glob.glob(user_dir + "/position_data/"+train_data_type+"_pattern*")
-files.sort()
-pattern_num = len(files)
-print('状態パターン数 : ', pattern_num)
-csv_path_dict = {}
-for i, file in enumerate(files):
-    csv_path_dict[i] = file
+for user_name in users:
+    for train_data_type in train_data_type_list:
+        for can_augment in can_augment_list:
 
-if can_augment:
-    augmented_csv_path_dict = augment_data_creater.augment(graph_utils, csv_path_dict)
-    csv_path_dict_for_train = augmented_csv_path_dict
-else:
-    csv_path_dict_for_train = csv_path_dict
+            if can_augment=='y':
+                can_augment = True
+            elif can_augment=='n':
+                can_augment = False
+            else:
+                sys.exit('Do you augment data ? (y/n)\n')
 
-model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern_0.csv','') # row_ / row_augmented_ / ideal_ / ideal_augmented_
+            print(f'~~~~~~~~~~~~~~~~~~~~~ {user_name} データタイプ={train_data_type} データ拡張={can_augment} ~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
+            ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+            graph_utils = graph_utilitys(fasttext_model=ft_path)
 
-# グラフデータセットを作成
-datasets,_ = graph_utils.csv2graphDataset(csv_path_dict_for_train)
-print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-print("dataset length : ", len(datasets))
-data = datasets[0]
-print("data 0 : ", data)
-# G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
-# print(G.get_edge_data)
-# pos = nx.spring_layout(G, k=0.3)
-# nx.draw_networkx_edge_labels(G, pos)
-# nx.draw_networkx(G, pos, with_labels=True, alpha=0.5)
-# plt.show()
-random.shuffle(datasets)
-train_dataset = datasets[:int(len(datasets)*0.5)]
-test_dataset = datasets[int(len(datasets)*0.5):]
+            # 状態パターンごとのファイルを取得
+            user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
+            files = glob.glob(user_dir + "/position_data/"+train_data_type+"_pattern_*")
+            # print(files)
+            files.sort()
+            pattern_num = len(files)
+            # print('状態パターン数 : ', pattern_num)
+            csv_path_dict = {}
+            for i, file in enumerate(files):
+                csv_path_dict[i] = file
 
-# バッチサイズの入力
-batch_size = int(input('enter batch size \n'))
-model_name += str(batch_size)+'_'
+            if can_augment:
+                augmented_csv_path_dict = augment_data_creater.augment(graph_utils, csv_path_dict, user_name=user_name[0])
+                csv_path_dict_for_train = augmented_csv_path_dict
+            else:
+                csv_path_dict_for_train = csv_path_dict
 
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-device = 'cpu' #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=pattern_num).to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters())
+            model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern_0.csv','') # row_ / row_augmented_ / ideal_ / ideal_augmented_
 
 
-print('-------train---------')
-train_loss_list = []
-train_acc_list = []
-test_loss_list = []
-test_acc_list = []
-for epoch in range(10):
-    train_loss, train_acc = train(model, train_loader , optimizer, criterion)
-    train_loss_list.append(train_loss)
-    train_acc_list.append(train_acc)
+            # グラフデータセットを作成
+            datasets,_ = graph_utils.csv2graphDataset(csv_path_dict_for_train)
+            print("dataset length : ", len(datasets))
+            data = datasets[0]
+            # print("data 0 : ", data)
+            # G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
+            # print(G.get_edge_data)
+            # pos = nx.spring_layout(G, k=0.3)
+            # nx.draw_networkx_edge_labels(G, pos)
+            # nx.draw_networkx(G, pos, with_labels=True, alpha=0.5)
+            # plt.show()
+            random.shuffle(datasets)
+            train_dataset = datasets[:int(len(datasets)*0.5)]
+            test_dataset = datasets[int(len(datasets)*0.5):]
 
-    test_loss, test_acc = test(model, test_loader)
-    test_loss_list.append(test_loss)
-    test_acc_list.append(test_acc)
-    print(f'epoch = {epoch}')
-    print(f'train loss = {train_loss}  train Accuracy = {train_acc}')
-    print(f'test loss = {test_loss}  test Accuracy = {test_acc}')
+            # バッチサイズの入力
+            # batch_size = int(input('enter batch size \n'))
+            # model_name += str(batch_size)+'_'
+            # バッチ学習
+            batch_size =1000# len(datasets)
+            model_name += 'batch_'
 
-# モデルを保存
-model_path = user_dir + '/'+model_name+'nnconv.pt'
-torch.save(model.state_dict(),model_path)
+            train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+            test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+            device = 'cpu' #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=pattern_num).to(device)
+            criterion = nn.CrossEntropyLoss()
+            optimizer = torch.optim.Adam(model.parameters())
 
-x = range(len(train_acc_list))
-# lossの描画
-fig = plt.figure()
-plt.plot(x, train_loss_list, color='b')
-plt.ylabel("Train Loss")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"LossTrain.png")
 
-fig = plt.figure()
-plt.plot(x, test_loss_list, color='y')
-plt.ylabel("Test Loss")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"LossTest.png")
+            print('-------train/test---------')
+            train_loss_list = []
+            train_acc_list = []
+            test_loss_list = []
+            test_acc_list = []
+            for epoch in range(30):
+                train_loss, train_acc = train(model, train_loader , optimizer, criterion)
+                train_loss_list.append(train_loss)
+                train_acc_list.append(train_acc)
 
-fig = plt.figure()
-plt.plot(x, train_loss_list, color='b', label='train')
-plt.plot(x, test_loss_list, color='y', label='test')
-plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize=15)
-plt.ylabel("Loss")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"Loss.png")
+                test_loss, test_acc = test(model, test_loader)
+                test_loss_list.append(test_loss)
+                test_acc_list.append(test_acc)
+                print(f'epoch = {epoch}')
+                print(f'train loss = {train_loss}  train Accuracy = {train_acc}')
+                print(f'test loss = {test_loss}  test Accuracy = {test_acc}')
 
-# accの描画
-fig = plt.figure()
-plt.plot(x, train_acc_list, color='b')
-plt.ylim(0.0, 1.0)
-plt.ylabel("Train Accuracy")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"AccuracyTrain.png")
+            # モデルを保存
+            model_path = user_dir + '/'+model_name+'nnconv.pt'
+            torch.save(model.state_dict(),model_path)
 
-fig = plt.figure()
-plt.plot(x, test_acc_list, color='y')
-plt.ylim(0.0, 1.0)
-plt.ylabel("Test Accuracy")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"AccuracyTest.png")
+            x = range(len(train_acc_list))
+            # lossの描画
+            fig = plt.figure()
+            plt.plot(x, train_loss_list, color='b')
+            plt.ylabel("Train Loss")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"LossTrain.png")
+            plt.close()
 
-fig = plt.figure()
-plt.plot(x, train_acc_list, color='b', label='train')
-plt.plot(x, test_acc_list, color='y', label='test')
-plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1, fontsize=15)
-plt.ylim(0.0, 1.0)
-plt.ylabel("Accuracy")
-plt.show()
-fig.savefig(user_dir+"/"+model_name+"Accuracy.png")
+            fig = plt.figure()
+            plt.plot(x, test_loss_list, color='y')
+            plt.ylabel("Test Loss")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"LossTest.png")
+            plt.close()
 
-# print('--------test---------')
-# acc = test(model, test_loader)
-# print(f'Accuracy : {acc}')
+            fig = plt.figure()
+            plt.plot(x, train_loss_list, color='b', label='train')
+            plt.plot(x, test_loss_list, color='y', label='test')
+            plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize=15)
+            plt.ylabel("Loss")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"Loss.png")
+            plt.close()
+
+            # accの描画
+            fig = plt.figure()
+            plt.plot(x, train_acc_list, color='b')
+            plt.ylim(0.0, 1.0)
+            plt.ylabel("Train Accuracy")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"AccuracyTrain.png")
+            plt.close()
+
+            fig = plt.figure()
+            plt.plot(x, test_acc_list, color='y')
+            plt.ylim(0.0, 1.0)
+            plt.ylabel("Test Accuracy")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"AccuracyTest.png")
+            plt.close()
+
+            fig = plt.figure()
+            plt.plot(x, train_acc_list, color='b', label='train')
+            plt.plot(x, test_acc_list, color='y', label='test')
+            plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1, fontsize=15)
+            plt.ylim(0.0, 1.0)
+            plt.ylabel("Accuracy")
+            # plt.show()
+            fig.savefig(user_dir+"/"+model_name+"Accuracy.png")
+            plt.close()
+            print()
+            print()
+
+            # print('--------test---------')
+            # acc = test(model, test_loader)
+            # print(f'Accuracy : {acc}')
 

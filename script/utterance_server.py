@@ -105,7 +105,7 @@ if __name__ == "__main__":
                 message = message.decode(encoding='utf-8')
                 print(message)
 
-            if ('はい' in message) or ('現在'in message) or ('今'in message):
+            if ('はい' in message) or ('します'in message) or ('夕食'in message) or ('16'in message) or ('現在'in message) or ('今'in message) or ('完了'in message):
                 pass
             
             elif 'モードの確認' in message:

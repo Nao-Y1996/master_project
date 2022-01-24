@@ -22,12 +22,35 @@ import fasttext
 import sys
 
 
-def augment(graph_utils, origin_csv_path_dict):
+def augment(graph_utils, origin_csv_path_dict, user_name):
     augmented_csv_path_dict = {}
     # 学習データを拡張  (train_data_type)_augmented_pattern.csvを作成する
-    remove_obj_names_list = [['sandwich', 'soup', 'salada', 'book'], # pattern_0 : 仕事
-                            ["laptop", "mouse", "keyboard", 'book'], # pattern_1 : 食事
-                            ["laptop", "mouse", "keyboard", 'sandwich', 'soup', 'salada']] # pattern_2 : 読書
+    if user_name=='k':
+
+        # kusakari
+        remove_obj_names_list = [['book', 'mouse', 'keyboard', 'tvmonitor'], # pattern_0 : 仕事
+                                ["laptop", "tvmonitor", 'book'], # pattern_1 : 昼食
+                                ["soup"]] # pattern_2 : 読書
+    elif user_name=='o':
+        # ozawa
+        remove_obj_names_list = [['tvmonitor', 'book'], # pattern_0 : 仕事
+                                ['soup', 'book'], # pattern_1 : 昼食
+                                ['laptop', 'soup']] # pattern_2 : 読書
+    elif user_name=='t':
+        # tou
+        remove_obj_names_list = [['book'], # pattern_0 : 仕事
+                                ['tvmonitor', 'laptop'], # pattern_1 : 昼食
+                                ['keyboard', 'mouse']] # pattern_2 : 読書
+    elif user_name=='y':
+        # yamada
+        remove_obj_names_list = [['book', 'mouse', 'keyboard', 'sandwich', 'soup', 'salada'], # pattern_0 : 仕事
+                                ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'soup', 'salada'], # pattern_1 : 昼食
+                                ['mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salada']] # pattern_2 : 読書
+    else:
+        sys.exit('select collect user')
+        # ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salada']
+
+
     remove_obj_ids_list = []
     for remove_obj_names in remove_obj_names_list:
         remove_obj_ids = []
