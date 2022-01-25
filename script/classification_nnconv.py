@@ -134,6 +134,7 @@ def test(model, iterator):
 users = ['yamada']#['comb-kusakari_ozawa', 'comb-kusakari_tou', 'comb-tou_ozawa']
 train_data_type_list = ['ideal'] # ['ideal', 'row']
 can_augment_list = ['y','n']
+total_epoch = 50
 
 for user_name in users:
     for train_data_type in train_data_type_list:
@@ -190,7 +191,7 @@ for user_name in users:
             # batch_size = int(input('enter batch size \n'))
             # model_name += str(batch_size)+'_'
             # バッチ学習
-            batch_size =1000# len(datasets)
+            batch_size =4000# len(datasets)
             model_name += 'batch_'
 
             train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -206,7 +207,7 @@ for user_name in users:
             train_acc_list = []
             test_loss_list = []
             test_acc_list = []
-            for epoch in range(30):
+            for epoch in range(total_epoch):
                 train_loss, train_acc = train(model, train_loader , optimizer, criterion)
                 train_loss_list.append(train_loss)
                 train_acc_list.append(train_acc)

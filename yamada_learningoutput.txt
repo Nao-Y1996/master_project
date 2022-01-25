@@ -1,0 +1,200 @@
+<hsrb>~/catkin_ws/src/master_project$ python3 script/classification_nnconv.py
+~~~~~~~~~~~~~~~~~~~~~ yamada データタイプ=ideal データ拡張=True ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Warning : `load_model` does not return WordVectorModel or SupervisedModel any more, but a `FastText` object which is very similar.
+データ数 :  [63418, 127740, 127344]  最小 :  63418
+データ数を63418に揃えます
+ideal_augmented_pattern_0.csv  number of data --->  63418
+ideal_augmented_pattern_1.csv  number of data --->  63418
+ideal_augmented_pattern_2.csv  number of data --->  63418
+dataset length :  190254
+-------train/test---------
+epoch = 0
+train loss = 0.00017619921295495005  train Accuracy = 0.7285523563236516
+test loss = 7.336190801590788e-05  test Accuracy = 0.8970113637558211
+epoch = 1
+train loss = 4.7854618403013e-05  train Accuracy = 0.934718849537986
+test loss = 3.363129697612491e-05  test Accuracy = 0.9556697888086453
+epoch = 2
+train loss = 2.7711726221096445e-05  train Accuracy = 0.9626499311446802
+test loss = 2.550790123298047e-05  test Accuracy = 0.9638062800256499
+epoch = 3
+train loss = 2.0375037601953605e-05  train Accuracy = 0.9726786296214535
+test loss = 1.8699549530393255e-05  test Accuracy = 0.9752856707349122
+epoch = 4
+train loss = 1.6446283176480706e-05  train Accuracy = 0.9777770769602742
+test loss = 1.7702786152100186e-05  test Accuracy = 0.9752541339472495
+epoch = 5
+train loss = 1.3172724359274368e-05  train Accuracy = 0.9826022054726838
+test loss = 1.3146306546164215e-05  test Accuracy = 0.9836639439906651
+epoch = 6
+train loss = 1.1255763915919803e-05  train Accuracy = 0.9856822984010849
+test loss = 1.1010232952601078e-05  test Accuracy = 0.9860712521155929
+epoch = 7
+train loss = 1.017931883108818e-05  train Accuracy = 0.9873537481472138
+test loss = 1.0381488092038859e-05  test Accuracy = 0.9867545491816203
+epoch = 8
+train loss = 9.493867687522512e-06  train Accuracy = 0.9877006528115047
+test loss = 9.286115660406461e-06  test Accuracy = 0.9884470234528577
+epoch = 9
+train loss = 7.2304275398409685e-06  train Accuracy = 0.9916007022191387
+test loss = 8.419101366286023e-06  test Accuracy = 0.9899502769981183
+
+
+<hsrb>~/catkin_ws/src/master_project$ python3 script/classification_nnconv.py
+~~~~~~~~~~~~~~~~~~~~~ yamada データタイプ=ideal データ拡張=False ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Warning : `load_model` does not return WordVectorModel or SupervisedModel any more, but a `FastText` object which is very similar.
+ideal_pattern_0.csv  number of data --->  991
+ideal_pattern_1.csv  number of data --->  998
+ideal_pattern_2.csv  number of data --->  995
+dataset length :  2984
+-------train/test---------
+epoch = 0
+train loss = 0.0007497122556210842  train Accuracy = 0.33109919571045576
+test loss = 0.000721970208528534  test Accuracy = 0.46849865951742625
+epoch = 1
+train loss = 0.0007229298752690128  train Accuracy = 0.4457104557640751
+test loss = 0.0007070746402638208  test Accuracy = 0.5797587131367292
+epoch = 2
+train loss = 0.000708713128803243  train Accuracy = 0.5683646112600537
+test loss = 0.0006930271198538609  test Accuracy = 0.6575067024128687
+epoch = 3
+train loss = 0.0006956088958412968  train Accuracy = 0.6414209115281502
+test loss = 0.000677518167061077  test Accuracy = 0.6809651474530831
+epoch = 4
+train loss = 0.000680953743630376  train Accuracy = 0.6621983914209115
+test loss = 0.000659892330540409  test Accuracy = 0.6675603217158177
+epoch = 5
+train loss = 0.000664330599455028  train Accuracy = 0.6487935656836461
+test loss = 0.0006401708634225676  test Accuracy = 0.660857908847185
+epoch = 6
+train loss = 0.0006458494842212258  train Accuracy = 0.6400804289544236
+test loss = 0.0006189971523054803  test Accuracy = 0.650804289544236
+epoch = 7
+train loss = 0.0006259663415019058  train Accuracy = 0.6260053619302949
+test loss = 0.0005964237307735167  test Accuracy = 0.6575067024128687
+epoch = 8
+train loss = 0.0006046056667537536  train Accuracy = 0.6353887399463807
+test loss = 0.0005719910597992966  test Accuracy = 0.6802949061662198
+epoch = 9
+train loss = 0.0005813463923119348  train Accuracy = 0.6621983914209115
+test loss = 0.0005455594759524348  test Accuracy = 0.7044235924932976
+epoch = 10
+train loss = 0.0005561815270150315  train Accuracy = 0.685656836461126
+test loss = 0.0005176317835621156  test Accuracy = 0.7319034852546917
+epoch = 11
+train loss = 0.0005294189616118934  train Accuracy = 0.7171581769436998
+test loss = 0.0004888612767007331  test Accuracy = 0.7734584450402144
+epoch = 12
+train loss = 0.000501368025033148  train Accuracy = 0.7627345844504021
+test loss = 0.00045889799780244803  test Accuracy = 0.7855227882037533
+epoch = 13
+train loss = 0.00047147489744600596  train Accuracy = 0.7734584450402144
+test loss = 0.00042767347343485734  test Accuracy = 0.8063002680965148
+epoch = 14
+train loss = 0.00043989562157331776  train Accuracy = 0.7955764075067024
+test loss = 0.00039589524908295907  test Accuracy = 0.8371313672922251
+epoch = 15
+train loss = 0.0004073616726468779  train Accuracy = 0.8190348525469169
+test loss = 0.0003636677527235916  test Accuracy = 0.8599195710455764
+epoch = 16
+train loss = 0.0003739450396545451  train Accuracy = 0.8518766756032171
+test loss = 0.0003319570230414976  test Accuracy = 0.8780160857908847
+epoch = 17
+train loss = 0.0003409582632156863  train Accuracy = 0.863941018766756
+test loss = 0.0003020696881309591  test Accuracy = 0.8920911528150134
+epoch = 18
+train loss = 0.0003095372872122491  train Accuracy = 0.8753351206434317
+test loss = 0.0002758906649840102  test Accuracy = 0.8880697050938338
+epoch = 19
+train loss = 0.00028070328063044405  train Accuracy = 0.8847184986595175
+test loss = 0.00025249078829870145  test Accuracy = 0.9001340482573726
+epoch = 20
+train loss = 0.00025528181973475235  train Accuracy = 0.8954423592493298
+test loss = 0.00023185813315112854  test Accuracy = 0.9068364611260054
+epoch = 21
+train loss = 0.00023328526889351034  train Accuracy = 0.8981233243967829
+test loss = 0.00021466223308292214  test Accuracy = 0.9041554959785523
+epoch = 22
+train loss = 0.0002142253054690425  train Accuracy = 0.9014745308310992
+test loss = 0.00019985233650770008  test Accuracy = 0.9061662198391421
+epoch = 23
+train loss = 0.0001983716284941093  train Accuracy = 0.9021447721179625
+test loss = 0.00018875824222615832  test Accuracy = 0.9028150134048257
+epoch = 24
+train loss = 0.0001863592751224303  train Accuracy = 0.9001340482573726
+test loss = 0.0001846446428477924  test Accuracy = 0.925603217158177
+epoch = 25
+train loss = 0.00018143188458025935  train Accuracy = 0.9182305630026809
+test loss = 0.00017898088326083432  test Accuracy = 0.900804289544236
+epoch = 26
+train loss = 0.00017490829203787182  train Accuracy = 0.8981233243967829
+test loss = 0.00016374513506889343  test Accuracy = 0.9195710455764075
+epoch = 27
+train loss = 0.00015829385685217604  train Accuracy = 0.9115281501340483
+test loss = 0.00016647519359000567  test Accuracy = 0.9323056300268097
+epoch = 28
+train loss = 0.00015930822443706422  train Accuracy = 0.9235924932975871
+test loss = 0.0001546419937233503  test Accuracy = 0.9195710455764075
+epoch = 29
+train loss = 0.00014593356336409542  train Accuracy = 0.9135388739946381
+test loss = 0.00015320187439547787  test Accuracy = 0.9135388739946381
+epoch = 30
+train loss = 0.00014307659528849911  train Accuracy = 0.9088471849865952
+test loss = 0.00014585698018444767  test Accuracy = 0.9363270777479893
+epoch = 31
+train loss = 0.00013398466976334518  train Accuracy = 0.9316353887399463
+test loss = 0.00014224145112024875  test Accuracy = 0.9376675603217158
+epoch = 32
+train loss = 0.00012881264849578408  train Accuracy = 0.9336461126005362
+test loss = 0.00013760089794368592  test Accuracy = 0.9289544235924933
+epoch = 33
+train loss = 0.00012243146591148173  train Accuracy = 0.92828418230563
+test loss = 0.0001326339673900093  test Accuracy = 0.9363270777479893
+epoch = 34
+train loss = 0.00011617426658124131  train Accuracy = 0.9316353887399463
+test loss = 0.0001286478268716674  test Accuracy = 0.9410187667560321
+epoch = 35
+train loss = 0.00011162481822532879  train Accuracy = 0.9410187667560321
+test loss = 0.000122537561779687  test Accuracy = 0.9423592493297587
+epoch = 36
+train loss = 0.00010491615965283268  train Accuracy = 0.943029490616622
+test loss = 0.00011936581166755738  test Accuracy = 0.9410187667560321
+epoch = 37
+train loss = 0.00010063899705940533  train Accuracy = 0.9410187667560321
+test loss = 0.00011338183691290685  test Accuracy = 0.9450402144772118
+epoch = 38
+train loss = 9.449798084455904e-05  train Accuracy = 0.9477211796246648
+test loss = 0.00010885256305137204  test Accuracy = 0.9537533512064343
+epoch = 39
+train loss = 9.034133588660498e-05  train Accuracy = 0.9544235924932976
+test loss = 0.0001035467409416434  test Accuracy = 0.9517426273458445
+epoch = 40
+train loss = 8.518817078012564e-05  train Accuracy = 0.9631367292225201
+test loss = 9.964101875435571e-05  test Accuracy = 0.9564343163538874
+epoch = 41
+train loss = 8.100075472455881e-05  train Accuracy = 0.9617962466487936
+test loss = 9.493784474623427e-05  test Accuracy = 0.9564343163538874
+epoch = 42
+train loss = 7.640401116165334e-05  train Accuracy = 0.9664879356568364
+test loss = 9.098142665129245e-05  test Accuracy = 0.960455764075067
+epoch = 43
+train loss = 7.314852691048272e-05  train Accuracy = 0.9731903485254692
+test loss = 8.64907340134117e-05  test Accuracy = 0.9631367292225201
+epoch = 44
+train loss = 6.864414657728282e-05  train Accuracy = 0.9738605898123325
+test loss = 8.405348530723326e-05  test Accuracy = 0.9638069705093834
+epoch = 45
+train loss = 6.63062023253607e-05  train Accuracy = 0.9718498659517426
+test loss = 7.939484499734464e-05  test Accuracy = 0.9671581769436998
+epoch = 46
+train loss = 6.181798655609663e-05  train Accuracy = 0.9745308310991957
+test loss = 7.692512234637949e-05  test Accuracy = 0.9671581769436998
+epoch = 47
+train loss = 5.994419050440392e-05  train Accuracy = 0.9772117962466488
+test loss = 7.287667060505609e-05  test Accuracy = 0.9691689008042895
+epoch = 48
+train loss = 5.582727531805115e-05  train Accuracy = 0.9778820375335121
+test loss = 7.033040971762373e-05  test Accuracy = 0.9698391420911529
+epoch = 49
+train loss = 5.3875772507197095e-05  train Accuracy = 0.9785522788203753
+test loss = 6.660512441284854e-05  test Accuracy = 0.9711796246648794

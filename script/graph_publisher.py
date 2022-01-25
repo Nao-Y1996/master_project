@@ -447,9 +447,9 @@ if __name__ == '__main__':
                 pag.screenshot(image_save_path+str(data_id)+'.jpg')
                 recognition_count += 1
             print(names)
-            if recognition_count >1000:
-                tts.say('終了')
-                rospy.set_param("/robot_mode", "nomal")
+            # if recognition_count >1000:
+            #     tts.say('終了')
+            #     rospy.set_param("/robot_mode", "nomal")
 
             
         else:
