@@ -133,7 +133,7 @@ class graph_utilitys():
                     edge_features.append(vec)
 
         edge_index = torch.tensor(np.array(edges).T.tolist(), dtype=torch.long)
-        edge_attr = torch.tensor(edge_features, dtype=torch.float)
+        edge_attr = torch.tensor(np.array(edge_features), dtype=torch.float)
         y = torch.tensor([label], dtype=torch.long)
         graph = Data(x=x, y=y, edge_index=edge_index,edge_attr=edge_attr)
         return graph, names
@@ -162,14 +162,14 @@ class graph_utilitys():
             all_data = []
             with open(file_path) as f:
                 csv_file = csv.reader(f)
-                for i, row in enumerate(csv_file):
-                    _row = []
-                    if '' in row:
-                            continue
-                    for j, v in enumerate(row):
-                        _row.append(float(v))
-                    all_data.append(_row)# 先頭の要素（data_idのデータ）を削除してから追加
-                # positions_data = [[float(v) for v in row] for row in csv_file]
+                for row in csv_file:
+                    # _row = []
+                    # if '' in row:
+                    #         continue
+                    # for v in row:
+                    #     _row.append(float(v))
+                    _row = [float(v) for v in row if not '' in row]
+                    all_data.append(_row)
             print(file_path.split('/')[-1],' number of data ---> ', len(all_data))
             for row, data in enumerate(all_data):
                 position_data = self.removeDataId(data)

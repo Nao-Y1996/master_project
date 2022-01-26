@@ -43,10 +43,12 @@ model_path =  os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.
 df = pd.DataFrame()
 related_graph_ids = []
 for i, pattern in enumerate(all_pattern):
-    print(pattern)
-    f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
-    f.write(str(pattern).replace('{','').replace('}','').replace(':',' -->').replace("'", "")+'\n')
-    f.close()
+    change_num =len(pattern.items())
+    
+    print(i, pattern)
+    # f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
+    # f.write(str(pattern).replace('{','').replace('}','').replace(':',' -->').replace("'", "")+'\n')
+    # f.close()
     # save_dir = base_dir+'/RecallCheck-wvChangedPattern/pattern_'+str(i)
     # if not os.path.exists(save_dir):
     #     os.makedirs(save_dir)
@@ -84,10 +86,15 @@ for i, pattern in enumerate(all_pattern):
         ans = ''
         pass
     # print('パターン'+str(i+1)+' 正解率\n' , crrect_num, '/', related_graph_count, ' = ', end='')
-    f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
-    f.write('パターン'+str(i+1)+' 正解率\n')
-    f.write(str(crrect_num) + ' / ' + str(related_graph_count)+' = ' + ans + '\n')
-    f.close()
+    write_data = [i, change_num, ans, crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(':',' -->').replace("'", "")]
+    with open(base_dir+'RecallCheck-wvChangedPattern.csv', 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(write_data)
+        
+    # f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
+    # f.write('パターン'+str(i+1)+' 正解率\n')
+    # f.write(str(crrect_num) + ' / ' + str(related_graph_count)+' = ' + ans + '\n')
+    # f.close()
     
     # if i>2:
     #     break
