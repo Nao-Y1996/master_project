@@ -43,9 +43,13 @@ model_path =  os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.
 df = pd.DataFrame()
 related_graph_ids = []
 length = None
-with open(base_dir+'RecallCheck-wvChangedPattern.csv', 'r') as f:
-    reader = csv.reader(f)
-    length = len(list(reader))
+try:
+    with open(os.path.abspath('')+'RecallCheck-wvChangedPattern.csv', 'r') as f:
+        reader = csv.reader(f)
+        length = len(list(reader))
+except FileNotFoundError:
+    length = 0
+
 for i, pattern in enumerate(all_pattern):
     print(i, pattern)
     if i < length:
@@ -91,8 +95,8 @@ for i, pattern in enumerate(all_pattern):
         ans = ''
         pass
     # print('パターン'+str(i+1)+' 正解率\n' , crrect_num, '/', related_graph_count, ' = ', end='')
-    write_data = [i, change_num, ans, crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(': ','-->').replace("'", "").replace(", ", ":")]
-    with open(base_dir+'RecallCheck-wvChangedPattern.csv', 'a') as f:
+    write_data = [i, change_num, np.round(ans,5), crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(': ','-->').replace("'", "").replace(", ", ":")]
+    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow(write_data)
         
