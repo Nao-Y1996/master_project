@@ -164,7 +164,7 @@ OBJECT_NAME_2_ID ={}
 ID_2_OBJECT_NAME = {}
 
 obj_4_real = ["face", "tvmonitor", "laptop", "mouse", "keyboard", "book", "banana", "apple", "orange", "pizza","cup"]
-obj_4_marker = ['toast', 'sandwich', 'cereal', 'scrambled egg', 'soup', 'salada', 'donut']
+obj_4_marker = ['toast', 'sandwich', 'cereal', 'scrambled egg', 'soup', 'salad', 'donut']
 additional_obj = ['bottle']#,'chair']
 
 marker_list = []

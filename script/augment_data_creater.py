@@ -43,9 +43,9 @@ def augment(graph_utils, origin_csv_path_dict, user_name):
                                 ['keyboard', 'mouse']] # pattern_2 : 読書
     elif user_name=='y':
         # yamada
-        remove_obj_names_list = [['book', 'mouse', 'keyboard', 'sandwich', 'soup', 'salada'], # pattern_0 : 仕事
-                                ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'soup', 'salada'], # pattern_1 : 昼食
-                                ['mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salada']] # pattern_2 : 読書
+        remove_obj_names_list = [['book', 'mouse', 'keyboard', 'sandwich', 'soup', 'salad'], # pattern_0 : 仕事
+                                ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'soup', 'salad'], # pattern_1 : 昼食
+                                ['mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salad']] # pattern_2 : 読書
     else:
         sys.exit('select collect user')
         # ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salada']

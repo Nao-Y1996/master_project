@@ -13,3 +13,5 @@ script/__pycache__/*
 script/pandas_test.ipynb
 script/test.csv
 script/pandas_test.py
+script/zips/*
+script/*.zip

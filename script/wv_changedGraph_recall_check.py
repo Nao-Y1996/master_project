@@ -7,17 +7,17 @@ from classificator_nnconv import classificator
 import fasttext
 import matplotlib.pyplot as plt
 
-base_dir = os.path.abspath('')+'/experiment_data/nao/position_data/'
-csv_path_list = {0:base_dir+'row_augmented_pattern_0.csv',
-                 1:base_dir+'row_augmented_pattern_1.csv',
-                 2:base_dir+'row_augmented_pattern_2.csv',
+base_dir = os.path.abspath('')+'/experiment_data/yamada/position_data/'
+csv_path_list = {0:base_dir+'ideal_augmented_pattern_0.csv',
+                 1:base_dir+'ideal_augmented_pattern_1.csv',
+                 2:base_dir+'ideal_augmented_pattern_2.csv',
                  }
 # ==============物体名の入れ替えパターンを生成=========================
 # 組み合わせの総パターンを得る（７個の物体をへんこうする時は１２７通り）
 import itertools
 obj_name_change_patterns = {0:{'sandwich':'bagel'},
                             1:{'soup':'chowder'},
-                            2:{'salada':'coleslaw'},
+                            2:{'salad':'coleslaw'},
                             3:{'book':'comic'},
                             4:{'laptop':'tablet'},
                             5:{'keyboard':'trackpad'},
@@ -37,7 +37,7 @@ for i in range(1,8):
 print(len(all_pattern))
 # ===================================================================
 
-cf = classificator(model='./experiment_data/nao/row_augmented_5000_nnconv.pt')
+cf = classificator(model='./experiment_data/yamada/ideal_augmented_batch_nnconv.pt')
 model_path =  os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
 # ft = fasttext.load_model(model_path)
 df = pd.DataFrame()
