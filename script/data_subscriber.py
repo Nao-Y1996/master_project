@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 from classificator_nnconv import classificator
 import traceback
 graph_utils = graph_utilitys(fasttext_model=os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin')
-
+detectable_obj_num = len(graph_utils.ID_2_OBJECT_NAME.keys())
+all_obj_names = graph_utils.ID_2_OBJECT_NAME.values()
 
 def show_probability_graph(ax, labels, probability):
     x = np.arange(len(labels))
@@ -80,6 +81,10 @@ if __name__ == '__main__':
     count = 0
     probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
     flag_display = False
+
+    time_window = 100
+    __list = np.array([[0.0]*detectable_obj_num * time_window])
+    frame_count = 0
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
         clean_mode = rospy.get_param("/is_clean_mode")
@@ -140,6 +145,10 @@ if __name__ == '__main__':
                                     diff =  max(dummy_probability) - max(average_probability)
                                     # print('diff : ', diff)
                                     unnecessary_obj_candidate_info.append([removed_obj_id, average_probability, dummy_probability, diff])
+
+                                    __list[frame_count][removed_obj_id]  = diff
+                                    display__list = __list.mean(axis=0).tolist()
+                                    show_probability_graph(labels=all_obj_names, probability=display__list)
                                 else:
                                     # print('確率は上昇しませんでした')
                                     pass
@@ -182,4 +191,8 @@ if __name__ == '__main__':
             print(count_saved)
         else:
             pass
+
+        if frame_count == time_window:
+            frame_count = 0
+
         spin_rate.sleep()

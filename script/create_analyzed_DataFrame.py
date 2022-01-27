@@ -46,8 +46,8 @@ all_pattern = {0:{'bottle':'toothbrush'},
             6:{'bottle':'hairdryer'}}
 
 if __name__ == '__main__':
-    user_name = input('enter user name\n')
-    model_name = input('enter gnn model name\n')
+    user_name = 'yamada'#input('enter user name\n')
+    model_name = 'ideal_augmented_batch_nnconv' # input('enter gnn model name\n')
     user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
 
     # 認識モデルの設定
