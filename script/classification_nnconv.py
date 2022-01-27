@@ -131,46 +131,38 @@ def test(model, iterator):
 #     can_augment = False
 # else:
 #     sys.exit('Do you augment data ? (y/n)\n')
-users = ['yamada']#['comb-kusakari_ozawa', 'comb-kusakari_tou', 'comb-tou_ozawa']
-train_data_type_list = ['ideal'] # ['ideal', 'row']
-can_augment_list = ['y','n']
-total_epoch = [10,50]
+# if can_augment:
+#     _ = augment_data_creater.augment(graph_utils, csv_path_dict, user_name=user_name[0])
+# else:
+#     pass
+
+users = ['kusakari', 'tou', 'ozawa', 'comb-kusakari_ozawa', 'comb-kusakari_tou', 'comb-tou_ozawa']
+train_data_type_list = ['ideal_augmented','row_augmented','ideal','row']
+total_epoch = 30
+
+ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+graph_utils = graph_utilitys(fasttext_model=ft_path)
 
 for user_name in users:
     for train_data_type in train_data_type_list:
-        for k,can_augment in enumerate(can_augment_list):
-
-            if can_augment=='y':
-                can_augment = True
-            elif can_augment=='n':
-                can_augment = False
-            else:
-                sys.exit('Do you augment data ? (y/n)\n')
-
-            print(f'~~~~~~~~~~~~~~~~~~~~~ {user_name} データタイプ={train_data_type} データ拡張={can_augment} ~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-
-            ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
-            graph_utils = graph_utilitys(fasttext_model=ft_path)
+            print(f'~~~~~~~~~~~~~~~~~~~~~ {user_name} データタイプ={train_data_type} ~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 
             # 状態パターンごとのファイルを取得
             user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
             files = glob.glob(user_dir + "/position_data/"+train_data_type+"_pattern_*")
-            # print(files)
             files.sort()
+            # for file in files:
+            #     print(file)
             pattern_num = len(files)
-            # print('状態パターン数 : ', pattern_num)
+            print('状態パターン数 : ', pattern_num)
+            if pattern_num != 3:
+                print('skip')
+                continue
             csv_path_dict = {}
             for i, file in enumerate(files):
                 csv_path_dict[i] = file
 
-            if can_augment:
-                augmented_csv_path_dict = augment_data_creater.augment(graph_utils, csv_path_dict, user_name=user_name[0])
-                csv_path_dict_for_train = augmented_csv_path_dict
-            else:
-                csv_path_dict_for_train = csv_path_dict
-
-            model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern_0.csv','') # row_ / row_augmented_ / ideal_ / ideal_augmented_
-
+            csv_path_dict_for_train = csv_path_dict
 
             # グラフデータセットを作成
             datasets,_ = graph_utils.csv2graphDataset(csv_path_dict_for_train)
@@ -187,12 +179,14 @@ for user_name in users:
             train_dataset = datasets[:int(len(datasets)*0.5)]
             test_dataset = datasets[int(len(datasets)*0.5):]
 
+            model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern_0.csv','') # row_ / row_augmented_ / ideal_ / ideal_augmented_
+            
             # バッチサイズの入力
             # batch_size = int(input('enter batch size \n'))
             # model_name += str(batch_size)+'_'
             # バッチ学習
-            batch_size = 3000# len(datasets)
-            model_name += 'batch_'
+            batch_size = len(datasets)
+            model_name += 'batch'
 
             train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
             test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
@@ -202,12 +196,16 @@ for user_name in users:
             optimizer = torch.optim.Adam(model.parameters())
 
 
+            save_file = user_dir +'/'+model_name+'.csv'
+            with open(save_file,'w') as f:
+                print( 'save to ',save_file)
+
             print('-------train/test---------')
             train_loss_list = []
             train_acc_list = []
             test_loss_list = []
             test_acc_list = []
-            for epoch in range(total_epoch[k]):
+            for epoch in range(total_epoch):
                 train_loss, train_acc = train(model, train_loader , optimizer, criterion)
                 train_loss_list.append(train_loss)
                 train_acc_list.append(train_acc)
@@ -215,12 +213,14 @@ for user_name in users:
                 test_loss, test_acc = test(model, test_loader)
                 test_loss_list.append(test_loss)
                 test_acc_list.append(test_acc)
-                print(f'epoch = {epoch}')
+                print(f'epoch = {epoch+1}')
                 print(f'train loss = {train_loss}  train Accuracy = {train_acc}')
                 print(f'test loss = {test_loss}  test Accuracy = {test_acc}')
-
+                with open(user_dir +'/'+model_name+'.csv','a') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([epoch+1, train_acc, test_acc,train_loss,test_loss])
             # モデルを保存
-            model_path = user_dir + '/'+model_name+'nnconv.pt'
+            model_path = user_dir + '/'+model_name+'_nnconv.pt'
             torch.save(model.state_dict(),model_path)
 
             x = range(len(train_acc_list))
