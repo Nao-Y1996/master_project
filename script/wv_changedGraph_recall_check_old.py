@@ -7,9 +7,8 @@ from classificator_nnconv import classificator
 import fasttext
 import matplotlib.pyplot as plt
 import datetime
-
 base_dir = os.path.abspath('')+'/experiment_data/yamada/position_data/'
-csv_path_dict = {0:base_dir+'ideal_augmented_pattern_0.csv',
+csv_path_list = {0:base_dir+'ideal_augmented_pattern_0.csv',
                  1:base_dir+'ideal_augmented_pattern_1.csv',
                  2:base_dir+'ideal_augmented_pattern_2.csv',
                  }
@@ -45,15 +44,15 @@ df = pd.DataFrame()
 related_graph_ids = []
 length = None
 try:
-    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern.csv', 'r') as f:
+    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern_old.csv', 'r') as f:
         reader = csv.reader(f)
         length = len(list(reader))
 except FileNotFoundError:
     length = 0
 
-for k, pattern in enumerate(all_pattern):
-    print(k, pattern)
-    if k < length:
+for i, pattern in enumerate(all_pattern):
+    print(i, pattern)
+    if i < length:
         continue
     change_num =len(pattern.items())
     # f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
@@ -67,56 +66,12 @@ for k, pattern in enumerate(all_pattern):
     # if i>0: # 認識物体の名前を変更
     graph_util.changeID_2_OBJECT_NAME(pattern)
     # データセットを作成
-    # datasets, obj_names_sets = graph_util.csv2graphDataset(csv_path_dict, include_names=True)
+    datasets, obj_names_sets = graph_util.csv2graphDataset(csv_path_list, include_names=True)
 
-    # probabilitys = []
+    probabilitys = []
     related_graph_count = 0 # 物体名の変更が影響があるグラフの数
     crrect_num = 0
-    # is_related_graph_list = []
-
-    for true_label, csv_file_name in csv_path_dict.items():
-        # if true_label>0:
-        #     continue
-        with open(csv_file_name) as f:
-            csv_file = csv.reader(f)
-            # dataを1ずつ読み込む
-            for i, _row in enumerate(csv_file):
-                data = []
-                if '' in _row:
-                    continue
-                for j, v in enumerate(_row):
-                    data.append(float(v))
-                # dataをグラフ形式に変換
-                data_id = int(data[0])
-                position_data = graph_util.removeDataId(data)
-                graph, node_names = graph_util.positionData2graph(position_data, true_label, include_names=True)
-                
-                # 物体名の変更が影響がある　--> 物体名の変更があるグラフの数をインクリメント
-                is_related_graph = False
-                for changed_name in pattern.values():
-                    if changed_name in node_names:
-                        related_graph_count += 1
-                        is_related_graph = True
-                        break
-                # 物体名の変更が影響がある　かつ　認識結果とグラフラベルが一致する　--> 物体名の変更でも正しく認識できた数をインクリメント
-                probability = cf.classificate(graph)
-                result = np.argmax(probability)
-                # print(result , int(graph.y), (result ==  int(graph.y)))
-                if is_related_graph and (result ==  int(graph.y)):
-                    crrect_num += 1
-        # print(f'パターン{k} - ファイル{true_label} : {crrect_num}, {related_graph_count}')
-    try:
-        ans = str(crrect_num/related_graph_count)
-    except:
-        ans = ''
-        pass
-
-    # print('パターン'+str(i+1)+' 正解率\n' , crrect_num, '/', related_graph_count, ' = ', end='')
-    write_data = [k, change_num, ans, crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(': ','-->').replace("'", "").replace(", ", ":")]
-    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern.csv', 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(write_data)
-    """
+    is_related_graph_list = []
     for count,(graph, obj_names) in enumerate(zip(datasets, obj_names_sets)):
         is_related_graph = False
         # 物体名の変更が影響があるグラフの数
@@ -125,7 +80,7 @@ for k, pattern in enumerate(all_pattern):
                 related_graph_count += 1
                 is_related_graph = True
                 break
-        # is_related_graph_list.append(is_related_graph)
+        is_related_graph_list.append(is_related_graph)
         probability = cf.classificate(graph)
         result = np.argmax(probability)
         if is_related_graph and (result == int(graph.y)):
@@ -133,17 +88,19 @@ for k, pattern in enumerate(all_pattern):
         # if is_related_graph and (result != int(graph.y)):
         #     file_name = str(count)+'_'+str(result)+'->'+str(int(graph.y))+'.png'
         #     graph_util.visualize_graph(graph, node_labels=obj_names, save_graph_name=save_dir+'/'+file_name, show_graph=False)
-        # probabilitys.append(probability)
+        probabilitys.append(probability)
     try:
         ans = str(crrect_num/related_graph_count)
     except:
         ans = ''
         pass
     # print('パターン'+str(i+1)+' 正解率\n' , crrect_num, '/', related_graph_count, ' = ', end='')
-    write_data = [i, change_num, np.round(ans,5), crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(': ','-->').replace("'", "").replace(", ", ":")]
-    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern.csv', 'a') as f:
+    write_data = [i, change_num, ans, crrect_num, related_graph_count, str(pattern).replace('{','').replace('}','').replace(': ','-->').replace("'", "").replace(", ", ":")]
+    with open(os.path.abspath('')+'/RecallCheck-wvChangedPattern_old.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow(write_data)
+    print(datetime.datetime.now())
+    break
         
     # f = open(base_dir+'RecallCheck-wvChangedPattern.txt', 'a')
     # f.write('パターン'+str(i+1)+' 正解率\n')
@@ -155,4 +112,3 @@ for k, pattern in enumerate(all_pattern):
 #     df['pattern_'+str(i)] = p_results
 #     df['pattern_'+str(i)+'_is_related'] = is_related_graph_list
 # df.to_csv( base_dir+'/RecallCheck-wvChangedPattern/to_csv_out.csv')
-    """
