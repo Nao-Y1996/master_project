@@ -187,7 +187,7 @@ with open(conf_dir+'OBJECT_NAME_2_ID.json', 'w') as f:
 with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
     json.dump(MARKER_2_OBJECT, f)
 
-
+rospy.set_param("/all_obj_names", ID_2_OBJECT_NAME.values())
 
 if __name__ == '__main__':
     user_name = rospy.get_param("/user_name")
@@ -257,14 +257,14 @@ if __name__ == '__main__':
 
     # データ送信のためのソケットを作成する（UDP）
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.109', 12345)
+    serv_address = ('192.168.0.114', 12345)
 
     # グラフ収集：保存した数の送信用
-    sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address1 = ('192.168.0.109', 54321)
+    # sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # serv_address1 = ('192.168.0.114', 54321)
     # グラフ収集：検出物体名の送信用
-    sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address2 = ('192.168.0.109', 56789)
+    # sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # serv_address2 = ('192.168.0.114', 56789)
 
     # クラスのインスタンス化
     # face_sub = FacePoseSubscriber()
@@ -285,6 +285,12 @@ if __name__ == '__main__':
 
         robot_mode = rospy.get_param("/robot_mode")
         is_clean_mode = rospy.get_param("/is_clean_mode")
+        try:
+            clean_obj_id = rospy.get_param('/clean_obj_id')
+            tts.say(ID_2_OBJECT_NAME[clean_obj_id])
+            rospy.set_param('/clean_obj_id', -123)
+        except:
+            pass
 
         if is_clean_mode or (robot_mode == 'state_recognition'):
             detectable_obj_lsit = obj_4_real + additional_obj
@@ -386,9 +392,9 @@ if __name__ == '__main__':
             # ------------ データの送信 ------------#
             # グラフ収集：保存した数の送信用
             print(count_ideal_saved)
-            send_len1 = sock1.sendto(pickle.dumps(count_ideal_saved), serv_address1)
+            # send_len1 = sock1.sendto(pickle.dumps(count_ideal_saved), serv_address1)
             # グラフ収集：検出物体名の送信用
-            send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
+            # send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
             #----------------------------------------------#
             # data_save_path = rospy.get_param("/data_save_path") 
             if face_exist:

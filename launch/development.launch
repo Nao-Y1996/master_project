@@ -34,6 +34,8 @@
     </include> 
     <!-- <node pkg="master_project" name="voice_controller" type="utterance_server.py"/> -->
     <!-- <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>  -->
+    <!-- <node pkg="master_project" name="probability" type="clean_info_subscriber.py"/>
+    <node pkg="master_project" name="cleaninfo" type="probability_subscriber.py"/> -->
 
     
 
