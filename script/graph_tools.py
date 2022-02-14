@@ -69,10 +69,11 @@ class graph_utilitys():
         return position_data
 
     def positionData2graph(self, position_data, label, include_names=False):
+        # 欠損値のあるデータはグラフに変換しない
         if None in position_data:
             return None, None
         obj_num = int(len(position_data)/4)
-        #物体の数が0 or 1の時はグラフ作成できない
+        #物体の数が0 or 1の時はグラフに変換しない
         if (obj_num==0) or (obj_num==1):
             return None, None
         names = []
@@ -152,8 +153,8 @@ class graph_utilitys():
 
     def csv2graphDataset(self, csv_files, include_names=False):
         """
-        csv_files = {0:'1-1.csv', 1:'3-2.csv',
-                        2:'5-3.csv', 3:'7-4.csv'}
+        csv_files = {0:'pattern0.csv', 1:'pattern1.csv',
+                     2:'pattern2.csv', 3:'pattern3.csv'}
         """
         obj_names_sets = []
         datasets = []

@@ -81,7 +81,6 @@ if __name__ == "__main__":
     user_name = None
     user_name = args[1]
     
-    
     rospy.set_param("/user_name", user_name)
     rospy.set_param("/robot_mode", "nomal")
     rospy.set_param("/is_clean_mode", 0)
@@ -133,7 +132,6 @@ if __name__ == "__main__":
                     state_index = rospy.get_param("/state_index")
                     state_name = get_stateName(db_file, state_index)
                     
-
                     image_save_path = save_dir+'/images/'
                     rospy.set_param("/image_save_path", image_save_path)
                     rospy.set_param("/robot_mode", "nomal")
@@ -153,10 +151,6 @@ if __name__ == "__main__":
                 rospy.set_param("/is_clean_mode", 0)
                 tts.say('はい、通常機能に戻ります。')
 
-            elif '記録して' in message:
-                rospy.set_param("/robot_mode", "waite_state_name")
-                tts.say('はい、今何をしていますか？')
-
             elif '片付け' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
@@ -166,11 +160,13 @@ if __name__ == "__main__":
                 rospy.set_param("/is_clean_mode", 0)
                 tts.say('はい、どういたしまして')
 
+            elif '記録して' in message:
+                rospy.set_param("/robot_mode", "waite_state_name")
+                tts.say('はい、今何をしていますか？')
 
             else :
                 robot_mode = rospy.get_param("/robot_mode")
                 if (robot_mode=='waite_state_name'):
-                    # state_name = input('状態名を入力してください')
                     state_name = message
                     tts.say(state_name + '、を記録します。')
                     
@@ -185,7 +181,7 @@ if __name__ == "__main__":
 
                     # 収集するデータを保存するファイルを指定
                     image_save_path = save_dir+'/images/pattern_'+str(state_index)+'/'
-                    data_save_path = save_dir+'/position_data/row_pattern_'+str(state_index)+'.csv'
+                    data_save_path = save_dir+'/position_data/raw_pattern_'+str(state_index)+'.csv'
                     print(data_save_path + ' にデータを保存します')
                     rospy.set_param("/data_save_path", data_save_path)
                     rospy.set_param("/image_save_path", image_save_path)
@@ -193,7 +189,9 @@ if __name__ == "__main__":
                     # データ収集モードに切り替え
                     rospy.set_param("/robot_mode", "graph_collecting")
                     print(state_name +' のデータを収集します')
-                    rospy.set_param("/cllecting_state_name", state_name)
+                    rospy.set_param("/collecting_state_name", state_name)
+                else:
+                    pass
 
             
 

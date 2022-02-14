@@ -8,9 +8,10 @@ from six.moves import queue
 
 from google.api_core import exceptions
 from google.cloud import speech_v1p1beta1 as speech
+# ダウンロードしたサービスアカウントキーのpathを設定
+SERVICE_ACCOUNT_KEY = "serene-star-322806-748861ca74d7.json"
 # 環境変数の設定（プログラムの中でのみ有効）
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+"serene-star-322806-748861ca74d7.json"
-
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.dirname(__file__)+SERVICE_ACCOUNT_KEY
 import socket
 M_SIZE = 1024
 # Serverのアドレスを用意。Serverのアドレスは確認しておく必要がある。

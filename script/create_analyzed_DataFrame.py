@@ -6,7 +6,7 @@ import numpy as np
 import os
 import socket
 import pickle
-from graph_converter import graph_utilitys
+from graph_tools import graph_utilitys
 import matplotlib.pyplot as plt
 from classificator_nnconv import classificator
 import traceback

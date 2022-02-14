@@ -6,10 +6,11 @@ import numpy as np
 import os
 import socket
 import pickle
-from graph_converter import graph_utilitys
+from graph_tools import graph_utilitys
 import matplotlib.pyplot as plt
 from classificator_nnconv import classificator
 import traceback
+import glob
 graph_utils = graph_utilitys(fasttext_model=os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin')
 detectable_obj_num = len(graph_utils.ID_2_OBJECT_NAME.keys())
 all_obj_names = graph_utils.ID_2_OBJECT_NAME.values()
@@ -34,7 +35,7 @@ def show_probability_graph(ax, labels, probability):
 
 
 if __name__ == '__main__':
-
+    user_name = rospy.get_param("/user_name")
     rospy.init_node('model_nnconv', anonymous=True)
     spin_rate=rospy.Rate(20)
 
@@ -68,10 +69,11 @@ if __name__ == '__main__':
     # 認識モデルの設定
     # user_dir = rospy.get_param("/user_dir").replace('kubotalab-hsr', os.getlogin())
     # model_path = user_dir+'/model_nnconv.pt'
-    model_path = '/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/experiment_data/nao/row_augmented_5000_nnconv.pt'
+    model_path = '/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/experiment_data/'+user_name+'/raw_batch__nnconv.pt'
     cf = classificator(model=model_path)
 
     # 認識の確率表示のグラフ設定
+    # 【要修正】labaelsを固定しないようにする
     labels = ['working', 'eating', 'reading']
     fig, ax = plt.subplots()
 

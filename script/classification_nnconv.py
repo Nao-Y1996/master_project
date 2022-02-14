@@ -9,7 +9,7 @@ from torch_geometric.nn import NNConv
 from torch_geometric.loader import DataLoader
 from torch_geometric.utils import to_networkx
 
-from graph_converter import graph_utilitys
+from graph_tools import graph_utilitys
 import augment_data_creater
 
 from matplotlib import pyplot as plt
@@ -21,6 +21,7 @@ import os
 import glob
 import fasttext
 import sys
+import shutil
 
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
@@ -111,173 +112,188 @@ def test(model, iterator):
     epoch_loss, epoch_accuracy = total_loss/total_data_len, float(correct_num)/total_data_len
     return epoch_loss, epoch_accuracy
 
+if __name__=='__main__':
+    ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+    graph_utils = graph_utilitys(fasttext_model=ft_path)
 
-# # userの選択
-# user_name = input('enter user name \n')
+    # userの選択
+    user_name = input('enter user name \n')
 
-# # 学習用データの選択
-# train_data_type = input('enter train_data_type (ideal or row) \n')
-# if (train_data_type=='ideal') or \
-#    (train_data_type=='row') :
-#     pass
-# else:
-#     sys.exit('enter train_data_type (ideal or row) \n')
+    # data_typeの選択
+    data_type = input('select data_type (ideal/raw) \n')
+    if (data_type=='ideal') or (data_type=='raw') :
+        pass
+    else:
+        sys.exit('select correct data type (ideal/raw) \n')
 
-# # データの拡張をするかどうかを選択
-# can_augment = input('Do you augment data ? (y/n)\n')
-# if can_augment=='y':
-#     can_augment = True
-# elif can_augment=='n':
-#     can_augment = False
-# else:
-#     sys.exit('Do you augment data ? (y/n)\n')
-# if can_augment:
-#     _ = augment_data_creater.augment(graph_utils, csv_path_dict, user_name=user_name[0])
-# else:
-#     pass
+    # ------------------- 選択したdata_typeのデータすべてをPositionData_4_trainに集約する -------------------
+    user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
+    # PositionData_4_Trainの中身をリセットする
+    shutil.rmtree(user_dir+'/PositionData_4_Train')
+    os.mkdir(user_dir+'/PositionData_4_Train')
+    # 収集したデータを読み込む
+    experiment_dirs = glob.glob(user_dir+'/20*/')
+    experiment_dirs.sort()
+    for dir in experiment_dirs:
+        files = glob.glob(dir + "position_data/"+data_type+"_pattern_*")
+        files.sort()
+        for data_file in files:
+            state_id = data_file.replace('.csv','')[-1]
+            with open(data_file, 'r') as f1:
+                csv_file = csv.reader(f1)
+                _data = [row for row in csv_file]
+            # PositionData_4_Train内のcsvファイルに書き込む
+            with open(user_dir+'/PositionData_4_Train/'+data_type+'_pattern'+state_id+'.csv', 'a') as f2:
+                writer = csv.writer(f2)
+                writer.writerows(_data)
+    # -----------------------------------------------------------------------------------
 
-users = ['kusakari', 'tou', 'ozawa', 'comb-kusakari_ozawa', 'comb-kusakari_tou', 'comb-tou_ozawa']
-train_data_type_list = ['ideal_augmented','row_augmented','ideal','row']
-total_epoch = 30
+    # 拡張データを使用するかどうかを選択
+    can_augment = input('Do you use augmented data ? (y/n)\n')
+    if can_augment=='y':
+        # データを拡張する
+        _ = augment_data_creater.augment(graph_utils, user_name=user_name, data_type=data_type)
+        print('================== Finished Data Augmentation ==================')
+        train_data_type = data_type + '_augmented'
+    elif can_augment=='n':
+        train_data_type = data_type
+    else:
+        sys.exit('select y or n \n')
 
-ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
-graph_utils = graph_utilitys(fasttext_model=ft_path)
+    train_data_files = glob.glob(user_dir+'/PositionData_4_Train/'+train_data_type+'_pattern*')
+    train_data_files.sort()
+    pattern_num = len(train_data_files)
+    print('状態パターン数 : ', pattern_num)
+    csv_path_dict = {}
+    for i, file in enumerate(train_data_files):
+        csv_path_dict[i] = file
 
-for user_name in users:
-    for train_data_type in train_data_type_list:
-            print(f'~~~~~~~~~~~~~~~~~~~~~ {user_name} データタイプ={train_data_type} ~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    csv_path_dict_for_train = csv_path_dict
 
-            # 状態パターンごとのファイルを取得
-            user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
-            files = glob.glob(user_dir + "/position_data/"+train_data_type+"_pattern_*")
-            files.sort()
-            # for file in files:
-            #     print(file)
-            pattern_num = len(files)
-            print('状態パターン数 : ', pattern_num)
-            if pattern_num != 3:
-                print('skip')
-                continue
-            csv_path_dict = {}
-            for i, file in enumerate(files):
-                csv_path_dict[i] = file
+    # グラフデータセットを作成
+    datasets,_ = graph_utils.csv2graphDataset(csv_path_dict_for_train)
+    print("dataset length : ", len(datasets))
+    # グラフの描画
+    # data = datasets[0]
+    # G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
+    # print(G.get_edge_data)
+    # pos = nx.spring_layout(G, k=0.3)
+    # nx.draw_networkx_edge_labels(G, pos)
+    # nx.draw_networkx(G, pos, with_labels=True, alpha=0.5)
+    # plt.show()
 
-            csv_path_dict_for_train = csv_path_dict
+    # データセットをシャッフル
+    random.shuffle(datasets)
+    # データセットをtrainとtestに0.5:0.5で分割
+    train_dataset = datasets[:int(len(datasets)*0.5)]
+    test_dataset = datasets[int(len(datasets)*0.5):]
 
-            # グラフデータセットを作成
-            datasets,_ = graph_utils.csv2graphDataset(csv_path_dict_for_train)
-            print("dataset length : ", len(datasets))
-            data = datasets[0]
-            # print("data 0 : ", data)
-            # G = to_networkx(data, node_attrs=['x'], edge_attrs=['edge_attr'])
-            # print(G.get_edge_data)
-            # pos = nx.spring_layout(G, k=0.3)
-            # nx.draw_networkx_edge_labels(G, pos)
-            # nx.draw_networkx(G, pos, with_labels=True, alpha=0.5)
-            # plt.show()
-            random.shuffle(datasets)
-            train_dataset = datasets[:int(len(datasets)*0.5)]
-            test_dataset = datasets[int(len(datasets)*0.5):]
+    model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern0.csv','') # raw_ / raw_augmented_ / ideal_ / ideal_augmented_
+    
+    # バッチサイズの決定
+    # batch_size = int(input('enter batch size \n'))
+    if len(datasets) > 1000:
+        # ミニバッチ学習
+        batch_size = 1000
+        model_name += str(batch_size)
+    else:
+        # バッチ学習
+        batch_size = len(datasets)
+        model_name += 'batch'
 
-            model_name = csv_path_dict_for_train[0].split('/')[-1].replace('pattern_0.csv','') # row_ / row_augmented_ / ideal_ / ideal_augmented_
-            
-            # バッチサイズの入力
-            # batch_size = int(input('enter batch size \n'))
-            # model_name += str(batch_size)+'_'
-            # バッチ学習
-            batch_size = len(datasets)
-            model_name += 'batch'
+    
 
-            train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-            test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-            device = 'cpu' #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-            model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=pattern_num).to(device)
-            criterion = nn.CrossEntropyLoss()
-            optimizer = torch.optim.Adam(model.parameters())
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    device = 'cpu' #torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=pattern_num).to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters())
 
 
-            save_file = user_dir +'/'+model_name+'.csv'
-            with open(save_file,'w') as f:
-                print( 'save to ',save_file)
+    save_file = user_dir +'/learning_outputs/'+model_name+'.csv'
+    with open(save_file,'w') as f:
+        print( 'learning outputs is saved to ',save_file.split(user_name)[-1])
 
-            print('-------train/test---------')
-            train_loss_list = []
-            train_acc_list = []
-            test_loss_list = []
-            test_acc_list = []
-            for epoch in range(total_epoch):
-                train_loss, train_acc = train(model, train_loader , optimizer, criterion)
-                train_loss_list.append(train_loss)
-                train_acc_list.append(train_acc)
+    print('-------train/test---------')
+    total_epoch = 30
+    train_loss_list = []
+    train_acc_list = []
+    test_loss_list = []
+    test_acc_list = []
+    for epoch in range(total_epoch):
+        train_loss, train_acc = train(model, train_loader , optimizer, criterion)
+        train_loss_list.append(train_loss)
+        train_acc_list.append(train_acc)
 
-                test_loss, test_acc = test(model, test_loader)
-                test_loss_list.append(test_loss)
-                test_acc_list.append(test_acc)
-                print(f'epoch = {epoch+1}')
-                print(f'train loss = {train_loss}  train Accuracy = {train_acc}')
-                print(f'test loss = {test_loss}  test Accuracy = {test_acc}')
-                with open(user_dir +'/'+model_name+'.csv','a') as f:
-                    writer = csv.writer(f)
-                    writer.writerow([epoch+1, train_acc, test_acc,train_loss,test_loss])
-            # モデルを保存
-            model_path = user_dir + '/'+model_name+'_nnconv.pt'
-            torch.save(model.state_dict(),model_path)
+        test_loss, test_acc = test(model, test_loader)
+        test_loss_list.append(test_loss)
+        test_acc_list.append(test_acc)
+        print(f'epoch = {epoch+1}')
+        print(f'train loss = {train_loss}  train Accuracy = {train_acc}')
+        print(f'test loss = {test_loss}  test Accuracy = {test_acc}')
+        with open(user_dir +'/learning_outputs/'+model_name+'.csv','a') as f:
+            writer = csv.writer(f)
+            writer.writerow([epoch+1, train_acc, test_acc,train_loss,test_loss])
+    # モデルを保存
+    model_path = user_dir + '/learning_outputs/'+model_name+'_nnconv.pt'
+    torch.save(model.state_dict(),model_path)
 
-            x = range(len(train_acc_list))
-            # lossの描画
-            fig = plt.figure()
-            plt.plot(x, train_loss_list, color='b')
-            plt.ylabel("Train Loss")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"LossTrain.png")
-            plt.close()
+    x = range(len(train_acc_list))
+    # lossの描画
+    fig = plt.figure()
+    plt.plot(x, train_loss_list, color='b')
+    plt.ylabel("Train Loss")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"LossTrain.png")
+    plt.close()
 
-            fig = plt.figure()
-            plt.plot(x, test_loss_list, color='y')
-            plt.ylabel("Test Loss")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"LossTest.png")
-            plt.close()
+    fig = plt.figure()
+    plt.plot(x, test_loss_list, color='y')
+    plt.ylabel("Test Loss")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"LossTest.png")
+    plt.close()
 
-            fig = plt.figure()
-            plt.plot(x, train_loss_list, color='b', label='train')
-            plt.plot(x, test_loss_list, color='y', label='test')
-            plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize=15)
-            plt.ylabel("Loss")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"Loss.png")
-            plt.close()
+    fig = plt.figure()
+    plt.plot(x, train_loss_list, color='b', label='train')
+    plt.plot(x, test_loss_list, color='y', label='test')
+    plt.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=1, fontsize=15)
+    plt.ylabel("Loss")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"Loss.png")
+    plt.close()
 
-            # accの描画
-            fig = plt.figure()
-            plt.plot(x, train_acc_list, color='b')
-            plt.ylim(0.0, 1.0)
-            plt.ylabel("Train Accuracy")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"AccuracyTrain.png")
-            plt.close()
+    # accの描画
+    fig = plt.figure()
+    plt.plot(x, train_acc_list, color='b')
+    plt.ylim(0.0, 1.0)
+    plt.ylabel("Train Accuracy")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"AccuracyTrain.png")
+    plt.close()
 
-            fig = plt.figure()
-            plt.plot(x, test_acc_list, color='y')
-            plt.ylim(0.0, 1.0)
-            plt.ylabel("Test Accuracy")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"AccuracyTest.png")
-            plt.close()
+    fig = plt.figure()
+    plt.plot(x, test_acc_list, color='y')
+    plt.ylim(0.0, 1.0)
+    plt.ylabel("Test Accuracy")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"AccuracyTest.png")
+    plt.close()
 
-            fig = plt.figure()
-            plt.plot(x, train_acc_list, color='b', label='train')
-            plt.plot(x, test_acc_list, color='y', label='test')
-            plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1, fontsize=15)
-            plt.ylim(0.0, 1.0)
-            plt.ylabel("Accuracy")
-            # plt.show()
-            fig.savefig(user_dir+"/"+model_name+"Accuracy.png")
-            plt.close()
-            print()
-            print()
+    fig = plt.figure()
+    plt.plot(x, train_acc_list, color='b', label='train')
+    plt.plot(x, test_acc_list, color='y', label='test')
+    plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1, fontsize=15)
+    plt.ylim(0.0, 1.0)
+    plt.ylabel("Accuracy")
+    # plt.show()
+    fig.savefig(user_dir+"/learning_outputs/"+model_name+"Accuracy.png")
+    plt.close()
+    print()
+    print()
 
-            # print('--------test---------')
-            # acc = test(model, test_loader)
-            # print(f'Accuracy : {acc}')
+    # print('--------test---------')
+    # acc = test(model, test_loader)
+    # print(f'Accuracy : {acc}')
 

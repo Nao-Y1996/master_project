@@ -17,6 +17,8 @@ import mediapipe as mp
 import numpy as np
 import cv2
 
+
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
@@ -25,13 +27,10 @@ mp_pose = mp.solutions.pose
 class ImageSbscriber(object):
 
     def __init__(self, topic_name):
-        # topic_name = '/hsrb/head_rgbd_sensor/rgb/image_rect_color'
         self._bridge = CvBridge()
         self._input_image = None
-
         # Subscribe color image data
-        self._image_sub = rospy.Subscriber(
-            topic_name, Image, self._color_image_cb)
+        self._image_sub = rospy.Subscriber(topic_name, Image, self._color_image_cb)
         # Wait until connection
         rospy.wait_for_message(topic_name, Image, timeout=5.0)
 
@@ -55,7 +54,8 @@ def main():
     landmark_idx = list(range(0,32))
         
     try:
-        sub_image = ImageSbscriber(topic_name="/camera/rgb/image_raw")
+        # sub_image = ImageSbscriber(topic_name="/camera/rgb/image_raw")
+        sub_image = ImageSbscriber(topic_name="/hsrb/head_rgbd_sensor/rgb/image_raw")
         spin_rate = rospy.Rate(10)
 
         with mp_pose.Pose(
@@ -85,12 +85,12 @@ def main():
                         pub_p.publish(landmark_positions)
 
 
-                    mp_drawing.draw_landmarks(
-                        image,
-                        results.pose_landmarks,
-                        mp_pose.POSE_CONNECTIONS,
-                        landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-                    cv2.imshow("Detection Image Window", image)
+                    # mp_drawing.draw_landmarks(
+                    #     image,
+                    #     results.pose_landmarks,
+                    #     mp_pose.POSE_CONNECTIONS,
+                    #     landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+                    # cv2.imshow("Detection Image Window", image)
                     if cv2.waitKey(5) & 0xFF == 27:
                         break
 
@@ -99,7 +99,7 @@ def main():
     except rospy.ROSException as wait_for_msg_exception:
         rospy.logerr(wait_for_msg_exception)
 
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()

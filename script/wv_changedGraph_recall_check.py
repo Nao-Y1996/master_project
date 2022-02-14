@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import csv
 import os
-from graph_converter import graph_utilitys
+from graph_tools import graph_utilitys
 from classificator_nnconv import classificator
 import fasttext
 import matplotlib.pyplot as plt
