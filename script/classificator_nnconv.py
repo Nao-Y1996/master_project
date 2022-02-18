@@ -8,7 +8,6 @@ import torch.nn.functional as F
 from torch_geometric.nn import NNConv
 from torch_geometric.loader import DataLoader
 
-import os
 
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
@@ -55,9 +54,9 @@ class NNConvNet(nn.Module):
 
 class classificator():
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
-    def __init__(self,model):
+    def __init__(self,model,output_dim):
         model_path = model
-        self.loading_model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=3)
+        self.loading_model = NNConvNet(node_feature_dim=300, edge_feature_dim=3, output_dim=output_dim)
         self.loading_model.load_state_dict(torch.load(model_path))
 
     def classificate(self, graph):

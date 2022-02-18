@@ -1,24 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import torch
-import torch.nn as nn
 
-from torch_scatter import scatter_max
-import torch.nn.functional as F
-from torch_geometric.nn import NNConv
-from torch_geometric.loader import DataLoader
-from torch_geometric.utils import to_networkx
 
-from graph_tools import graph_utilitys
-
-from matplotlib import pyplot as plt
-import networkx as nx
 import numpy as np
 import random
 import csv
 import os
 import glob
-import fasttext
 import sys
 import json
 
@@ -44,33 +32,22 @@ def augment(graph_utils, user_name, data_type):
         _dict = json.load(f)
         for i in range(pattern_num):
             sometimes_obj_list.append(list(map(str,_dict['state_pattern'+str(i)]['sometimes'])))
-    print('---- Objects used occasionally ----')
+    print('---- 「時々使う物体」 ----')
     for i, objs in enumerate(sometimes_obj_list):
         print(i, objs)
-    # 「時々使用する」物体が設定されていない時はデータの拡張ができないため、終了する
+        if len(objs)==0:
+            print(f'状態パターン{i}に「時々使う物体」の設定がありません')
+            is_continue = input(f'このまま続けますか？ (y/n)（yを選択すると、状態パターン{i}の学習用データでは"augmented_raw/ideal_data"は"raw/ideal_data"と等しくなります。）')
+            if is_continue=='y':
+                pass
+            elif is_continue=='n':
+                sys.exit('終了しました。「時々使用する物体」「必ず使用する物体」の設定は"obj_combinations.json"でできます。')
+            else:
+                sys.exit('select y or n')
+    # すべての状態において「時々使用する」物体が設定されていない時はデータの拡張ができないため、終了する
     if np.array(sometimes_obj_list, dtype=object).size==0:
-        sys.exit('Augmentation Failed.  Please set Objects that used occasionally in "obj_combinations.json"')
+        sys.exit("すべての状態において「時々使用する」物体が設定されていないため、でーたのかくちょうができません. obj_combinations.jsonで設定してください")
     
-    # 学習データを拡張  (data_type)_augmented_pattern.csvを作成する
-    # sometimes_obj_list にユーザーごとの「時々使う物体」を入れておくこと！
-    # if user_name=='k':# kusakari
-    #     sometimes_obj_list = [['book', 'mouse', 'keyboard', 'tvmonitor'], # pattern_0 : 仕事
-    #                             ["laptop", "tvmonitor", 'book'], # pattern_1 : 昼食
-    #                             ["soup"]] # pattern_2 : 読書
-    # elif user_name=='o':# ozawa
-    #     sometimes_obj_list = [['tvmonitor', 'book'], # pattern_0 : 仕事
-    #                             ['soup', 'book'], # pattern_1 : 昼食
-    #                             ['laptop', 'soup']] # pattern_2 : 読書
-    # elif user_name=='t':# tou
-    #     sometimes_obj_list = [['book'], # pattern_0 : 仕事
-    #                             ['tvmonitor', 'laptop'], # pattern_1 : 昼食
-    #                             ['keyboard', 'mouse']] # pattern_2 : 読書
-    # elif user_name=='y':# yamada
-    #     sometimes_obj_list = [['book', 'mouse', 'keyboard', 'sandwich', 'soup', 'salad'], # pattern_0 : 仕事
-    #                             ['book', 'mouse', 'keyboard', 'tvmonitor', 'laptop', 'soup', 'salad'], # pattern_1 : 昼食
-    #                             ['mouse', 'keyboard', 'tvmonitor', 'laptop', 'sandwich', 'soup', 'salad']] # pattern_2 : 読書
-    # else:
-    #     sys.exit('select collect user')
 
     # 「時々使用する物体」のidのリストを得る
     remove_obj_ids_list = []

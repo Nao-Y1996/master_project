@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+from ipaddress import ip_address
 import torch
 import torch.nn as nn
 
@@ -19,9 +20,11 @@ import random
 import csv
 import os
 import glob
-import fasttext
 import sys
 import shutil
+import json
+import scp
+import paramiko
 
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
@@ -83,7 +86,6 @@ def train(model, iterator, optimizer, criterion):
         pred = model(batch)
         loss = criterion(pred, batch.y)
         _, pred_labels = torch.max(pred, axis=1)
-        # print(len(pred_labels), len(batch.y), sep='\n')
         correct_num += torch.sum(pred_labels == batch.y) # バッチの出力の中で正解ラベルと一致している物の個数を足していく→このエポックでの総正解数を得る
         total_data_len += len(pred_labels) # バッチサイズをiterator回足して学習データの総数を得る
         loss.backward()
@@ -216,7 +218,7 @@ if __name__=='__main__':
         print( 'learning outputs is saved to ',save_file.split(user_name)[-1])
 
     print('-------train/test---------')
-    total_epoch = 30
+    total_epoch = 10
     train_loss_list = []
     train_acc_list = []
     test_loss_list = []
@@ -238,6 +240,36 @@ if __name__=='__main__':
     # モデルを保存
     model_path = user_dir + '/learning_outputs/'+model_name+'_nnconv.pt'
     torch.save(model.state_dict(),model_path)
+
+    # 現状の認識モデルの情報（user_name, model_name, pattern_num）を保存
+    recognition_conf = {"model_name":model_name, "pattern_num":pattern_num}
+    with open(user_dir+'/model_info.json', 'w') as f:
+        json.dump(recognition_conf, f)
+
+    # ====================== 作成したモデルファイルを認識用PCにSSHで転送する ======================
+    # 認識用PCで　sudo apt install ssh で予めsshをインストールしておくこと
+    with open('/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/secret.json') as f:
+        _dict = json.load(f)
+        ip_4_recognitionPC = _dict['pc4recognition']['ip_address']
+        user_4_recognitionPC = _dict['pc4recognition']['username']
+        pass_4_recognitionPC = _dict['pc4recognition']['password']
+    with paramiko.SSHClient() as ssh:
+        # 初回ログイン時に「Are you sure you want to continue connecting (yes/no)?」ときかれても問題なく接続できるように。
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh接続する
+        print('[ssh接続]')
+        ssh.connect(ip_4_recognitionPC, \
+                    port=22, \
+                    username=user_4_recognitionPC, \
+                    password=pass_4_recognitionPC)
+        # scp clientオブジェクト生成
+        with scp.SCPClient(ssh.get_transport()) as scp:
+            # モデルファイルとモデル情報を転送
+            scp.put(model_path, '/home/'+ user_4_recognitionPC +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model.pt')
+            scp.put(user_dir+'/model_info.json', '/home/'+ user_4_recognitionPC +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model_info.json')
+    # ======================================================================================
+
+
 
     x = range(len(train_acc_list))
     # lossの描画
@@ -293,7 +325,4 @@ if __name__=='__main__':
     print()
     print()
 
-    # print('--------test---------')
-    # acc = test(model, test_loader)
-    # print(f'Accuracy : {acc}')
 

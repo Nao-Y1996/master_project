@@ -5,9 +5,9 @@ import sys
 
 import rospy
 import os
-from datetime import datetime
 import pandas as pd
 import csv
+import json
 
 # ロボット機能を使うための準備
 from hsrb_interface import Robot
@@ -15,7 +15,7 @@ robot = Robot()
 tts = robot.try_get('default_tts')
 whole_body = robot.try_get('whole_body')
 
-whole_body.move_to_joint_positions({'head_pan_joint': -0.9, 
+whole_body.move_to_joint_positions({'head_pan_joint': 0.9, 
                                      'head_tilt_joint': -0.3,
                                      'arm_flex_joint': -2.6,
                                      'wrist_flex_joint':-0.5,
@@ -142,9 +142,13 @@ if __name__ == "__main__":
                     pass
             
             elif '認識モード' in message:
-                rospy.set_param("/robot_mode", "state_recognition")
-                rospy.set_param("/is_clean_mode", 0)
-                tts.say('はい、認識機能をオンにします。')
+                can_recognize = os.path.exists(user_dir+'/model_info.json')
+                if can_recognize:
+                    rospy.set_param("/robot_mode", "state_recognition")
+                    rospy.set_param("/is_clean_mode", 0)
+                    tts.say('はい、認識機能をオンにします。')
+                else:
+                    tts.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")

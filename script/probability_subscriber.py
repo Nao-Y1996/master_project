@@ -1,21 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import rospy
-from std_msgs.msg import Float32MultiArray
 import numpy as np
-import csv
 import matplotlib.pyplot as plt
-import pandas as pd
 import socket
 import pickle
 
 
-def show_probability_graph(ax, labels, probability):
+def show_probability_graph(ax, labels, probability, user_name):
     x = np.arange(len(labels))
     width = 0.35
     rects = ax.bar(x, probability, width)
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
+    plt.title('state pattern of ' + user_name)
     plt.ylim(0, 1)
     for rect in rects:
         height = rect.get_height()
@@ -48,25 +46,26 @@ if __name__ == '__main__':
 
     # 認識の確率表示のグラフ設定
     # labels = []
-    # save_dir = rospy.get_param("/save_dir")
+    save_dir = rospy.get_param("/save_dir")
     # read_data = pd.read_csv(save_dir +'/state.csv',encoding="utf-8")
     # labels = read_data['state'].tolist()
-    labels = ['working', 'eating', 'reading']
+    user_name = rospy.get_param('user_name')
+    
     fig, ax = plt.subplots()
-    pattern_num = len(labels)
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param('robot_mode')
 
         if robot_mode=='state_recognition':
             # probabilityをUDPで受け取る
-            data, cli_addr = sock.recvfrom(1024)
-            data = pickle.loads(data)
-            average_probability, data_id = data[0:3], data[3]
-            print(average_probability, data_id)
+            data, cli_addr = sock.recvfrom(256)
+            average_probability = pickle.loads(data)
+            print(average_probability)
+            labels = ['state'+str(i) for i in range(len(average_probability))]
+            # 認識確率の表示
+            show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
         else:
-            average_probability, data_id = [0.0, 0.0, 0.0], [0]
-
-        # 認識確率の表示
-        show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())
+            # average_probability = [0.0, 0.0, 0.0]
+            pass
+        
 
         spin_rate.sleep()

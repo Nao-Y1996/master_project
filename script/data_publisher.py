@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import enum
 import rospy
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, JointState
@@ -13,13 +12,10 @@ import numpy as np
 np.set_printoptions(precision=6, suppress=True)
 import sys
 from yolo_object_detector import GetYoloObjectInfo
-import math
 import pickle
 import socket
-from matplotlib import pyplot as plt
 import pyautogui as pag
 # import sqlite3
-import pandas as pd
 import time
 import traceback
 import json
@@ -226,14 +222,7 @@ if __name__ == '__main__':
     
     # データ送信のためのソケットを作成する（UDP）
     sock4data = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.114', 12345)
-
-    # グラフ収集：保存した数の送信用
-    # sock1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # serv_address1 = ('192.168.0.114', 54321)
-    # グラフ収集：検出物体名の送信用
-    # sock2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # serv_address2 = ('192.168.0.114', 56789)
+    serv_address = ('192.168.0.109', 12345)
 
     # クラスのインスタンス化
     # joint_state_sub = JointStateSbscriber()
@@ -348,12 +337,6 @@ if __name__ == '__main__':
 
         # データ収集モードのとき
         if robot_mode == 'graph_collecting':
-            # ------------ 保存したデータ数の送信 ------------#
-            # グラフ収集：保存した数の送信用
-            # send_len1 = sock1.sendto(pickle.dumps(count_ideal_saved), serv_address1)
-            # グラフ収集：検出物体名の送信用
-            # send_len2 = sock2.sendto(pickle.dumps(names), serv_address2)
-            #----------------------------------------------#
 
             state_index = rospy.get_param("/state_index")
             state_name = rospy.get_param("/collecting_state_name")
@@ -372,20 +355,7 @@ if __name__ == '__main__':
                 # いまの状態における「必ず使う物体」すべてが現在のグラフノードに含まれているかチェック
                 # 含まれている時はcan_save_IdealDataをTrueにする
                 can_save_IdealData = True if set(essential_obj_list).issubset(names) else False
-                # essential_objに何も追記していない場合もTrueになる（raw_dataとideal_dataが同じになる）のでそのときはFalseにする
-                if essential_obj_list == []:
-                    can_save_IdealData = False
-
-                
-                # if state_name == '読書'.decode('utf-8'):
-                #     can_save_IdealData = True if ('book' in names)else False
-                # elif state_name == '仕事'.decode('utf-8'):
-                #     can_save_IdealData = True if (('laptop' in names) and \
-                #                                     ('tvmonitor' in names)) else False
-                # elif state_name == '昼食'.decode('utf-8'):
-                #     can_save_IdealData = True if ( ('sandwich' in names) ) else False
-                # else:
-                #     can_save_IdealData = False
+                # [注意]essential_objに何も追記していない場合もTrueになる（raw_dataとideal_dataが同じになる）
 
                 # ideal_dataの保存
                 if can_save_IdealData:
@@ -407,6 +377,7 @@ if __name__ == '__main__':
                 pass
             print('保存したデータ数 : '+str(count_saved) + '  |  保存した理想データ数 : ' + str(count_ideal_saved))
 
+            # 保存した理想データ数が1000になったら終了
             if count_ideal_saved >= 1000:
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'
@@ -421,8 +392,8 @@ if __name__ == '__main__':
                 writer = csv.writer(f)
                 writer.writerow(graph_data)
                 #　スクリーンショット
-                image_save_path = rospy.get_param("/image_save_path")
-                pag.screenshot(image_save_path+str(data_id)+'.jpg')
+                # image_save_path = rospy.get_param("/image_save_path")
+                # pag.screenshot(image_save_path+str(data_id)+'.jpg')
             print(names)
             essential_obj_list = None
 

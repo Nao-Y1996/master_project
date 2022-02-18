@@ -15,3 +15,4 @@ script/test.csv
 script/pandas_test.py
 script/zips/*
 script/*.zip
+script/secret.json

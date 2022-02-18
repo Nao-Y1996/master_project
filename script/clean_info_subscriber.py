@@ -62,7 +62,7 @@ if __name__ == '__main__':
         clean_mode = rospy.get_param("/is_clean_mode")
 
         if clean_mode:
-            data, cli_addr = sock.recvfrom(1024)
+            data, cli_addr = sock.recvfrom(256)
             data = pickle.loads(data)
         else:
             data = [0.0] * detectable_obj_num
