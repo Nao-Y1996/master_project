@@ -20,15 +20,7 @@ import time
 import traceback
 import json
 import shutil
-
-# ロボット機能を使うための準備
-from hsrb_interface import Robot
-robot = Robot()
-tts = robot.try_get('default_tts')
-whole_body = robot.try_get('whole_body')
-
-br = TF.TransformBroadcaster()
-listener = TF.TransformListener()
+from robot_tools import RobotPartner
 
 class JointStateSbscriber(object):
 
@@ -47,13 +39,9 @@ class JointStateSbscriber(object):
 
 
 class TF_Publisher():
-    def __init__(self, exe_type):
+    def __init__(self, exe_type, tf_broadcaster):
         if exe_type == 'xtion':  # for Xtion
             topic_name = "/camera/depth_registered/points"
-            self.reference_tf = '/camera_depth_frame'
-            
-        elif exe_type == 'sense': # for realsense
-            topic_name = "/camera/depth/color/points"
             self.reference_tf = '/camera_depth_frame'
 
         elif exe_type == 'hsr_sim': # for HSR simulator
@@ -67,6 +55,7 @@ class TF_Publisher():
             print('TF_Publisherクラスの初期化に失敗しました')
             sys.exit()
         self.exe_type = exe_type
+        self.br = tf_broadcaster
         self.pc_sub = rospy.Subscriber(topic_name, PointCloud2, self.get_pc)
         rospy.wait_for_message(topic_name, PointCloud2, timeout=20.0)
         self.pc_data = None
@@ -74,35 +63,18 @@ class TF_Publisher():
     def get_pc(self, data):
         self.pc_data = data
 
-    def create_object_TF(self, object_name, x, y, roll=None, pitch=None, yaw=None, create=True):
+    def create_object_TF(self, object_name, x, y, create=True):
         if self.pc_data is not None:
             pc_list = list(pc2.read_points(self.pc_data,skip_nans=True,
-                                                field_names=('x', 'y', 'z'),
-                                                uvs=[(x, y)]))
+                                            field_names=('x', 'y', 'z'),
+                                            uvs=[(x, y)]))
             if len(pc_list) != 0:
                 x,y,z = pc_list[0]
-
-                # if roll is not None  and self.exe_type == 'xtion':
-                #     rot = (math.radians(roll), math.radians(pitch-180), math.radians(yaw))
-                #     rot = TF.transformations.quaternion_from_euler(rot[0],rot[1],rot[2])
-                # elif roll is not None  and self.exe_type == 'hsr':
-                #     try:
-                #         trans, _ = listener.lookupTransform(self.reference_tf, 'face', rospy.Time(0))
-                #         r = np.linalg.norm([trans[0],trans[2]])
-                #         fai = np.arccos(trans[2]/r)
-                #         print(fai, np.degrees(fai))
-                #     except TF.LookupException:
-                #         pass
-                    
-                #     rot = (math.radians(pitch), math.radians(-yaw-270), math.radians(roll))
-                #     rot = TF.transformations.quaternion_from_euler(rot[0],rot[1],rot[2])
-                # else:
-                #     rot = [1.0, 0.0, 0.0, 0.0]
                 rot = [1.0, 0.0, 0.0, 0.0]
                 if create and self.exe_type == 'xtion':
-                    br.sendTransform([z,-x,-y], rot, rospy.Time.now(), '/'+object_name, self.reference_tf)
+                    self.br.sendTransform([z,-x,-y], rot, rospy.Time.now(), '/'+object_name, self.reference_tf)
                 if create and self.exe_type == 'hsr':
-                    br.sendTransform([x,y,z], rot, rospy.Time.now(), '/'+object_name, self.reference_tf)
+                    self.br.sendTransform([x,y,z], rot, rospy.Time.now(), '/'+object_name, self.reference_tf)
                 return x,y,z
             else:
                 return None, None, None
@@ -162,12 +134,11 @@ rospy.set_param("/all_obj_names", ID_2_OBJECT_NAME.values())
 # ==================================================================
 
 if __name__ == '__main__':
+
     user_name = rospy.get_param("/user_name")
-    print
-    print('=============================')
+    print('\n=============================')
     print('current user is '+user_name)
-    print('=============================')
-    print
+    print('=============================\n')
     rospy.sleep(3)
     user_dir = rospy.get_param("/user_dir")
 
@@ -185,10 +156,10 @@ if __name__ == '__main__':
         os.makedirs(position_dir)
     except OSError:
         print('directory exist')
-    # 認識結果の保存用ファイルの作成
+    # 認識結果の保存用ファイルの新規作成
     with open(recognition_file_path, 'w') as f:
-        print('created csv file for recognition')
-    
+        print()
+
     # スクリーンショット保存用ディレクトリの作成（10パターン分）
     for i in range(10):
         try:
@@ -198,7 +169,6 @@ if __name__ == '__main__':
 
     user_state_file = user_dir+"/state.csv"
     is_known_user = os.path.isfile(user_state_file)
-
     if not is_known_user:
         #状態管理用のファイル(csv)を新規作成
         with open(user_state_file, 'w') as f:
@@ -218,17 +188,18 @@ if __name__ == '__main__':
         pass
     
     
-
-    
     # データ送信のためのソケットを作成する（UDP）
     sock4data = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     serv_address = ('192.168.0.109', 12345)
 
     # クラスのインスタンス化
     # joint_state_sub = JointStateSbscriber()
+    exe_type = rospy.get_param('exe_type')
+    br = TF.TransformBroadcaster()
+    listener = TF.TransformListener()  
     pose_sub = MediapipePoseSubscriber()
     yolo_info = GetYoloObjectInfo()
-    tf_pub = TF_Publisher(exe_type='hsr')
+    tf_pub = TF_Publisher(exe_type=exe_type, tf_broadcaster=br)
 
     spin_rate=rospy.Rate(10)
     count_saved = 0
@@ -241,7 +212,6 @@ if __name__ == '__main__':
         is_clean_mode = rospy.get_param("/is_clean_mode")
         try:
             clean_obj_id = rospy.get_param('/clean_obj_id')
-            tts.say(ID_2_OBJECT_NAME[clean_obj_id])
             rospy.set_param('/clean_obj_id', -123)
         except:
             pass
@@ -304,7 +274,7 @@ if __name__ == '__main__':
                     names.append(obj_name)
                     obj_positions.append( [OBJECT_NAME_2_ID[obj_name] ,obj_x, obj_y, obj_z] )
                     rot = [1.0, 0.0, 0.0, 0.0]
-                    br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
+                    tf_pub.br.sendTransform(trans, rot, rospy.Time.now(), obj_name,  tf_pub.reference_tf)
         else:
             pass
 
@@ -382,9 +352,8 @@ if __name__ == '__main__':
                 save_dir = rospy.get_param("/save_dir")
                 image_save_path = save_dir+'/images/'
                 rospy.set_param("/image_save_path", image_save_path)
-                rospy.set_param("/robot_mode", "nomal")
+                rospy.set_param("/robot_mode", "finish_collecting")
                 rospy.set_param("/cllecting_state_name", '')
-                tts.say('記録は完了です。')
 
         # 認識モードのとき
         elif robot_mode == 'state_recognition':

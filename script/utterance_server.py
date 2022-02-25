@@ -2,25 +2,12 @@
 # -*- coding: utf-8 -*-
 import socket
 import sys
-
 import rospy
 import os
 import pandas as pd
 import csv
-import json
+from robot_tools import RobotPartner
 
-# ロボット機能を使うための準備
-from hsrb_interface import Robot
-robot = Robot()
-tts = robot.try_get('default_tts')
-whole_body = robot.try_get('whole_body')
-
-whole_body.move_to_joint_positions({'head_pan_joint': 0.9, 
-                                     'head_tilt_joint': -0.3,
-                                     'arm_flex_joint': -2.6,
-                                     'wrist_flex_joint':-0.5,
-                                     'arm_lift_joint':0.6,
-                                     'arm_roll_joint':0.0})
 python_version = sys.version_info[0]
 
 def exist_state_check(csv_file, state_name):
@@ -80,10 +67,22 @@ if __name__ == "__main__":
     args = sys.argv
     user_name = None
     user_name = args[1]
+    if python_version==2:
+        exe_type = raw_input("select exe type hsr, hsr_sim, xtion\n")
+    elif python_version==3:
+        exe_type = input("select exe type hsr, hsr_sim, xtion\n")
+    else:
+        sys.exit("Unknown python version was detected")
+    if exe_type!="hsr" and exe_type!="hsr_sim" and exe_type!="xtion":
+        sys.exit("select correct exe type (hsr/hsr_sim/xtion)")
+    else:
+        pass
     
     rospy.set_param("/user_name", user_name)
     rospy.set_param("/robot_mode", "nomal")
     rospy.set_param("/is_clean_mode", 0)
+    rospy.set_param("/exe_type", exe_type)
+    robot = RobotPartner(exe_type=exe_type)
 
     # 保存用ディレクトリの設定
     user_dir = os.path.dirname(__file__)+'/experiment_data/'+user_name
@@ -111,17 +110,17 @@ if __name__ == "__main__":
                 robot_mode = rospy.get_param("/robot_mode")
                 is_clean_mode = rospy.get_param("/is_clean_mode")
                 if robot_mode == "state_recognition":
-                    tts.say('現在、認識モードです。')
+                    robot.say('現在、認識モードです。')
                 elif robot_mode == "nomal":
-                    tts.say('現在、通常モードです。')
+                    robot.say('現在、通常モードです。')
                 elif robot_mode == "waite_state_name":
-                    tts.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
+                    robot.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
                 elif robot_mode == "graph_collecting":
-                    tts.say('現在、記録中です。')
+                    robot.say('現在、記録中です。')
                 else:
-                    tts.say('モードが不明です。')
+                    robot.say('モードが不明です。')
                 if is_clean_mode:
-                    tts.say('片付け機能が働いています。')
+                    robot.say('片付け機能が働いています。')
 
             elif '終了' in message:
                 if (robot_mode=='graph_collecting'):
@@ -137,7 +136,7 @@ if __name__ == "__main__":
                     rospy.set_param("/robot_mode", "nomal")
                     rospy.set_param("/cllecting_state_name", '')
 
-                    tts.say(state_name + 'の記録は完了です。')
+                    robot.say(state_name + 'の記録は完了です。')
                 else:
                     pass
             
@@ -146,33 +145,38 @@ if __name__ == "__main__":
                 if can_recognize:
                     rospy.set_param("/robot_mode", "state_recognition")
                     rospy.set_param("/is_clean_mode", 0)
-                    tts.say('はい、認識機能をオンにします。')
+                    robot.say('はい、認識機能をオンにします。')
                 else:
-                    tts.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
+                    robot.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
+            
+            # elif 'モデルの学習を開始' in message:
+            # ここで、自動でモデルの学習（python3で動く）ができるようになるのが理想
+            # ubuntu20とROS noeticを使用すればシステム全体がpython3で動かせるので簡単に実現できるが、
+            # 現状、ubuntu18（基本的にpython2）だと自動化は少し面倒
             
             elif '通常モード' in message:
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('はい、通常機能に戻ります。')
+                robot.say('はい、通常機能に戻ります。')
 
             elif '片付け' in message:
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
-                tts.say('はい、不要なものを探します。')
+                robot.say('はい、不要なものを探します。')
 
             elif 'ありがとう' in message:
                 rospy.set_param("/is_clean_mode", 0)
-                tts.say('はい、どういたしまして')
+                robot.say('はい、どういたしまして')
 
             elif '記録して' in message:
                 rospy.set_param("/robot_mode", "waite_state_name")
-                tts.say('はい、今何をしていますか？')
+                robot.say('はい、今何をしていますか？')
 
             else :
                 robot_mode = rospy.get_param("/robot_mode")
                 if (robot_mode=='waite_state_name'):
                     state_name = message
-                    tts.say(state_name + '、を記録します。')
+                    robot.say(state_name + '、を記録します。')
                     
                     save_dir = rospy.get_param("/save_dir")
                     user_dir = rospy.get_param("/user_dir")
@@ -194,6 +198,9 @@ if __name__ == "__main__":
                     rospy.set_param("/robot_mode", "graph_collecting")
                     print(state_name +' のデータを収集します')
                     rospy.set_param("/collecting_state_name", state_name)
+                elif (robot_mode=='finish_collecting'):
+                    robot.say('記録は完了です')
+                    rospy.set_param("/robot_mode", "nomal")
                 else:
                     pass
 

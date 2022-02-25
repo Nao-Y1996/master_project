@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>        
-    <node pkg="master_project" name="probability" type="clean_info_subscriber.py"/>
-    <node pkg="master_project" name="cleaninfo" type="probability_subscriber.py"/>
-</launch>

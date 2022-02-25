@@ -10,6 +10,7 @@ from classificator_nnconv import classificator
 import traceback
 import json
 
+
 graph_utils = graph_utilitys(fasttext_model=os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin')
 detectable_obj_num = len(graph_utils.ID_2_OBJECT_NAME.keys())
 all_obj_names = graph_utils.ID_2_OBJECT_NAME.values()
@@ -20,6 +21,34 @@ if __name__ == '__main__':
     spin_rate=rospy.Rate(20)
 
     user_name = rospy.get_param("/user_name")
+
+    # -------------------------- 認識モデルの初期設定 --------------------------
+    model_path = '/home/'+ os.getlogin() +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model.pt'
+    model_info_path = '/home/'+ os.getlogin() +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model_info.json'
+    model_update_time, modelinfo_update_time = None, None
+    model_exist = os.path.exists(model_path) and os.path.exists(model_info_path)
+    if model_exist:
+        model_update_time = os.path.getmtime(model_path)
+        modelinfo_update_time = os.path.getmtime(model_info_path)
+        print('モデルの初期設定を読み込む')
+
+        with open(model_info_path) as f:
+            _dict = json.load(f)
+            pattern_num = _dict['pattern_num']
+        cf = classificator(model=model_path, output_dim=pattern_num)
+        
+        data_buf_len = 10
+        count4probability = 0
+        probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
+
+        time_window = 10
+        is_unnecessary_obj_list = np.array([[0.0]*detectable_obj_num] * time_window) # 過去time_windowフレーム分の不要物体の情報を格納するリスト（0=必要物体、1=不要物体）
+
+        model_loaded = True
+    else:
+        print('まだモデルが存在しない')
+        model_loaded = False
+    # -------------------------------------------------------------------- 
 
 # ------------------------dataを受け取るための通信の設定--------------------
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -41,43 +70,19 @@ if __name__ == '__main__':
     serv_address4clean = ('192.168.0.110', 3456)
 # ----------------------------------------------------------------------
 
-    # -------------------------- 認識モデルの初期設定 --------------------------
-    model_path = '/home/'+ os.getlogin() +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model.pt'
-    model_info_path = '/home/'+ os.getlogin() +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model_info.json'
-    model_update_time, modelinfo_update_time = None, None
-    if os.path.exists(model_path) and os.path.exists(model_info_path):
-        model_update_time = os.path.getmtime(model_path)
-        modelinfo_update_time = os.path.getmtime(model_info_path)
-        print('モデルの初期設定を読み込む')
 
-        with open(model_info_path) as f:
-            _dict = json.load(f)
-            pattern_num = _dict['pattern_num']
-        cf = classificator(model=model_path, output_dim=pattern_num)
-        
-        data_buf_len = 10
-        count = 0
-        probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
-
-        time_window = 10
-        is_unnecessary_obj_list = np.array([[0.0]*detectable_obj_num] * time_window) # 過去time_windowフレーム分の不要物体の情報を格納するリスト（0=必要物体、1=不要物体）
-
-        model_loaded = True
-    else:
-        print('まだモデルが存在しない')
-        model_loaded = False
-    # -------------------------------------------------------------------- 
 
     frame_count = 0
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param("/robot_mode")
         clean_mode = rospy.get_param("/is_clean_mode")
-        if os.path.exists(model_path) and os.path.exists(model_info_path):
-            # --------------------- モデルが更新されたらモデルの設定、各種変数を再定義する ---------------------
+        model_exist = os.path.exists(model_path) and os.path.exists(model_info_path)
+        if model_exist:
+            # --------------------- モデルが更新されたらモデルの設定を読み込み、各種変数を初期化する ---------------------
             if model_update_time != os.path.getmtime(model_path) and modelinfo_update_time != os.path.getmtime(model_info_path):
                 model_update_time = os.path.getmtime(model_path)
                 modelinfo_update_time = os.path.getmtime(model_info_path)
-                print('モデルを更新した')
+                print('モデルが更新された')
 
                 with open(model_info_path) as f:
                     _dict = json.load(f)
@@ -86,7 +91,7 @@ if __name__ == '__main__':
                 cf = classificator(model=model_path, output_dim=pattern_num)
                 
                 data_buf_len = 10
-                count = 0
+                count4probability = 0
                 probability_list = np.array([[0.0]*pattern_num] * data_buf_len)
 
                 time_window = 10
@@ -114,13 +119,12 @@ if __name__ == '__main__':
                     # 状態認識
                     probability = cf.classificate(graph)
 
-                    # 認識確率の平滑化（過去data_buf_len個分のデータで平均を取る）
-                    probability_list[count] = probability
+                    # 認識確率の平均（過去data_buf_len個分のデータで平均を取る）
+                    probability_list[count4probability] = probability
                     average_probability  = probability_list.mean(axis=0).tolist()
-                    count += 1
-                    if count >= data_buf_len:
-                        count = 0
-                    state_now_id = average_probability.index(max(average_probability))
+                    count4probability += 1
+                    if count4probability >= data_buf_len:
+                        count4probability = 0
 
                     # 不要な物体（ノード）の特定
                     if clean_mode:

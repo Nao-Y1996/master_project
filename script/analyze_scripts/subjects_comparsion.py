@@ -53,10 +53,10 @@ if __name__ == '__main__':
         target_user = user2
         print(model_owner, '--->', target_user)
 
-        model_user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+model_owner
-        target_user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+target_user
+        model_user_dir = os.path.dirname(os.path.abspath(__file__))+ "/../experiment_data/"+model_owner
+        target_user_dir = os.path.dirname(os.path.abspath(__file__))+ "/../experiment_data/"+target_user
 
-        save_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/user_comparsion/" + model_owner + '2' + target_user +'/'
+        save_dir = os.path.dirname(os.path.abspath(__file__))+ "/../experiment_data/user_comparsion/" + model_owner + '2' + target_user +'/'
         try:
             os.makedirs(save_dir+'images')
         except OSError:
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         target_cf = classificator(model=target_model_path)
 
         # ツールのインスタンス化
-        ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+        ft_path = os.path.dirname(os.path.abspath(__file__)) +'/../w2v_model/cc.en.300.bin'
         graph_utils = graph_utilitys(fasttext_model=ft_path)
 
         # target_userのデータを読み込む

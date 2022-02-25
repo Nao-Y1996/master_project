@@ -54,8 +54,15 @@ def main():
     landmark_idx = list(range(0,32))
         
     try:
-        # sub_image = ImageSbscriber(topic_name="/camera/rgb/image_raw")
-        sub_image = ImageSbscriber(topic_name="/hsrb/head_rgbd_sensor/rgb/image_raw")
+        exe_type = rospy.get_param('/exe_type')
+        if exe_type =='hsr' or exe_type=="hsr_sim":
+            topic_name = "/hsrb/head_rgbd_sensor/rgb/image_raw"
+        elif exe_type == "xtion":
+            topic_name = "/camera/rgb/image_raw"
+        else:
+            topic_name = None
+        
+        sub_image = ImageSbscriber(topic_name=topic_name)
         spin_rate = rospy.Rate(10)
 
         with mp_pose.Pose(

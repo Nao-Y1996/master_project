@@ -13,28 +13,8 @@ import traceback
 from mpl_toolkits.mplot3d import Axes3D
 import csv
 import pandas as pd
-import time
+import sys
 
-
-def show_probability_graph(ax, labels, probability, count=None, is_save=False):
-    x = np.arange(len(labels))
-    width = 0.35
-    rects = ax.bar(x, probability, width)
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    plt.ylim(0, 1)
-    for rect in rects:
-        height = rect.get_height()
-        ax.annotate('{}'.format(height),
-                    xy=(rect.get_x() + rect.get_width() / 2, height),
-                    xytext=(0, 3),
-                    textcoords="offset points",
-                    ha='center', va='bottom')
-    plt.draw()  # 描画する。
-    plt.pause(0.01)  # 0.01 秒ストップする。
-    plt.cla()
-    if is_save:
-        fig.savefig('fig'+str(count)+'.png')
 
 # 名前の変更パターン
 all_pattern = {0:{'bottle':'toothbrush'},
@@ -46,21 +26,23 @@ all_pattern = {0:{'bottle':'toothbrush'},
             6:{'bottle':'hairdryer'}}
 
 if __name__ == '__main__':
-    user_name = 'yamada'#input('enter user name\n')
-    model_name = 'ideal_augmented_batch_nnconv' # input('enter gnn model name\n')
-    user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
-
-    # 認識モデルの設定
-    model_path = user_dir+'/'+model_name+'.pt'
-    cf = classificator(model=model_path)
-    ft_path = os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin'
+    user_name = input('enter user name\n')
+    model_name = input('enter gnn model name (ex:abc.pt)\n')
+    base_dir = '/home/'+ os.getlogin() +'/catkin_ws/src/master_project/script/'
+    user_dir = base_dir+ "experiment_data/"+user_name
+    model_path = user_dir+'/learning_outputs/'+model_name
+    if os.path.exists(model_path):
+        pass
+    else:
+        sys.exit('モデルが存在しません')
+    cf = classificator(model=model_path)# 認識モデルの設定
 
     for k, pattern in enumerate(all_pattern):
         print(f" ------------   {all_pattern[k]['bottle']}   --------------")
         
     
         # インスタンスを作り直す（ID_2_OBJECT_NAMEをリセット）
-        graph_utils = graph_utilitys(fasttext_model=ft_path)
+        graph_utils = graph_utilitys(fasttext_model=base_dir+'/w2v_model/cc.en.300.bin')
          # 認識物体の名前を変更
         graph_utils.changeID_2_OBJECT_NAME(all_pattern[k])
         # print(graph_utils.ID_2_OBJECT_NAME)
@@ -92,7 +74,7 @@ if __name__ == '__main__':
             # print('-------------------------------------------------')
             if all_pattern[k]['bottle'] =='toothbrush' and true_label==0:
                 continue
-            columun_names= ['dataID', 'state', 'probability', "objects", 'removed_obj', 'dummy_state', 'dummy_probability', 'state_match', 'run_up', 'diff', 'is_unnecessary']
+            columun_names= ['dataID', 'state', 'probability', "objects", 'removed_obj', 'dummy_state', 'dummy_probability', 'state_match', 'is_probability_rised', 'diff', 'is_unnecessary']
             df = pd.DataFrame(columns=columun_names,)
             analyze_data = [None]*len(columun_names)
             # csvファイルの読み込み
@@ -147,9 +129,6 @@ if __name__ == '__main__':
                             plt.pause(0.01)  # 0.01 秒ストップする。
                             plt.cla()
                         
-                        # 認識確率の表示
-                        # show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist())
-
                         # 不要な物体（ノード）の特定
                         state_now = labels[average_probability.index(max(average_probability))]
                         print(f"=================== {all_pattern[k]['bottle']} pattern_{true_label} | {data_id} {count}======================")
@@ -171,32 +150,28 @@ if __name__ == '__main__':
                                 continue # faceは片付け対象としない
 
                             if dummy_graph[0] is not None:
-                                _countList = []
-                                # print('------------------------------')
                                 removed_obj = graph_utils.ID_2_OBJECT_NAME[int(removed_obj_id)]
-                                # print(f'{count}    removed : {removed_obj}')
                                 dummy_probability = cf.classificate(dummy_graph[0])
                                 dummy_state = labels[dummy_probability.index(max(dummy_probability))]
                                 # print(dummy_probability)
                                 state_match = False
-                                run_up = False
+                                is_probability_rised = False
                                 diff = None
                                 # あるノードを取り除いた時の認識結果ともとの認識結果が一致するか
                                 if dummy_probability.index(max(dummy_probability)) == average_probability.index(max(average_probability)):
                                     state_match = True
                                     # あるノードを取り除いた時の認識結果の確率が上昇するか
                                     if max(dummy_probability) > max(average_probability):
-                                        run_up = True
+                                        is_probability_rised = True
                                         diff =  (max(dummy_probability) - max(average_probability)) * 100
                                         # print(f'diff : {diff}')
                                         unnecessary_obj_candidate_info.append([average_probability, dummy_probability, removed_obj_id, diff, count])
                                     else:
-                                        # print('確率は上昇せず')
-                                        run_up = False
+                                        # print('確率は上昇しませんでした')
+                                        is_probability_rised = False
                                         pass
                                 else:
                                     # print('認識結果が一致していません')
-                                    # print(f'認識が変化 : {state_now} --> {dummy_state}')
                                     state_match = False
                                     pass
                                 
@@ -204,7 +179,7 @@ if __name__ == '__main__':
                                 analyze_data[5] = dummy_state
                                 analyze_data[6] = dummy_probability
                                 analyze_data[7] = state_match
-                                analyze_data[8] = run_up
+                                analyze_data[8] = is_probability_rised
                                 analyze_data[9] = diff
                                 analyze_data[10] = False
                                 df.loc[count] = analyze_data
@@ -213,8 +188,6 @@ if __name__ == '__main__':
                         if len(unnecessary_obj_candidate_info)!=0:
                             # print('~~~~~~~~~不要ノード~~~~~~~~~')
                             unnecessary_obj_candidate_info = np.array(unnecessary_obj_candidate_info)
-                            # for _id, diff, _count in zip(unnecessary_obj_candidate_info[:,0], unnecessary_obj_candidate_info[:,-1], _countList):
-                            #     print(graph_utils.ID_2_OBJECT_NAME[int(_id)], diff)
                             # print(unnecessary_obj_candidate_info)
                             unnecessary_obj_index = np.argmax(unnecessary_obj_candidate_info[:,3])
                             # print(unnecessary_obj_index)
