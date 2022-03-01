@@ -134,6 +134,7 @@ rospy.set_param("/all_obj_names", ID_2_OBJECT_NAME.values())
 # ==================================================================
 
 if __name__ == '__main__':
+    rospy.init_node('data_publisher')
 
     user_name = rospy.get_param("/user_name")
     print('\n=============================')
