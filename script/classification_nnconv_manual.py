@@ -23,8 +23,6 @@ import glob
 import sys
 import shutil
 import json
-import scp
-import paramiko
 
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
@@ -239,35 +237,17 @@ if __name__=='__main__':
             writer.writerow([epoch+1, train_acc, test_acc,train_loss,test_loss])
     # モデルを保存
     model_path = user_dir + '/learning_outputs/'+model_name+'_nnconv.pt'
-    torch.save(model.state_dict(),model_path)
+    torch.save(model.state_dict(), model_path)
+    model_path = '/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model.pt'
+    torch.save(model.state_dict(), model_path)
 
     # 現状の認識モデルの情報（user_name, model_name, pattern_num）を保存
     recognition_conf = {"model_name":model_name, "pattern_num":pattern_num}
     with open(user_dir+'/model_info.json', 'w') as f:
         json.dump(recognition_conf, f)
+    with open('/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model_info.json', 'w') as f:
+        json.dump(recognition_conf, f)
 
-    # ====================== 作成したモデルファイルを認識用PCにSSHで転送する ======================
-    # 認識用PCで　sudo apt install ssh で予めsshをインストールしておくこと
-    with open('/home/'+ os.getlogin()+'/catkin_ws/src/master_project/script/secret.json') as f:
-        _dict = json.load(f)
-        ip_4_recognitionPC = _dict['pc4recognition']['ip_address']
-        user_4_recognitionPC = _dict['pc4recognition']['username']
-        pass_4_recognitionPC = _dict['pc4recognition']['password']
-    with paramiko.SSHClient() as ssh:
-        # 初回ログイン時に「Are you sure you want to continue connecting (yes/no)?」ときかれても問題なく接続できるように。
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        # ssh接続する
-        print('[ssh接続]')
-        ssh.connect(ip_4_recognitionPC, \
-                    port=22, \
-                    username=user_4_recognitionPC, \
-                    password=pass_4_recognitionPC)
-        # scp clientオブジェクト生成
-        with scp.SCPClient(ssh.get_transport()) as scp:
-            # モデルファイルとモデル情報を転送
-            scp.put(model_path, '/home/'+ user_4_recognitionPC +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model.pt')
-            scp.put(user_dir+'/model_info.json', '/home/'+ user_4_recognitionPC +'/catkin_ws/src/master_project/script/recognition_model/'+user_name+'_model_info.json')
-    # ======================================================================================
 
 
 
@@ -322,7 +302,3 @@ if __name__=='__main__':
     # plt.show()
     fig.savefig(user_dir+"/learning_outputs/"+model_name+"Accuracy.png")
     plt.close()
-    print()
-    print()
-
-

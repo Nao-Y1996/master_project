@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import socket
 import sys
@@ -42,7 +42,7 @@ def add_new_state(csv_file, state_name):
         with open(csv_file, 'a') as f:
             writer = csv.writer(f)
             writer.writerow([state_name])
-        print '新しい状態を追加しました --->', state_name
+        print ('新しい状態を追加しました --->', state_name)
     else:
         # print('すでに状態名はあるので追加はスキップしました')
         pass
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     IP_ADDRESS = s.getsockname()[0] # get IP address of this PC
-    port = 8890
+    port = 8880
     print('utterance server : IP address = '+str(IP_ADDRESS)+'  port = '+str(port))
     sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
     sock.bind((IP_ADDRESS, port))
@@ -89,6 +89,7 @@ if __name__ == "__main__":
         pass
     
     rospy.set_param("/user_name", user_name)
+    rospy.set_param("/IP_address", str(IP_ADDRESS))
     rospy.set_param("/robot_mode", "nomal")
     rospy.set_param("/is_clean_mode", 0)
     rospy.set_param("/exe_type", exe_type)
@@ -105,12 +106,9 @@ if __name__ == "__main__":
         try :# ③Clientからのmessageの受付開始
         
             message, cli_addr = sock.recvfrom(1024)
-            # python2では（）つけるとコンソールの表示が崩れる
-            if PYTHON_VERSION == 2:
-                print message
-            if PYTHON_VERSION == 3:
-                message = message.decode(encoding='utf-8')
-                print(message)
+            
+            message = message.decode(encoding='utf-8')
+            print(message)
 
             if ('はい' in message) or ('します'in message) or ('現在'in message) or ('今'in message) or ('完了'in message):
                 pass
@@ -158,10 +156,9 @@ if __name__ == "__main__":
                 else:
                     robotPartner.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
             
-            # elif 'モデルの学習を開始' in message:
-            # ここで、自動でモデルの学習（python3で動く）ができるようになるのが理想
-            # ubuntu20とROS noeticを使用すればシステム全体がpython3で動かせるので簡単に実現できるが、
-            # 現状、ubuntu18（基本的にpython2）だと自動化は少し面倒
+            elif 'モデルの学習を開始'==message:
+                rospy.set_param("/robot_mode", "auto_train")
+                robotPartner.say('start train')
             
             elif '通常モード' == message:
                 rospy.set_param("/robot_mode", "nomal")

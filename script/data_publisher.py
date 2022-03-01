@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import rospy
 import sensor_msgs.point_cloud2 as pc2
@@ -15,7 +15,6 @@ from yolo_object_detector import GetYoloObjectInfo
 import pickle
 import socket
 import pyautogui as pag
-# import sqlite3
 import time
 import traceback
 import json
@@ -130,7 +129,7 @@ with open(conf_dir+'OBJECT_NAME_2_ID.json', 'w') as f:
 with open(conf_dir+'MARKER_2_OBJECT.json', 'w') as f:
     json.dump(MARKER_2_OBJECT, f)
 
-rospy.set_param("/all_obj_names", ID_2_OBJECT_NAME.values())
+rospy.set_param("/all_obj_names", list(ID_2_OBJECT_NAME.values()))
 # ==================================================================
 
 if __name__ == '__main__':
@@ -191,7 +190,7 @@ if __name__ == '__main__':
     
     # データ送信のためのソケットを作成する（UDP）
     sock4data = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.109', 12345)
+    serv_address = ('192.168.0.103', 12345)
 
     # クラスのインスタンス化
     # joint_state_sub = JointStateSbscriber()

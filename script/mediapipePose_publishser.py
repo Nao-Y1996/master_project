@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-mediapipeによるposeデータを配信する。
-このスクリプトはpython2では実行できないため
-python3で実行できるワークスペースにあるパッケージに移植して実行する
-"""
+
 import sys
-sys.path.append('/opt/ros/melodic/lib/python2.7/dist-packages')
 from cv_bridge import CvBridge, CvBridgeError
 import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray
-
-sys.path.append('/home/kubotalab-hsr/.pyenv/versions/3.8.10/lib/python3.8/site-packages')
 import mediapipe as mp
 import numpy as np
 import cv2
@@ -92,12 +85,12 @@ def main():
                         pub_p.publish(landmark_positions)
 
 
-                    # mp_drawing.draw_landmarks(
-                    #     image,
-                    #     results.pose_landmarks,
-                    #     mp_pose.POSE_CONNECTIONS,
-                    #     landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-                    # cv2.imshow("Detection Image Window", image)
+                    mp_drawing.draw_landmarks(
+                        image,
+                        results.pose_landmarks,
+                        mp_pose.POSE_CONNECTIONS,
+                        landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+                    cv2.imshow("Detection Image Window", image)
                     if cv2.waitKey(5) & 0xFF == 27:
                         break
 
