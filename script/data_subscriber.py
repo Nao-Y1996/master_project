@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import rospy
+from std_msgs.msg import Float32MultiArray
 import numpy as np
 import os
 import socket
@@ -14,6 +15,20 @@ import json
 graph_utils = graph_utilitys(fasttext_model=os.path.dirname(os.path.abspath(__file__)) +'/w2v_model/cc.en.300.bin')
 detectable_obj_num = len(graph_utils.ID_2_OBJECT_NAME.keys())
 all_obj_names = graph_utils.ID_2_OBJECT_NAME.values()
+
+
+class DataSubscriber():
+    def __init__(self):
+        self.observed_data = [0.0, 0.0, 0.0, 0.0]
+        self.data_sub = rospy.Subscriber("/observed_data", Float32MultiArray, self.callback)
+        # rospy.wait_for_message("/observed_data", Float32MultiArray, timeout=10.0)
+
+    def callback(self, data):
+        self.observed_data = data.data
+
+    def get_data(self):
+        return self.observed_data
+
 
 if __name__ == '__main__':
 
@@ -50,24 +65,17 @@ if __name__ == '__main__':
         model_loaded = False
     # -------------------------------------------------------------------- 
 
-# ------------------------dataを受け取るための通信の設定--------------------
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    IP_ADDRESS = s.getsockname()[0]
-    port4data = 12345
-    sock4data = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
-    sock4data.bind((IP_ADDRESS, port4data))
-    print(f'data server : IP address = {IP_ADDRESS}  port = {port4data}')
+# ------------------------データを受け取るための設定--------------------
+    data_sub = DataSubscriber()
+
 # ----------------------------------------------------------------------
     
-# ------------------------認識確率の送信のための設定------------------------
-    sock4probability = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.103', 5624)
+# ------------------------認識確率の配信のための設定------------------------
+    probability_pub = rospy.Publisher("avarage_probability", Float32MultiArray, queue_size=1)
 # ----------------------------------------------------------------------
 
-# ------------------------片付け物体情報の送信のための設定------------------------
-    sock4clean = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address4clean = ('192.168.0.103', 3456)
+# ------------------------片付け物体情報の配信のための設定------------------------
+    cleaninfo_pub = rospy.Publisher("cleaninfo", Float32MultiArray, queue_size=1)
 # ----------------------------------------------------------------------
 
 
@@ -106,9 +114,8 @@ if __name__ == '__main__':
         if model_loaded:
             if robot_mode == 'state_recognition':
                 
-                # dataをUDPでデータを受け取る
-                data, cli_addr = sock4data.recvfrom(1024)
-                data = pickle.loads(data)
+                # データを受け取る
+                data = data_sub.get_data()
                 
                 # グラフ形式に変換
                 position_data = graph_utils.removeDataId(data)
@@ -183,11 +190,15 @@ if __name__ == '__main__':
                 average_probability = [0.0] * pattern_num
                 pass
 
-            #　認識結果をUDPで送信（受け取る側がpython2なのでprotocol=2を指定する）
-            send_len = sock4probability.sendto(pickle.dumps(average_probability, protocol=2), serv_address)
+            #　認識結果（確率）を配信
+            msg_average_probability = Float32MultiArray(data=average_probability)
+            probability_pub.publish(msg_average_probability)
 
+            # 片付け物体情報を配信
             unnecessary_score_list = is_unnecessary_obj_list.mean(axis=0).tolist()
-            send_len = sock4clean.sendto(pickle.dumps(unnecessary_score_list, protocol=2), serv_address4clean)
+            msg_cleaninfo = Float32MultiArray(data=unnecessary_score_list)
+            cleaninfo_pub.publish(msg_cleaninfo)
+
             frame_count += 1
             if frame_count == time_window:
                 frame_count = 0

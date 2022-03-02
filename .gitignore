@@ -3,16 +3,8 @@ script/w2v_model/*.bin
 script/w2v_model/*.gz
 script/*.pyc
 script/__pycache__/*.pyc
+script/__pycache__/*
 script/.DS_store
 .DS_store
 .python-version
 script/serene-star-322806-748861ca74d7.json
-*.bin
-*bin.gz
-script/__pycache__/*
-script/pandas_test.ipynb
-script/test.csv
-script/pandas_test.py
-script/zips/*
-script/*.zip
-script/secret.json

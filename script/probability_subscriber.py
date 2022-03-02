@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import socket
 import pickle
+from std_msgs.msg import Float32MultiArray
 
 
 def show_probability_graph(ax, labels, probability, user_name):
@@ -27,6 +28,18 @@ def show_probability_graph(ax, labels, probability, user_name):
     plt.cla()
 
 
+class ProbabilitySubscriber():
+    def __init__(self):
+        self.probability = []
+        self.probability_sub = rospy.Subscriber("/avarage_probability", Float32MultiArray, self.callback)
+        # rospy.wait_for_message("/avarage_probability", Float32MultiArray, timeout=10.0)
+
+    def callback(self, data):
+        self.probability = data.data
+
+    def get_data(self):
+        return self.probability
+
 if __name__ == '__main__':
 
     rospy.init_node('probability_subscriber', anonymous=True)
@@ -34,13 +47,7 @@ if __name__ == '__main__':
 
 
     # 認識結果（probability）を受け取るための通信の設定
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    IP_ADDRESS = s.getsockname()[0]
-    port = 5624
-    sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM) # ソケットを作成する
-    sock.bind((IP_ADDRESS, port)) # 使用するIPアドレスとポート番号を指定
-    print('Probability Subscriber : IP address = ' + str(IP_ADDRESS) + ' port = ' + str(port))
+    probability_sub = ProbabilitySubscriber()
 
 
 
@@ -54,18 +61,11 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param('robot_mode')
-
-        if robot_mode=='state_recognition':
-            # probabilityをUDPで受け取る
-            data, cli_addr = sock.recvfrom(256)
-            average_probability = pickle.loads(data)
-            print(average_probability)
-            labels = ['state'+str(i) for i in range(len(average_probability))]
-            # 認識確率の表示
-            show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
-        else:
-            # average_probability = [0.0, 0.0, 0.0]
-            pass
+        average_probability = probability_sub.get_data()
+        print(average_probability)
+        labels = ['state'+str(i) for i in range(len(average_probability))]
+        # 認識確率の表示
+        show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
         
 
         spin_rate.sleep()

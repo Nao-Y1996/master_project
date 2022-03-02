@@ -189,8 +189,7 @@ if __name__ == '__main__':
     
     
     # データ送信のためのソケットを作成する（UDP）
-    sock4data = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    serv_address = ('192.168.0.103', 12345)
+    data_pub = rospy.Publisher("observed_data", Float32MultiArray, queue_size=1)
 
     # クラスのインスタンス化
     # joint_state_sub = JointStateSbscriber()
@@ -300,8 +299,11 @@ if __name__ == '__main__':
             traceback.print_exc()
 
 
-        #------------ グラフデータをUDPで送る ------------#
-        send_len = sock4data.sendto(pickle.dumps(graph_data), serv_address)
+        #------------ グラフデータを送る ------------#
+        if None in graph_data:
+            continue
+        msg_data = Float32MultiArray(data=graph_data)
+        data_pub.publish(msg_data)
         #----------------------------------------------#
         node_num = (len(graph_data)-1)/4
 
