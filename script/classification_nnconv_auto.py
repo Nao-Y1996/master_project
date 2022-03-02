@@ -24,6 +24,7 @@ import glob
 import sys
 import shutil
 import json
+import time
 
 class NNConvNet(nn.Module):
     def __init__(self, node_feature_dim, edge_feature_dim, output_dim):
@@ -296,6 +297,8 @@ if __name__=='__main__':
             plt.close()
 
             
-            rospy.set_param("/robot_mode", "nomal")
+            rospy.set_param("/robot_mode", "finish_train")
+            # ここで「学習が完了しました」と発話させたいが、
+            # robot_toolsのインスタンスは１つしか起動できないので、それを一つのノードにして、それに発話内容を投げるような仕組みが必要
         else:
             pass

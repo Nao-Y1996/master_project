@@ -39,6 +39,8 @@ class ImageSbscriber(object):
 
 
 def main():
+    # 骨格検出を描画するかしないかの切り替え
+    draw_landmarks = False
     
     rospy.init_node('pose_publisher')
 
@@ -84,13 +86,13 @@ def main():
                         landmark_positions = Float32MultiArray(data=[0.0,0.0,0.0])
                         pub_p.publish(landmark_positions)
 
-
-                    mp_drawing.draw_landmarks(
-                        image,
-                        results.pose_landmarks,
-                        mp_pose.POSE_CONNECTIONS,
-                        landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-                    cv2.imshow("Detection Image Window", image)
+                    if draw_landmarks:
+                        mp_drawing.draw_landmarks(
+                            image,
+                            results.pose_landmarks,
+                            mp_pose.POSE_CONNECTIONS,
+                            landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
+                        cv2.imshow("Detection Image Window", image)
                     if cv2.waitKey(5) & 0xFF == 27:
                         break
 

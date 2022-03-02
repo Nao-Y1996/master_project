@@ -3,8 +3,11 @@
 import rospy
 import numpy as np
 import matplotlib.pyplot as plt
+import japanize_matplotlib
 import socket
 import pickle
+import os
+import pandas as pd
 from std_msgs.msg import Float32MultiArray
 
 
@@ -52,20 +55,34 @@ if __name__ == '__main__':
 
 
     # 認識の確率表示のグラフ設定
-    # labels = []
-    save_dir = rospy.get_param("/save_dir")
-    # read_data = pd.read_csv(save_dir +'/state.csv',encoding="utf-8")
-    # labels = read_data['state'].tolist()
+    def update_state_label(user_dir):
+        labels = []
+        read_data = pd.read_csv(user_dir +'/state.csv',encoding="utf-8")
+        labels = read_data['state'].tolist()
+        return labels
+
     user_name = rospy.get_param('user_name')
+    user_dir = user_dir = os.path.dirname(os.path.abspath(__file__))+ "/experiment_data/"+user_name
+    labels = []
     
     fig, ax = plt.subplots()
+
+    rospy.set_param("/robot_mode", "finish_train") # プログラム起動時に１度labelsを取得するための対応
     while not rospy.is_shutdown():
         robot_mode = rospy.get_param('robot_mode')
+
+        if robot_mode=='finish_train':
+            labels = update_state_label(user_dir)
+            print(labels)
+            rospy.set_param("/robot_mode", "nomal")
+        
         average_probability = probability_sub.get_data()
         print(average_probability)
-        labels = ['state'+str(i) for i in range(len(average_probability))]
         # 認識確率の表示
-        show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
+        try:
+            show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
+        except ValueError:
+            continue
         
 
         spin_rate.sleep()

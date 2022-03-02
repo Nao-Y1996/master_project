@@ -6,6 +6,7 @@ import rospy
 import os
 import pandas as pd
 import csv
+import time
 from robot_tools import RobotPartner
 
 PYTHON_VERSION = sys.version_info[0]
@@ -59,6 +60,8 @@ if __name__ == "__main__":
     sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
     sock.bind((IP_ADDRESS, port))
     print('Successfully created socket!')
+    rospy.set_param('ip_address', str(IP_ADDRESS))
+    rospy.set_param('port', port)
 
     # usernameと実行タイプの入力
     """
@@ -104,7 +107,7 @@ if __name__ == "__main__":
         state_index = None
         robot_mode = rospy.get_param("/robot_mode")
         try :# ③Clientからのmessageの受付開始
-        
+            
             message, cli_addr = sock.recvfrom(1024)
             
             message = message.decode(encoding='utf-8')
@@ -124,6 +127,11 @@ if __name__ == "__main__":
                     robotPartner.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
                 elif robot_mode == "graph_collecting":
                     robotPartner.say('現在、記録中です。')
+                # elif robot_mode == "finish_train": # finish_trainになるとprobobility_subですぐにnomalに切り替わる
+                #    robotPartner.say('現在、学習完了状態です。認識機能が利用できます')
+                #    pass
+                elif robot_mode == "auto_train":
+                    robotPartner.say('現在、モデルの学習中です。学習が完了するまでお待ちください')
                 else:
                     robotPartner.say('モードが不明です。')
                 if is_clean_mode:
@@ -157,8 +165,10 @@ if __name__ == "__main__":
                     robotPartner.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
             
             elif 'モデルの学習を開始'==message:
+                robotPartner.say('モデルの学習を開始します')
+                time.sleep(1)
+
                 rospy.set_param("/robot_mode", "auto_train")
-                robotPartner.say('start train')
             
             elif '通常モード' == message:
                 rospy.set_param("/robot_mode", "nomal")
@@ -178,6 +188,9 @@ if __name__ == "__main__":
                 rospy.set_param("/robot_mode", "waite_state_name")
                 robotPartner.say('はい、今何をしていますか？')
 
+            elif 'プログラム終了' == message:
+                break
+                # sys.exit('プログラム終了')
             else :
                 robot_mode = rospy.get_param("/robot_mode")
                 if (robot_mode=='waite_state_name'):
@@ -210,11 +223,12 @@ if __name__ == "__main__":
                 else:
                     pass
 
-            
+
 
         except KeyboardInterrupt:
             print ('\n . . .\n')
-            sock.close()
+            if sock is not None:
+                sock.close()
             break
         except socket.timeout:
             pass
