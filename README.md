@@ -6,7 +6,7 @@ The robot can observe the position of your face and the positions of surrounding
 
 A demonstration of the system in use is shown below.
 
-https://youtu.be/nCje5sG1cTc
+https://youtu.be/WI8vl_UJwCc
 
 Here, we first have the robot record two states, "reading" and "working," to build a recognition model.
 Then, we have the robot record a new state, "studying," and reconstruct the recognition model.
