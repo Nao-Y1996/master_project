@@ -75,14 +75,25 @@ if __name__ == '__main__':
             labels = update_state_label(user_dir)
             print(labels)
             rospy.set_param("/robot_mode", "nomal")
-        
-        average_probability = probability_sub.get_data()
-        print(average_probability)
+        elif robot_mode=='state_recognition':
+            average_probability = probability_sub.get_data()
+            # 未学習の状態パターンがあるときは、その状態は無視して認識を行う
+            # （モデルの分類可能数とラベル数が一致しないときはラベルの末尾を削除する）
+            if len(average_probability) != len(labels):
+                labels = labels[0:-1]
+                continue
+            print(average_probability)
+        else:
+            average_probability = [0.0] * len(labels)
+            pass
+
         # 認識確率の表示
         try:
             show_probability_graph(ax, labels, np.round(average_probability, decimals=4).tolist(), user_name)
         except ValueError:
             continue
+        except NameError: # name 'average_probability' is not defined
+            pass 
         
 
         spin_rate.sleep()

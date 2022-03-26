@@ -241,9 +241,9 @@ def listen_print_loop(responses, stream, sock):
             sys.stdout.write("\033[K")
             sys.stdout.write(str(corrected_time) + ": " + transcript + "\n")
             
-            #-----------ここにsocket通信を入れる------------#
+            #-----------ここにsocket通信------------#
             send_len = sock.sendto(transcript.encode('utf-8'), serv_address) # UDPで送る
-            #--------------------------------------------#
+            #--------------------------------------#
 
             stream.is_final_end_time = stream.result_end_time
             stream.last_transcript_was_final = True
@@ -264,7 +264,7 @@ def listen_print_loop(responses, stream, sock):
             stream.last_transcript_was_final = False
 
 
-def main():
+def main(lang_code):
     # UDPのためのソケットを作成する
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -274,7 +274,7 @@ def main():
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=SAMPLE_RATE,
-        language_code="ja-JP",
+        language_code=lang_code,
         # language_code="en-US",
         max_alternatives=1,
     )
@@ -326,7 +326,16 @@ def main():
 
 
 if __name__ == "__main__":
+    lang = input('select langage. Ja/En\n')
+    if lang=='Ja':
+        lang_code="ja-JP"
+    elif lang=='En':
+        lang_code="en-US"
+    else:
+        print('Please input  "Ja" or "En"')
+        sys.exit()
+    rospy.set_param('language', lang)
 
-    main()
+    main(lang_code)
 
 # [END speech_transcribe_infinite_streaming]

@@ -15,5 +15,3 @@ if not os.path.exists(model_path):
     ft = fasttext.load_model('cc.en.300.bin')
     fasttext.util.reduce_model(ft, 50)
     ft.save_model('cc.en.50.bin')
-
-# ft = fasttext.load_model(model_path)

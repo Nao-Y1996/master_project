@@ -134,7 +134,7 @@ rospy.set_param("/all_obj_names", list(ID_2_OBJECT_NAME.values()))
 
 if __name__ == '__main__':
     rospy.init_node('data_publisher')
-
+    
     user_name = rospy.get_param("/user_name")
     print('\n=============================')
     print('current user is '+user_name)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     save_dir = user_dir  + '/'+time_now[0] + '-' +  time_now[1].split('.')[0].replace(':', '-')
     image_dir = save_dir+'/images/'
     position_dir = save_dir+'/position_data/'
-    recognition_file_path = position_dir + '/data_recognition.csv'
+    recognition_file_path = position_dir + '/data_when_recognition.csv'
     rospy.set_param("/save_dir", save_dir)
     rospy.set_param("/image_save_path", image_dir)
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
         
         # 各状態パターンごとの「必ず使う物体」「時々使う物体」の設定ファイルを作成
         # （「必ず使う物体」「時々使う物体」を定義するときはこのファイルを編集すること）
-        shutil.copy(os.path.dirname(__file__)+'/experiment_data/obj_combinations_base.json', user_dir + '/obj_combinations.json')
+        shutil.copy(os.path.dirname(__file__)+'/obj_combinations_base.json', user_dir + '/obj_combinations.json')
     else:
         pass
     
@@ -347,7 +347,7 @@ if __name__ == '__main__':
                 pag.screenshot(image_save_path+str(data_id)+'.jpg')
             else:
                 pass
-            print('保存したデータ数 : '+str(count_saved) + '  |  保存した理想データ数 : ' + str(count_ideal_saved))
+            print('number of Raw Data : '+str(count_saved) + '  |  number of Ideal Data : ' + str(count_ideal_saved))
 
             # 保存した理想データ数が1000になったら終了
             if count_ideal_saved >= 1000:
@@ -373,7 +373,6 @@ if __name__ == '__main__':
             count_saved = 0
             count_ideal_saved = 0
             essential_obj_list = None
-            print(names)
             
         spin_rate.sleep()
  

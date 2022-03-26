@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <launch> 
     <!-- ====== HSR ===== -->
+    <rosparam>
+      exe_type: hsr
+    </rosparam>
     <node pkg="rviz" type="rviz" name="overwite_rviz_conf" args="-d $(find master_project)/rviz_conf/hsr_dev2.rviz"/>
     <include file="$(find darknet_ros)/launch/darknet_ros.launch">
       <arg name="image" value="/hsrb/head_rgbd_sensor/rgb/image_raw"/>

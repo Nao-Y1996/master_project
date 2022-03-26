@@ -9,7 +9,6 @@ import csv
 import time
 from robot_tools import RobotPartner
 
-PYTHON_VERSION = sys.version_info[0]
 
 def exist_state_check(csv_file, state_name):
     df = pd.read_csv(csv_file)
@@ -43,7 +42,7 @@ def add_new_state(csv_file, state_name):
         with open(csv_file, 'a') as f:
             writer = csv.writer(f)
             writer.writerow([state_name])
-        print ('新しい状態を追加しました --->', state_name)
+        print (f'------ A new state added : {state_name} ------')
     else:
         # print('すでに状態名はあるので追加はスキップしました')
         pass
@@ -56,28 +55,18 @@ if __name__ == "__main__":
     s.connect(("8.8.8.8", 80))
     IP_ADDRESS = s.getsockname()[0] # get IP address of this PC
     port = 8880
-    print('utterance server : IP address = '+str(IP_ADDRESS)+'  port = '+str(port))
     sock = socket.socket(socket.AF_INET, type=socket.SOCK_DGRAM)
     sock.bind((IP_ADDRESS, port))
-    print('Successfully created socket!')
     rospy.set_param('ip_address', str(IP_ADDRESS))
     rospy.set_param('port', port)
 
-    # usernameと実行タイプの入力
     """
     実行タイプ
     hsr     : real robot
     hsr_sim : HSR simulator
     xtion   : xtion camera
     """
-    if PYTHON_VERSION==2:
-        user_name = raw_input('\nenter user name\n')
-        exe_type = raw_input("select exe type hsr, hsr_sim, xtion\n")
-    elif PYTHON_VERSION==3:
-        user_name = input('\nenter user name\n')
-        exe_type = input("select exe type hsr, hsr_sim, xtion\n")
-    else:
-        sys.exit("Unexpected python version is used")
+    exe_type = rospy.get_param('exe_type')
     
     if exe_type!="hsr" and exe_type!="hsr_sim" and exe_type!="xtion":
         sys.exit("select correct exe type (hsr/hsr_sim/xtion)")
@@ -90,12 +79,14 @@ if __name__ == "__main__":
         robotPartner = RobotPartner(exe_type=exe_type,hsr_robot=None)
     else:
         pass
+
+    # usernameの入力
+    user_name = input('\nenter user name\n')
     
     rospy.set_param("/user_name", user_name)
     rospy.set_param("/IP_address", str(IP_ADDRESS))
     rospy.set_param("/robot_mode", "nomal")
     rospy.set_param("/is_clean_mode", 0)
-    rospy.set_param("/exe_type", exe_type)
 
     # 保存用ディレクトリの設定
     user_dir = os.path.dirname(__file__)+'/experiment_data/'+user_name
@@ -106,7 +97,7 @@ if __name__ == "__main__":
         state_name = None
         state_index = None
         robot_mode = rospy.get_param("/robot_mode")
-        try :# ③Clientからのmessageの受付開始
+        try :
             
             message, cli_addr = sock.recvfrom(1024)
             
@@ -116,28 +107,32 @@ if __name__ == "__main__":
             if ('はい' in message) or ('します'in message) or ('現在'in message) or ('今'in message) or ('完了'in message):
                 pass
             
-            elif 'モードの確認' == message:
+            elif 'モードの確認' == message or ("check the mode" in message):
                 robot_mode = rospy.get_param("/robot_mode")
                 is_clean_mode = rospy.get_param("/is_clean_mode")
                 if robot_mode == "state_recognition":
                     robotPartner.say('現在、認識モードです。')
+                    # robotPartner.say("It's recognition mode.")
                 elif robot_mode == "nomal":
                     robotPartner.say('現在、通常モードです。')
+                    # robotPartner.say("It's nomal mode. ")
                 elif robot_mode == "waite_state_name":
                     robotPartner.say('現在、記録の準備中です。 今、何をしているか教えてもらえたら記録を開始できます。')
+                    # robotPartner.say("Currently, I am preparing to record data. Please let me know what you are doing now so I can start recording.")
                 elif robot_mode == "graph_collecting":
-                    robotPartner.say('現在、記録中です。')
-                # elif robot_mode == "finish_train": # finish_trainになるとprobobility_subですぐにnomalに切り替わる
-                #    robotPartner.say('現在、学習完了状態です。認識機能が利用できます')
-                #    pass
+                    robotPartner.say('現在、データを記録中です。')
+                    # robotPartner.say('Now I am recording data.')
                 elif robot_mode == "auto_train":
                     robotPartner.say('現在、モデルの学習中です。学習が完了するまでお待ちください')
+                    # robotPartner.say('The model is currently being trained. Please wait until learning is complete.')
                 else:
-                    robotPartner.say('モードが不明です。')
+                    robotPartner.say('モードが不明です。プログラムを修正する必要があるかもしれません。')
+                    # robotPartner.say('Sorry, the mode is unknown. You may need to modify the program.')
                 if is_clean_mode:
-                    robotPartner.say('片付け機能が働いています。')
+                    robotPartner.say('不要物体を特定する機能が働いています。')
+                    # robotPartner.say('The function that detecting unnecessary object is turned on')
 
-            elif '終了' == message:
+            elif '終了' == message or ("finish recording" in message):
                 if (robot_mode=='graph_collecting'):
                     save_dir = rospy.get_param("/save_dir")
                     user_dir = rospy.get_param("/user_dir")
@@ -152,41 +147,44 @@ if __name__ == "__main__":
                     rospy.set_param("/cllecting_state_name", '')
 
                     robotPartner.say(state_name + 'の記録は完了です。')
+                    # robotPartner.say('Recording your state data of ' + state_name + 'is finished.')
                 else:
                     pass
             
-            elif '認識モード'== message:
+            elif '認識モード'== message or ('start recognition' in message):
                 can_recognize = os.path.exists(user_dir+'/model_info.json')
                 if can_recognize:
                     rospy.set_param("/robot_mode", "state_recognition")
                     rospy.set_param("/is_clean_mode", 0)
                     robotPartner.say('はい、認識機能をオンにします。')
+                    # robotPartner.say('Yes, the recognition function is turned on.')
                 else:
                     robotPartner.say('利用可能な認識モデルがありません。学習後に認識モードが利用可能になります。')
+                    # robotPartner.say('There are no recognition models available. Recognition mode will be available after training.')
             
-            elif 'モデルの学習を開始'==message:
+            elif 'モデルの学習を開始'==message or ('start training the model' in message):
                 robotPartner.say('モデルの学習を開始します')
+                # robotPartner.say('Yes, start training the model.')
                 time.sleep(1)
 
                 rospy.set_param("/robot_mode", "auto_train")
             
-            elif '通常モード' == message:
+            elif '通常モード' == message or ('back to normal mode' in message):
                 rospy.set_param("/robot_mode", "nomal")
                 rospy.set_param("/is_clean_mode", 0)
                 robotPartner.say('はい、通常機能に戻ります。')
+                # robotPartner.say('Yes, back to normal mode.')
 
-            elif '片付け' == message:
+            elif '片付け' == message or ('clean up' in message):
                 rospy.set_param("/robot_mode", "state_recognition")
                 rospy.set_param("/is_clean_mode", 1)
                 robotPartner.say('はい、不要なものを探します。')
+                # robotPartner.say('Yes, start detecting unnecessary object.')
 
-            elif 'ありがとう' == message:
-                rospy.set_param("/is_clean_mode", 0)
-                robotPartner.say('はい、どういたしまして')
-
-            elif '記録して' == message:
+            elif '記録して' == message or ('start recording' in message):
                 rospy.set_param("/robot_mode", "waite_state_name")
                 robotPartner.say('はい、今何をしていますか？')
+                # robotPartner.say('Yes, what are you doing now?')
 
             elif 'プログラム終了' == message:
                 break
@@ -196,6 +194,7 @@ if __name__ == "__main__":
                 if (robot_mode=='waite_state_name'):
                     state_name = message
                     robotPartner.say(state_name + '、を記録します。')
+                    # robotPartner.say('Recording state data of '+state_name )
                     
                     save_dir = rospy.get_param("/save_dir")
                     user_dir = rospy.get_param("/user_dir")
@@ -209,14 +208,13 @@ if __name__ == "__main__":
                     # 収集するデータを保存するファイルを指定
                     image_save_path = save_dir+'/images/pattern_'+str(state_index)+'/'
                     data_save_path = save_dir+'/position_data/raw_pattern_'+str(state_index)+'.csv'
-                    print(data_save_path + ' にデータを保存します')
                     rospy.set_param("/data_save_path", data_save_path)
                     rospy.set_param("/image_save_path", image_save_path)
                     
                     # データ収集モードに切り替え
                     rospy.set_param("/robot_mode", "graph_collecting")
-                    print(state_name +' のデータを収集します')
                     rospy.set_param("/collecting_state_name", state_name)
+                    print(f'------ start collecting data of "{state_name}" ------')
                 elif (robot_mode=='finish_collecting'):
                     robotPartner.say('記録は完了です')
                     rospy.set_param("/robot_mode", "nomal")
