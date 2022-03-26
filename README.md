@@ -5,7 +5,8 @@ The robot partner can be imagined as a virtual robot on your PC. (If you are the
 The robot can observe the position of your face and the positions of surrounding objects and build a state recognition model based on the meaning and spatial location of those objects.
 
 A demonstration of the system in use is shown below.
-https://youtu.be/7KQUi7MCPrM
+
+https://youtu.be/nCje5sG1cTc
 
 Here, we first have the robot record two states, "reading" and "working," to build a recognition model.
 Then, we have the robot record a new state, "studying," and reconstruct the recognition model.
